@@ -146,7 +146,7 @@
   /* SECTION HEAD */
   .section-head{margin-bottom:1.5rem}
 
-  /* ABOUT ME — фото и факты равной ширины */
+  /* ABOUT ME */
   .about{display:grid;gap:14px}
   .about-photo{aspect-ratio:4/5;position:relative;overflow:hidden}
   .about-photo.has-img{border-style:solid;border-color:transparent}
@@ -245,7 +245,7 @@
   }
   .fact-big h3 em{font-style:italic;color:var(--signal)}
 
-  /* LOGO GRID — ровная сетка: 3 / 4 / 6 колонок */
+  /* LOGO GRID — 3 / 4 / 6 колонок */
   .grid-logos{
     display:grid;
     grid-template-columns:repeat(3,1fr);
@@ -275,46 +275,41 @@
   @media(min-width:560px){.grid-logos{grid-template-columns:repeat(4,1fr)}}
   @media(min-width:900px){.grid-logos{grid-template-columns:repeat(6,1fr)}}
 
-  /* WHERE — россыпь эмодзи-подсказок */
-  .spot{
+  /* WHERE — три бегущих ряда эмодзи */
+  .emoji-band{
+    overflow:hidden;
+    width:100vw;
+    margin-left:calc(50% - 50vw);
+    display:grid;
+    gap:clamp(1.1rem, 3vw, 2rem);
+    margin-top:1.75rem;
+  }
+  .emoji-track{
     display:flex;
-    flex-wrap:wrap;
-    gap:12px 10px;
-    margin-top:1.5rem;
+    width:max-content;
+    animation:slide 40s linear infinite;
+  }
+  .emoji-track.rev{animation-direction:reverse}
+  .emoji-set{
+    display:flex;
     align-items:center;
-    justify-content:center;
-    row-gap:1.1rem;
+    gap:clamp(1.4rem, 4vw, 2.8rem);
+    padding-right:clamp(1.4rem, 4vw, 2.8rem);
   }
-  .spot > *{
-    transition:transform .25s var(--ease-out);
-    cursor:default;
-  }
-  .spot > *:hover{transform:rotate(0deg) scale(1.12) !important}
-  .spot > *:nth-child(odd){transform:rotate(-2.5deg)}
-  .spot > *:nth-child(even){transform:rotate(2deg)}
-  .spot > *:nth-child(3n){transform:rotate(-1deg)}
-  .spot-chip{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    padding:.6rem 1rem;
-    border-radius:999px;
-    font-size:13px;
-    font-weight:800;
-    letter-spacing:.01em;
-    white-space:nowrap;
-  }
-  .spot-chip .em{font-size:17px;line-height:1}
-  .spot-chip.s-ink{background:var(--ink);color:var(--paper)}
-  .spot-chip.s-red{background:var(--signal);color:#fff}
-  .spot-chip.s-out{background:transparent;border:2px solid var(--ink)}
-  .spot-chip.s-plain{background:var(--paper-2);border:2px solid transparent}
-  .spot-chip.s-blue{background:var(--blue);color:#fff}
-  .spot-big{
-    font-size:clamp(1.9rem, 6vw, 2.8rem);
+  .emoji-set span{
+    display:inline-block;
     line-height:1;
-    filter:drop-shadow(0 4px 8px rgba(11,11,12,.15));
+    filter:drop-shadow(0 6px 10px rgba(11,11,12,.14));
   }
+  .emoji-set span:nth-child(odd){transform:rotate(-8deg) translateY(-.06em)}
+  .emoji-set span:nth-child(even){transform:rotate(7deg) translateY(.08em)}
+  .emoji-band:hover .emoji-track{animation-play-state:paused}
+  .b1{animation-duration:46s}
+  .b2{animation-duration:36s}
+  .b3{animation-duration:28s}
+  .b1 span{font-size:clamp(2.2rem, 6vw, 3.8rem)}
+  .b2 span{font-size:clamp(2.9rem, 8vw, 5rem)}
+  .b3 span{font-size:clamp(1.7rem, 4.5vw, 2.8rem)}
 
   /* VIDEO */
   .video-block{margin-top:1.5rem}
@@ -538,6 +533,7 @@
   /* RESPONSIVE */
   @media(min-width:768px){
     .about{grid-template-columns:1fr 1fr;align-items:stretch;gap:20px}
+    .about .fact{flex:1;font-size:15px}
     .names-wall{grid-template-columns:repeat(4,1fr)}
     .likes{grid-template-columns:repeat(4,1fr)}
     .apples{gap:20px}
@@ -561,7 +557,7 @@
     </h1>
     <div class="rv" style="margin-top:2rem; border-top:1px solid var(--line); padding-top:1rem; display:flex; justify-content:space-between; align-items:flex-end; gap:1rem;">
       <div style="font-size:11px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--muted);">знакомство <b style="color:var(--ink);">с рекламой</b></div>
-      <div style="font-size:11px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--muted);">↓ </div>
+      <div style="font-size:11px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--muted);">↓ листай</div>
     </div>
   </div>
 </section>
@@ -598,10 +594,8 @@
       <div class="facts">
         <div class="fact"><span class="em">💻</span><span>Работала в IT</span></div>
         <div class="fact"><span class="em">💙</span><span>Работала в VK, руководила командой</span></div>
-        <div class="fact"><span class="em">🎥</span><span>Работала с Владом А4 и Данкаром</span></div>
+        <div class="fact"><span class="em">🎥</span><span>Работала с блогерами</span></div>
         <div class="fact"><span class="em">🎨</span><span>Придумываю рекламу много лет</span></div>
-        <div class="fact"><span class="em">🏆</span><span>Участвую в конкурсах рекламы</span></div>
-        <div class="fact"><span class="em">📚</span><span>Учусь сама и придумываю новое</span></div>
       </div>
     </div>
   </div>
@@ -667,28 +661,13 @@
   </div>
 </section>
 
-<!-- SLIDE 6: ГДЕ РЕКЛАМА -->
+<!-- SLIDE 6: ГДЕ РЕКЛАМА — только эмодзи, три бегущих ряда -->
 <section class="slide" id="where">
   <div class="slide-content">
     <div class="section-head rv">
       <h2 class="display">Где <span class="it">реклама?</span></h2>
     </div>
-    <div class="spot rv" aria-hidden="false">
-      <span class="spot-chip s-ink"><span class="em">🏪</span>Вывески</span>
-      <span class="spot-big">👀</span>
-      <span class="spot-chip s-red"><span class="em">📺</span>Мультики</span>
-      <span class="spot-chip s-plain"><span class="em">📱</span>Лайк</span>
-      <span class="spot-big">🧐</span>
-      <span class="spot-chip s-out"><span class="em">🚌</span>Автобусы</span>
-      <span class="spot-chip s-blue"><span class="em">🎮</span>Игры</span>
-      <span class="spot-chip s-plain"><span class="em">🧃</span>Этикетки</span>
-      <span class="spot-big">💡</span>
-      <span class="spot-chip s-out"><span class="em">🎈</span>Шарики</span>
-      <span class="spot-big">🗺️</span>
-      <span class="spot-big">✨</span>
-      <span class="spot-chip s-blue"><span class="em">🛒</span>Магазины</span>
-      <span class="spot-chip s-plain"><span class="em">🎫</span>В лифте</span>
-    </div>
+    <div class="emoji-band rv" id="emoji-band" aria-hidden="true"></div>
   </div>
 </section>
 
@@ -885,6 +864,38 @@
     img.src = sources[0];
     card.appendChild(img);
     grid.appendChild(card);
+  });
+
+  /* ===== «ГДЕ РЕКЛАМА»: три бегущих ряда эмодзи =====
+     ВАЖНО: трек сначала добавляется на страницу, и только потом
+     измеряется. Плюс жёсткий лимит повторов — зависание невозможно. */
+  const band = document.getElementById('emoji-band');
+  const rows = [
+    { cls: 'b1',      items: ['🏪','👀','📺','📱','🚌','🎮','🧃'] },
+    { cls: 'b2 rev',  items: ['💡','🎈','🗺️','✨','🛒','🎫'] },
+    { cls: 'b3',      items: ['📺','🎈','🚌','✨','🎮','💡','👀','🎫','🏪','🗺️'] },
+  ];
+  function addSet(track, items){
+    const set = document.createElement('div');
+    set.className = 'emoji-set';
+    items.forEach(e => {
+      const s = document.createElement('span');
+      s.textContent = e;
+      set.appendChild(s);
+    });
+    track.appendChild(set);
+  }
+  rows.forEach(r => {
+    const track = document.createElement('div');
+    track.className = 'emoji-track ' + r.cls;
+    band.appendChild(track); // сначала в DOM — только так у ленты есть реальная ширина
+    let guard = 0;
+    do {
+      addSet(track, r.items);
+      guard++;
+    } while (track.scrollWidth < window.innerWidth + 200 && guard < 20); // лимит: максимум 20 повторов
+    const half = track.children.length;
+    for (let i = 0; i < half; i++) track.appendChild(track.children[i].cloneNode(true)); // вторая половина = копия
   });
 
   /* ===== ВИДЕО: обложка + кнопки YouTube / VK / OK / RuTube ===== */
