@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Собери свой ресторан!</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700;900&family=Inter:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffe9c7;
+    --bg2:#ffd6a5;
+    --ink:#2b1a0f;
+    --pink:#ff5d8f;
+    --yellow:#ffc93c;
+    --blue:#5bc0eb;
+    --green:#7bd389;
+    --purple:#a06cd5;
+    --white:#fffaf0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{
+    height:100%;
+    font-family:'Fredoka','Inter',system-ui,sans-serif;
+    background:radial-gradient(circle at 50% 0%, var(--bg) 0%, var(--bg2) 100%);
+    color:var(--ink);
+    overflow:hidden;
+    user-select:none;
+  }
+  body{
+    display:flex;
+    flex-direction:column;
+    padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+
+  /* PROGRESS */
+  .progress{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    padding:16px 0 8px;
+    flex-shrink:0;
+  }
+  .dot{
+    width:14px;height:14px;
+    border-radius:50%;
+    background:rgba(43,26,15,0.15);
+    transition:all .3s cubic-bezier(.34,1.56,.64,1);
+  }
+  .dot.active{
+    background:var(--pink);
+    transform:scale(1.4);
+  }
+  .dot.done{background:var(--green)}
+
+  /* STAGE */
+  .stage{
+    flex:1;
+    display:none;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    text-align:center;
+    gap:20px;
+    overflow-y:auto;
+  }
+  .stage.active{display:flex;animation:fadeIn .5s ease}
+
+  @keyframes fadeIn{
+    from{opacity:0;transform:scale(.95)}
+    to{opacity:1;transform:scale(1)}
+  }
+
+  /* TITLES */
+  .title{
+    font-size:clamp(1.6rem,7vw,2.6rem);
+    font-weight:900;
+    line-height:1.05;
+    letter-spacing:-.02em;
+    max-width:14ch;
+  }
+  .title .accent{color:var(--pink)}
+  .subtitle{
+    font-size:clamp(.9rem,3.5vw,1.1rem);
+    font-weight:600;
+    opacity:.7;
+  }
+
+  /* BIG BUTTONS GRID */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+    width:100%;
+    max-width:520px;
+  }
+  .grid.g3{grid-template-columns:repeat(3,1fr)}
+  .grid.g4{grid-template-columns:repeat(4,1fr)}
+
+  /* CARD BTN */
+  .card-btn{
+    background:var(--white);
+    border:4px solid var(--ink);
+    border-radius:24px;
+    padding:18px 12px;
+    font-family:inherit;
+    font-weight:900;
+    font-size:clamp(.9rem,3.5vw,1.15rem);
+    color:var(--ink);
+    cursor:pointer;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    min-height:100px;
+    transition:transform .15s cubic-bezier(.34,1.56,.64,1), box-shadow .15s;
+    box-shadow:0 6px 0 var(--ink);
+    position:relative;
+  }
+  .card-btn:hover{transform:translateY(-3px);box-shadow:0 9px 0 var(--ink)}
+  .card-btn:active{transform:translateY(4px);box-shadow:0 2px 0 var(--ink)}
+  .card-btn .emo{font-size:clamp(2rem,8vw,3rem);line-height:1}
+  .card-btn.selected{
+    background:var(--yellow);
+    transform:translateY(4px);
+    box-shadow:0 2px 0 var(--ink);
+  }
+  .card-btn.selected::after{
+    content:"✓";
+    position:absolute;
+    top:-10px;right:-10px;
+    width:34px;height:34px;
+    border-radius:50%;
+    background:var(--green);
+    color:#fff;
+    font-size:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:3px solid var(--ink);
+    animation:pop .3s cubic-bezier(.34,1.56,.64,1);
+  }
+  @keyframes pop{
+    0%{transform:scale(0)}
+    100%{transform:scale(1)}
+  }
+
+  /* NAME CARDS */
+  .name-card{
+    background:var(--white);
+    border:4px solid var(--ink);
+    border-radius:20px;
+    padding:20px 14px;
+    font-family:inherit;
+    font-weight:900;
+    font-size:clamp(1rem,4vw,1.3rem);
+    color:var(--ink);
+    cursor:pointer;
+    transition:transform .15s cubic-bezier(.34,1.56,.64,1), box-shadow .15s, background .2s;
+    box-shadow:0 6px 0 var(--ink);
+    text-align:center;
+    line-height:1.1;
+  }
+  .name-card:nth-child(1){background:#ffd6e0}
+  .name-card:nth-child(2){background:#d4f1d4}
+  .name-card:nth-child(3){background:#c9e4ff}
+  .name-card:nth-child(4){background:#ffe9c7}
+  .name-card:nth-child(5){background:#e8d5ff}
+  .name-card:nth-child(6){background:#ffe4d6}
+
+  .name-card:hover{transform:translateY(-3px);box-shadow:0 9px 0 var(--ink)}
+  .name-card:active{transform:translateY(4px);box-shadow:0 2px 0 var(--ink)}
+
+  /* MENU PICKER */
+  .emoji-wall{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:10px;
+    width:100%;
+    max-width:560px;
+    padding:14px;
+    background:rgba(255,255,255,0.5);
+    border-radius:24px;
+    border:3px dashed var(--ink);
+  }
+  .emoji-btn{
+    aspect-ratio:1;
+    background:var(--white);
+    border:3px solid var(--ink);
+    border-radius:16px;
+    font-size:clamp(1.6rem,7vw,2.2rem);
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:transform .15s cubic-bezier(.34,1.56,.64,1);
+    position:relative;
+  }
+  .emoji-btn:active{transform:scale(.9)}
+  .emoji-btn.picked{
+    background:var(--yellow);
+    transform:scale(1.05);
+  }
+  .emoji-btn.picked::after{
+    content:"✓";
+    position:absolute;
+    top:-6px;right:-6px;
+    width:22px;height:22px;
+    border-radius:50%;
+    background:var(--green);
+    color:#fff;
+    font-size:13px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:2px solid var(--ink);
+  }
+
+  /* COUNTER */
+  .counter{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:clamp(1rem,4vw,1.3rem);
+    font-weight:900;
+    background:var(--white);
+    border:3px solid var(--ink);
+    border-radius:999px;
+    padding:8px 20px;
+    box-shadow:0 4px 0 var(--ink);
+  }
+  .counter .big{color:var(--pink);font-size:1.3em}
+
+  /* NEXT BUTTON */
+  .next-btn{
+    background:var(--pink);
+    color:#fff;
+    border:4px solid var(--ink);
+    border-radius:999px;
+    padding:16px 42px;
+    font-family:inherit;
+    font-weight:900;
+    font-size:clamp(1.1rem,4.5vw,1.5rem);
+    cursor:pointer;
+    box-shadow:0 6px 0 var(--ink);
+    transition:transform .15s cubic-bezier(.34,1.56,.64,1), box-shadow .15s;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .next-btn:hover{transform:translateY(-3px);box-shadow:0 9px 0 var(--ink)}
+  .next-btn:active{transform:translateY(4px);box-shadow:0 2px 0 var(--ink)}
+  .next-btn:disabled{
+    background:#c8c8c8;
+    cursor:not-allowed;
+    transform:none;
+    box-shadow:0 6px 0 var(--ink);
+    opacity:.6;
+  }
+
+  /* POWER CARDS */
+  .power-card{
+    background:var(--white);
+    border:4px solid var(--ink);
+    border-radius:24px;
+    padding:18px;
+    cursor:pointer;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    box-shadow:0 6px 0 var(--ink);
+    transition:transform .15s cubic-bezier(.34,1.56,.64,1), box-shadow .15s;
+    min-height:140px;
+    justify-content:center;
+  }
+  .power-card:hover{transform:translateY(-3px);box-shadow:0 9px 0 var(--ink)}
+  .power-card:active{transform:translateY(4px);box-shadow:0 2px 0 var(--ink)}
+  .power-card.p1{background:#ffd6e0}
+  .power-card.p2{background:#fff3b0}
+  .power-card.p3{background:#c9e4ff}
+  .power-card.p4{background:#e8d5ff}
+  .power-card .emo{font-size:clamp(2.4rem,10vw,3.4rem);line-height:1}
+  .power-card .label{font-weight:900;font-size:clamp(.8rem,3vw,1rem);text-align:center}
+
+  /* RESULT */
+  .result-card{
+    background:var(--white);
+    border:5px solid var(--ink);
+    border-radius:32px;
+    padding:30px 24px;
+    max-width:520px;
+    width:100%;
+    box-shadow:0 10px 0 var(--ink);
+    position:relative;
+    animation:cardIn .7s cubic-bezier(.34,1.56,.64,1);
+  }
+  @keyframes cardIn{
+    0%{transform:scale(.5) rotate(-8deg);opacity:0}
+    100%{transform:scale(1) rotate(-1deg);opacity:1}
+  }
+  .result-card .badge{
+    position:absolute;
+    top:-22px;left:50%;transform:translateX(-50%) rotate(-3deg);
+    background:var(--pink);
+    color:#fff;
+    padding:8px 22px;
+    border-radius:999px;
+    border:4px solid var(--ink);
+    font-weight:900;
+    font-size:clamp(.9rem,3.5vw,1.1rem);
+    white-space:nowrap;
+  }
+  .result-card h2{
+    margin-top:14px;
+    font-size:clamp(1.6rem,7vw,2.4rem);
+    font-weight:900;
+    line-height:1.05;
+    letter-spacing:-.02em;
+  }
+  .result-dishes{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px;
+    margin:20px 0;
+  }
+  .result-dishes .emo{
+    font-size:clamp(2rem,8vw,3rem);
+    background:var(--yellow);
+    border:3px solid var(--ink);
+    border-radius:50%;
+    width:clamp(56px,16vw,72px);
+    height:clamp(56px,16vw,72px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    animation:float 2.5s ease-in-out infinite;
+  }
+  .result-dishes .emo:nth-child(2n){animation-delay:.3s}
+  .result-dishes .emo:nth-child(3n){animation-delay:.6s}
+  @keyframes float{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-8px)}
+  }
+  .result-power{
+    font-size:clamp(.95rem,4vw,1.15rem);
+    font-weight:800;
+    margin-top:6px;
+    padding:10px 16px;
+    background:var(--blue);
+    color:#fff;
+    border-radius:999px;
+    border:3px solid var(--ink);
+    display:inline-block;
+  }
+
+  /* STARS BACKGROUND */
+  .stars{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    overflow:hidden;
+    z-index:0;
+  }
+  .star{
+    position:absolute;
+    font-size:24px;
+    opacity:.35;
+    animation:twinkle 3s ease-in-out infinite;
+  }
+  @keyframes twinkle{
+    0%,100%{opacity:.2;transform:scale(1)}
+    50%{opacity:.6;transform:scale(1.15)}
+  }
+
+  .stage{position:relative;z-index:1}
+
+  /* CONFETTI */
+  .confetti{
+    position:fixed;
+    font-size:28px;
+    pointer-events:none;
+    z-index:999;
+    animation:fall 2.5s ease-in forwards;
+  }
+  @keyframes fall{
+    0%{transform:translateY(-10vh) rotate(0);opacity:1}
+    100%{transform:translateY(110vh) rotate(720deg);opacity:0}
+  }
+
+  /* RESTART */
+  .restart{
+    background:transparent;
+    border:3px dashed var(--ink);
+    border-radius:999px;
+    padding:12px 24px;
+    font-family:inherit;
+    font-weight:800;
+    font-size:1rem;
+    cursor:pointer;
+    color:var(--ink);
+    margin-top:16px;
+    transition:background .2s;
+  }
+  .restart:hover{background:rgba(255,255,255,.5)}
+
+  /* RESPONSIVE */
+  @media(min-width:768px){
+    .grid{max-width:640px}
+    .emoji-wall{max-width:640px}
+    .title{max-width:20ch}
+  }
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<!-- PROGRESS -->
+<div class="progress" id="progress">
+  <div class="dot active"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
+</div>
+
+<!-- STAGE 1: ИМЯ -->
+<section class="stage active" id="stage1">
+  <div class="title">Придумай <span class="accent">имя</span><br>своему ресторану!</div>
+  <div class="subtitle">Нажми на карточку 👇</div>
+  <div class="grid" id="nameGrid">
+    <button class="name-card" data-name="Король блинчиков">👑 Король<br>блинчиков</button>
+    <button class="name-card" data-name="Кухня всего мира">🌍 Кухня<br>всего мира</button>
+    <button class="name-card" data-name="Милая кухня">💕 Милая<br>кухня</button>
+    <button class="name-card" data-name="Земля сладостей">🍬 Земля<br>сладостей</button>
+    <button class="name-card" data-name="Весёлый повар">👨‍🍳 Весёлый<br>повар</button>
+    <button class="name-card" data-name="Домик вкусностей">🏠 Домик<br>вкусностей</button>
+  </div>
+  <button class="next-btn" id="toStage2" disabled>Дальше →</button>
+</section>
+
+<!-- STAGE 2: БЛЮДА -->
+<section class="stage" id="stage2">
+  <div class="title">Выбери блюда<br>для <span class="accent">меню</span>!</div>
+  <div class="counter">Выбрано: <span class="big" id="dishCount">0</span> / 5</div>
+  <div class="emoji-wall" id="dishWall">
+    <button class="emoji-btn" data-dish="🍕">🍕</button>
+    <button class="emoji-btn" data-dish="🍔">🍔</button>
+    <button class="emoji-btn" data-dish="🍟">🍟</button>
+    <button class="emoji-btn" data-dish="🌮">🌮</button>
+    <button class="emoji-btn" data-dish="🍣">🍣</button>
+    <button class="emoji-btn" data-dish="🍜">🍜</button>
+    <button class="emoji-btn" data-dish="🥞">🥞</button>
+    <button class="emoji-btn" data-dish="🍩">🍩</button>
+    <button class="emoji-btn" data-dish="🍦">🍦</button>
+    <button class="emoji-btn" data-dish="🧁">🧁</button>
+    <button class="emoji-btn" data-dish="🍎">🍎</button>
+    <button class="emoji-btn" data-dish="🍓">🍓</button>
+    <button class="emoji-btn" data-dish="🍪">🍪</button>
+    <button class="emoji-btn" data-dish="🥗">🥗</button>
+    <button class="emoji-btn" data-dish="🍇">🍇</button>
+    <button class="emoji-btn" data-dish="🍉">🍉</button>
+    <button class="emoji-btn" data-dish="🥕">🥕</button>
+    <button class="emoji-btn" data-dish="🍫">🍫</button>
+    <button class="emoji-btn" data-dish="🍭">🍭</button>
+    <button class="emoji-btn" data-dish="🥐">🥐</button>
+  </div>
+  <button class="next-btn" id="toStage3" disabled>Дальше →</button>
+</section>
+
+<!-- STAGE 3: СУПЕРСИЛА -->
+<section class="stage" id="stage3">
+  <div class="title">Что сделает<br>тебя <span class="accent">особенным?</span></div>
+  <div class="subtitle">Выбери одну волшебную силу ✨</div>
+  <div class="grid" id="powerGrid">
+    <button class="power-card p1" data-power="Звёздный вкус">
+      <span class="emo">⭐</span>
+      <span class="label">Звёздный вкус</span>
+    </button>
+    <button class="power-card p2" data-power="Радужное сияние">
+      <span class="emo">🌈</span>
+      <span class="label">Радужное сияние</span>
+    </button>
+    <button class="power-card p3" data-power="Волшебный дым">
+      <span class="emo">✨</span>
+      <span class="label">Волшебный дым</span>
+    </button>
+    <button class="power-card p4" data-power="Смех до слёз">
+      <span class="emo">😂</span>
+      <span class="label">Смех до слёз</span>
+    </button>
+  </div>
+  <button class="next-btn" id="toStage4" disabled>Показать рекламу →</button>
+</section>
+
+<!-- STAGE 4: РЕЗУЛЬТАТ -->
+<section class="stage" id="stage4">
+  <div class="result-card">
+    <div class="badge">🎉 Твоя реклама готова!</div>
+    <h2 id="resultName">Король блинчиков</h2>
+    <div class="result-dishes" id="resultDishes"></div>
+    <div class="result-power" id="resultPower">⭐ Звёздный вкус</div>
+  </div>
+  <button class="restart" id="restart">↻ Сделать ещё раз</button>
+</section>
+
+<script>
+  /* -------- SOUND -------- */
+  let audioCtx;
+  function beep(freq = 660, dur = 0.12, type = 'sine', vol = 0.15){
+    try{
+      if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.value = freq;
+      gain.gain.value = vol;
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+      osc.stop(audioCtx.currentTime + dur);
+    }catch(e){}
+  }
+  function popSound(){ beep(880, 0.1, 'triangle', 0.2); setTimeout(()=>beep(1320,0.08,'triangle',0.15), 60); }
+  function pickSound(){ beep(523, 0.1, 'sine', 0.18); }
+  function winSound(){
+    beep(523,0.15); setTimeout(()=>beep(659,0.15),120);
+    setTimeout(()=>beep(784,0.15),240); setTimeout(()=>beep(1046,0.3),360);
+  }
+  function removeSound(){ beep(300, 0.12, 'sawtooth', 0.12); }
+
+  /* -------- STATE -------- */
+  const state = {
+    name: '',
+    dishes: [],
+    power: ''
+  };
+
+  /* -------- STAGES -------- */
+  const stages = [1,2,3,4].map(i => document.getElementById('stage'+i));
+  const dots = document.querySelectorAll('.dot');
+
+  function goToStage(n){
+    stages.forEach((s,i) => {
+      s.classList.toggle('active', i === n-1);
+    });
+    dots.forEach((d,i) => {
+      d.classList.toggle('active', i === n-1);
+      d.classList.toggle('done', i < n-1);
+    });
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  /* -------- STAGE 1: ИМЯ -------- */
+  const nameCards = document.querySelectorAll('#nameGrid .name-card');
+  const toStage2 = document.getElementById('toStage2');
+
+  nameCards.forEach(card => {
+    card.addEventListener('click', () => {
+      pickSound();
+      nameCards.forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      state.name = card.dataset.name;
+      toStage2.disabled = false;
+    });
+  });
+
+  toStage2.addEventListener('click', () => { popSound(); goToStage(2); });
+
+  /* -------- STAGE 2: БЛЮДА -------- */
+  const dishBtns = document.querySelectorAll('#dishWall .emoji-btn');
+  const dishCount = document.getElementById('dishCount');
+  const toStage3 = document.getElementById('toStage3');
+  const MAX_DISHES = 5;
+
+  dishBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const dish = btn.dataset.dish;
+      const idx = state.dishes.indexOf(dish);
+      if(idx > -1){
+        state.dishes.splice(idx, 1);
+        btn.classList.remove('picked');
+        removeSound();
+      } else {
+        if(state.dishes.length >= MAX_DISHES){
+          // маленькое «нельзя»
+          beep(200, 0.15, 'sawtooth', 0.1);
+          btn.animate([
+            {transform:'translateX(0)'},
+            {transform:'translateX(-6px)'},
+            {transform:'translateX(6px)'},
+            {transform:'translateX(0)'}
+          ], {duration:250});
+          return;
+        }
+        state.dishes.push(dish);
+        btn.classList.add('picked');
+        pickSound();
+      }
+      dishCount.textContent = state.dishes.length;
+      toStage3.disabled = state.dishes.length === 0;
+    });
+  });
+
+  toStage3.addEventListener('click', () => { popSound(); goToStage(3); });
+
+  /* -------- STAGE 3: СУПЕРСИЛА -------- */
+  const powerCards = document.querySelectorAll('#powerGrid .power-card');
+  const toStage4 = document.getElementById('toStage4');
+
+  powerCards.forEach(card => {
+    card.addEventListener('click', () => {
+      pickSound();
+      powerCards.forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      state.power = card.dataset.power;
+      toStage4.disabled = false;
+    });
+  });
+
+  toStage4.addEventListener('click', () => {
+    winSound();
+    renderResult();
+    goToStage(4);
+    launchConfetti();
+  });
+
+  /* -------- STAGE 4: РЕЗУЛЬТАТ -------- */
+  function renderResult(){
+    document.getElementById('resultName').textContent = state.name;
+    const dishesBox = document.getElementById('resultDishes');
+    dishesBox.innerHTML = '';
+    state.dishes.forEach(d => {
+      const el = document.createElement('span');
+      el.className = 'emo';
+      el.textContent = d;
+      dishesBox.appendChild(el);
+    });
+    document.getElementById('resultPower').textContent = '✨ ' + state.power;
+  }
+
+  /* -------- RESTART -------- */
+  document.getElementById('restart').addEventListener('click', () => {
+    // Сброс
+    state.name = '';
+    state.dishes = [];
+    state.power = '';
+    nameCards.forEach(c => c.classList.remove('selected'));
+    dishBtns.forEach(b => b.classList.remove('picked'));
+    powerCards.forEach(c => c.classList.remove('selected'));
+    dishCount.textContent = '0';
+    toStage2.disabled = true;
+    toStage3.disabled = true;
+    toStage4.disabled = true;
+    goToStage(1);
+  });
+
+  /* -------- CONFETTI -------- */
+  const emojis = ['⭐','🎉','✨','🍕','🍔','🍩','💖','🌈','🍭','🎈','🍦','🧁'];
+  function launchConfetti(){
+    for(let i = 0; i < 30; i++){
+      setTimeout(() => {
+        const el = document.createElement('div');
+        el.className = 'confetti';
+        el.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+        el.style.left = Math.random()*100 + 'vw';
+        el.style.animationDuration = (1.5 + Math.random()*1.5) + 's';
+        el.style.fontSize = (20 + Math.random()*24) + 'px';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 3000);
+      }, i*50);
+    }
+  }
+
+  /* -------- STARS BACKGROUND -------- */
+  function makeStars(){
+    const stars = document.getElementById('stars');
+    const chars = ['⭐','✨','🌟','💫','🍭','🍕','🍩','🧁'];
+    for(let i = 0; i < 18; i++){
+      const s = document.createElement('div');
+      s.className = 'star';
+      s.textContent = chars[Math.floor(Math.random()*chars.length)];
+      s.style.left = Math.random()*100 + 'vw';
+      s.style.top = Math.random()*100 + 'vh';
+      s.style.animationDelay = (Math.random()*3) + 's';
+      s.style.fontSize = (16 + Math.random()*20) + 'px';
+      stars.appendChild(s);
+    }
+  }
+  makeStars();
+
+  /* -------- UNLOCK AUDIO ON FIRST TAP -------- */
+  document.body.addEventListener('touchstart', function unlock(){
+    if(!audioCtx){
+      try{ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){}
+    }
+    document.body.removeEventListener('touchstart', unlock);
+  }, {passive:true});
+</script>
+</body>
+</html>

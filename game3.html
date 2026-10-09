@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Собери своего героя!</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fff2d9;
+    --bg2:#ffd1a8;
+    --ink:#2b1a0f;
+    --pink:#ff5d8f;
+    --yellow:#ffc93c;
+    --blue:#5bc0eb;
+    --green:#7bd389;
+    --purple:#a06cd5;
+    --white:#fffaf0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{
+    height:100%;
+    font-family:'Fredoka',system-ui,sans-serif;
+    background:radial-gradient(circle at 50% 0%, var(--bg) 0%, var(--bg2) 100%);
+    color:var(--ink);
+    overflow:hidden;
+    user-select:none;
+  }
+  body{
+    display:flex;flex-direction:column;
+    padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+
+  /* PROGRESS */
+  .progress{
+    display:flex;justify-content:center;gap:8px;
+    padding:14px 0 4px;flex-shrink:0;
+  }
+  .dot{
+    width:12px;height:12px;border-radius:50%;
+    background:rgba(43,26,15,0.15);
+    transition:all .3s cubic-bezier(.34,1.56,.64,1);
+  }
+  .dot.active{background:var(--pink);transform:scale(1.5)}
+  .dot.done{background:var(--green)}
+
+  /* STAGE */
+  .stage{
+    flex:1;display:none;flex-direction:column;
+    justify-content:center;align-items:center;
+    padding:14px;text-align:center;gap:14px;
+    overflow-y:auto;
+  }
+  .stage.active{display:flex;animation:fadeIn .4s ease}
+  @keyframes fadeIn{
+    from{opacity:0;transform:scale(.96)}
+    to{opacity:1;transform:scale(1)}
+  }
+
+  /* TITLES */
+  .title{
+    font-size:clamp(1.6rem,7vw,2.4rem);
+    font-weight:900;line-height:1.05;
+    letter-spacing:-.02em;max-width:14ch;
+  }
+  .title .accent{color:var(--pink)}
+  .hint{
+    font-size:clamp(.85rem,3.4vw,1rem);
+    font-weight:600;opacity:.6;
+    max-width:24ch;line-height:1.3;
+  }
+
+  /* PREVIEW — маленькие чипсы сверху */
+  .preview{
+    display:flex;gap:8px;justify-content:center;
+    flex-wrap:wrap;min-height:52px;align-items:center;
+    padding:6px 0;
+  }
+  .preview-chip{
+    width:48px;height:48px;
+    border-radius:50%;
+    background:var(--white);
+    border:3px solid var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    font-size:24px;
+    box-shadow:0 3px 0 var(--ink);
+    animation:pop .35s cubic-bezier(.34,1.56,.64,1);
+  }
+  @keyframes pop{
+    0%{transform:scale(0) rotate(-90deg)}
+    100%{transform:scale(1) rotate(0)}
+  }
+
+  /* GRIDS */
+  .grid{
+    display:grid;gap:10px;width:100%;max-width:520px;
+  }
+  .g3{grid-template-columns:repeat(4,1fr)}
+  .g4{grid-template-columns:repeat(3,1fr)}
+
+  /* EMOJI BUTTON */
+  .emo-btn{
+    background:var(--white);
+    border:4px solid var(--ink);
+    border-radius:20px;
+    padding:10px 4px;
+    font-family:inherit;
+    color:var(--ink);
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    aspect-ratio:1;
+    box-shadow:0 5px 0 var(--ink);
+    transition:transform .12s cubic-bezier(.34,1.56,.64,1), box-shadow .12s;
+    position:relative;
+    font-size:clamp(2rem,8vw,2.8rem);
+    line-height:1;
+  }
+  .emo-btn:hover{transform:translateY(-3px);box-shadow:0 8px 0 var(--ink)}
+  .emo-btn:active{transform:translateY(3px);box-shadow:0 2px 0 var(--ink)}
+  .emo-btn.picked{
+    background:var(--yellow);
+    transform:translateY(3px);
+    box-shadow:0 2px 0 var(--ink);
+  }
+  .emo-btn.picked::after{
+    content:"✓";
+    position:absolute;top:-8px;right:-8px;
+    width:28px;height:28px;border-radius:50%;
+    background:var(--green);color:#fff;font-size:16px;
+    display:flex;align-items:center;justify-content:center;
+    border:3px solid var(--ink);
+    animation:pop .3s cubic-bezier(.34,1.56,.64,1);
+  }
+
+  /* NEXT BTN */
+  .next-btn{
+    background:var(--pink);color:#fff;
+    border:4px solid var(--ink);
+    border-radius:999px;
+    padding:14px 36px;
+    font-family:inherit;font-weight:900;
+    font-size:clamp(1rem,4vw,1.3rem);
+    cursor:pointer;
+    box-shadow:0 5px 0 var(--ink);
+    transition:transform .12s, box-shadow .12s;
+    display:inline-flex;align-items:center;gap:8px;
+  }
+  .next-btn:hover{transform:translateY(-3px);box-shadow:0 8px 0 var(--ink)}
+  .next-btn:active{transform:translateY(3px);box-shadow:0 2px 0 var(--ink)}
+  .next-btn:disabled{
+    background:#c8c8c8;cursor:not-allowed;
+    transform:none;box-shadow:0 5px 0 var(--ink);opacity:.55;
+  }
+
+  /* HERO RESULT */
+  .hero-scene{
+    position:relative;
+    width:min(320px, 80vw);
+    height:min(320px, 80vw);
+    display:flex;align-items:center;justify-content:center;
+    margin:0 auto;
+  }
+  .hero-main{
+    font-size:clamp(6rem,30vw,10rem);
+    line-height:1;
+    position:relative;
+    z-index:2;
+    animation:bounce 1.6s ease-in-out infinite;
+    filter:drop-shadow(0 12px 0 rgba(43,26,15,.15));
+  }
+  @keyframes bounce{
+    0%,100%{transform:translateY(0) rotate(-2deg)}
+    50%{transform:translateY(-14px) rotate(2deg)}
+  }
+  .hero-accessory{
+    position:absolute;
+    top:12%;right:14%;
+    font-size:clamp(2.4rem,11vw,3.6rem);
+    z-index:3;
+    animation:wiggle 1.4s ease-in-out infinite;
+  }
+  @keyframes wiggle{
+    0%,100%{transform:rotate(-12deg)}
+    50%{transform:rotate(12deg)}
+  }
+  .hero-face{
+    position:absolute;
+    bottom:14%;left:8%;
+    font-size:clamp(1.8rem,8vw,2.6rem);
+    z-index:3;
+    animation:pop 1.2s ease-in-out infinite;
+  }
+  @keyframes pop{
+    0%,100%{transform:scale(1)}
+    50%{transform:scale(1.2)}
+  }
+
+  /* SPARKLES вокруг героя */
+  .sparkles{
+    position:absolute;inset:0;
+    pointer-events:none;z-index:1;
+  }
+  .sparkle{
+    position:absolute;
+    font-size:22px;
+    animation:sparkleFloat 2.6s ease-in-out infinite;
+  }
+  @keyframes sparkleFloat{
+    0%,100%{transform:translate(0,0) scale(1);opacity:.5}
+    50%{transform:translate(var(--dx,10px),var(--dy,-14px)) scale(1.3);opacity:1}
+  }
+
+  /* RESULT CARD */
+  .result-wrap{
+    display:flex;flex-direction:column;align-items:center;gap:14px;
+    padding:8px 0;
+    animation:cardIn .6s cubic-bezier(.34,1.56,.64,1);
+    width:100%;
+  }
+  @keyframes cardIn{
+    0%{transform:scale(.5) rotate(-6deg);opacity:0}
+    100%{transform:scale(1) rotate(0);opacity:1}
+  }
+  .hero-name{
+    background:var(--ink);color:var(--white);
+    padding:10px 26px;border-radius:999px;
+    font-size:clamp(1.1rem,4.5vw,1.4rem);
+    font-weight:900;
+    letter-spacing:-.01em;
+    border:3px solid var(--ink);
+    box-shadow:0 4px 0 rgba(43,26,15,.25);
+  }
+  .hero-name .accent{color:var(--yellow)}
+
+  /* Собрал сам */
+  .made-by{
+    display:flex;flex-direction:column;align-items:center;gap:8px;
+    margin-top:6px;
+  }
+  .made-by .word{
+    font-weight:900;
+    font-size:clamp(1.1rem,4.5vw,1.4rem);
+    color:var(--pink);
+    letter-spacing:-.02em;
+  }
+  .made-by .icons{
+    display:flex;gap:8px;
+  }
+  .made-by .icons span{
+    width:40px;height:40px;
+    background:var(--white);
+    border:3px solid var(--ink);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:20px;
+    box-shadow:0 3px 0 var(--ink);
+  }
+
+  /* RESTART */
+  .restart{
+    background:transparent;
+    border:3px dashed var(--ink);
+    border-radius:999px;
+    padding:10px 22px;
+    font-family:inherit;font-weight:800;
+    font-size:.95rem;cursor:pointer;color:var(--ink);
+    transition:background .2s;
+  }
+  .restart:hover{background:rgba(255,255,255,.6)}
+
+  /* STARS BG */
+  .stars{
+    position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0;
+  }
+  .star{
+    position:absolute;font-size:20px;opacity:.3;
+    animation:twinkle 3s ease-in-out infinite;
+  }
+  @keyframes twinkle{
+    0%,100%{opacity:.12;transform:scale(1)}
+    50%{opacity:.5;transform:scale(1.15)}
+  }
+  .stage{position:relative;z-index:1}
+
+  /* CONFETTI */
+  .confetti{
+    position:fixed;font-size:26px;pointer-events:none;z-index:999;
+    animation:fall 2.8s ease-in forwards;
+  }
+  @keyframes fall{
+    0%{transform:translateY(-10vh) rotate(0);opacity:1}
+    100%{transform:translateY(110vh) rotate(720deg);opacity:0}
+  }
+
+  /* SPEECH BUBBLE */
+  .speech{
+    position:absolute;top:-20px;left:50%;
+    transform:translateX(-50%);
+    background:var(--white);
+    border:3px solid var(--ink);
+    border-radius:20px;
+    padding:10px 18px;
+    font-size:clamp(.85rem,3.4vw,1.05rem);
+    font-weight:900;
+    white-space:nowrap;
+    z-index:10;
+    animation:bubbleIn .5s cubic-bezier(.34,1.56,.64,1);
+    box-shadow:0 4px 0 var(--ink);
+  }
+  .speech::after{
+    content:"";
+    position:absolute;bottom:-10px;left:50%;
+    transform:translateX(-50%);
+    width:0;height:0;
+    border-left:8px solid transparent;
+    border-right:8px solid transparent;
+    border-top:12px solid var(--ink);
+  }
+  @keyframes bubbleIn{
+    0%{transform:translateX(-50%) scale(0) rotate(-10deg)}
+    100%{transform:translateX(-50%) scale(1) rotate(0)}
+  }
+
+  @media(max-height:640px){
+    .title{font-size:clamp(1.3rem,5.5vw,1.8rem)}
+    .hero-main{font-size:clamp(4rem,22vw,6rem)}
+    .emo-btn{font-size:clamp(1.6rem,7vw,2.2rem)}
+  }
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<div class="progress" id="progress">
+  <div class="dot active"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
+</div>
+
+<!-- STAGE 1: КТО ОН? -->
+<section class="stage active" id="stage1">
+  <div class="title">Кто будет <span class="accent">героем</span> твоей рекламы?</div>
+  <div class="preview" id="preview1"></div>
+  <div class="grid g3" id="animalGrid">
+    <button class="emo-btn" data-animal="🐱" data-name="Кот">🐱</button>
+    <button class="emo-btn" data-animal="🐶" data-name="Пёс">🐶</button>
+    <button class="emo-btn" data-animal="🐰" data-name="Заяц">🐰</button>
+    <button class="emo-btn" data-animal="🐻" data-name="Мишка">🐻</button>
+    <button class="emo-btn" data-animal="🦄" data-name="Единорог">🦄</button>
+    <button class="emo-btn" data-animal="🐼" data-name="Панда">🐼</button>
+    <button class="emo-btn" data-animal="🦊" data-name="Лис">🦊</button>
+    <button class="emo-btn" data-animal="🐸" data-name="Квак">🐸</button>
+  </div>
+  <button class="next-btn" id="toStage2" disabled>Дальше →</button>
+</section>
+
+<!-- STAGE 2: КАКОЙ ОН? -->
+<section class="stage" id="stage2">
+  <div class="title">Какой у него <span class="accent">характер?</span></div>
+  <div class="preview" id="preview2"></div>
+  <div class="grid g4" id="moodGrid">
+    <button class="emo-btn" data-mood="😄" data-moodname="весёлый">😄</button>
+    <button class="emo-btn" data-mood="😎" data-moodname="крутой">😎</button>
+    <button class="emo-btn" data-mood="🤪" data-moodname="смешной">🤪</button>
+    <button class="emo-btn" data-mood="😇" data-moodname="добрый">😇</button>
+    <button class="emo-btn" data-mood="🥳" data-moodname="праздничный">🥳</button>
+    <button class="emo-btn" data-mood="😻" data-moodname="милый">😻</button>
+  </div>
+  <button class="next-btn" id="toStage3" disabled>Дальше →</button>
+</section>
+
+<!-- STAGE 3: ЧТО У НЕГО ЕСТЬ? -->
+<section class="stage" id="stage3">
+  <div class="title">Во что он <span class="accent">одет?</span></div>
+  <div class="preview" id="preview3"></div>
+  <div class="grid g4" id="accessoryGrid">
+    <button class="emo-btn" data-acc="👑">👑</button>
+    <button class="emo-btn" data-acc="🎩">🎩</button>
+    <button class="emo-btn" data-acc="🧢">🧢</button>
+    <button class="emo-btn" data-acc="🎧">🎧</button>
+    <button class="emo-btn" data-acc="🕶️">🕶️</button>
+    <button class="emo-btn" data-acc="🎀">🎀</button>
+  </div>
+  <button class="next-btn" id="toStage4" disabled>Дальше →</button>
+</section>
+
+<!-- STAGE 4: СУПЕРСИЛА -->
+<section class="stage" id="stage4">
+  <div class="title">Что он умеет <span class="accent">делать?</span></div>
+  <div class="preview" id="preview4"></div>
+  <div class="grid g4" id="powerGrid">
+    <button class="emo-btn" data-power="💫">💫</button>
+    <button class="emo-btn" data-power="🌈">🌈</button>
+    <button class="emo-btn" data-power="✨">✨</button>
+    <button class="emo-btn" data-power="🎉">🎉</button>
+    <button class="emo-btn" data-power="🚀">🚀</button>
+    <button class="emo-btn" data-power="❤️">❤️</button>
+  </div>
+  <button class="next-btn" id="toStage5" disabled>Показать героя!</button>
+</section>
+
+<!-- STAGE 5: РЕЗУЛЬТАТ -->
+<section class="stage" id="stage5">
+  <div class="result-wrap">
+    <div class="hero-scene">
+      <div class="sparkles" id="sparkles"></div>
+      <div class="hero-main" id="rAnimal">🐱</div>
+      <div class="hero-accessory" id="rAccessory">👑</div>
+      <div class="hero-face" id="rMood">😄</div>
+    </div>
+    <div class="hero-name" id="rName">Король <span class="accent">Кот</span></div>
+    <div class="made-by">
+      <div class="word">Ты — создатель героев!</div>
+      <div class="icons">
+        <span>🎨</span>
+        <span>✏️</span>
+        <span>🎬</span>
+      </div>
+    </div>
+    <button class="restart" id="restart">↻ Сделать ещё одного</button>
+  </div>
+</section>
+
+<script>
+  /* ---------- SOUND ---------- */
+  let audioCtx;
+  function tone(freq=660, dur=0.12, type='sine', vol=0.15){
+    try{
+      if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = type; o.frequency.value = freq;
+      g.gain.value = vol;
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start();
+      g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+      o.stop(audioCtx.currentTime + dur);
+    }catch(e){}
+  }
+  const pick = () => tone(660,0.1,'sine',0.18);
+  const pop  = () => { tone(880,0.1,'triangle',0.2); setTimeout(()=>tone(1320,0.08,'triangle',0.15),60); };
+  const win  = () => {
+    tone(523,0.15); setTimeout(()=>tone(659,0.15),120);
+    setTimeout(()=>tone(784,0.15),240); setTimeout(()=>tone(1046,0.35),360);
+  };
+
+  /* ---------- STATE ---------- */
+  const state = {
+    animal:'', name:'',
+    mood:'', moodname:'',
+    acc:'',
+    power:''
+  };
+
+  /* ---------- STAGES ---------- */
+  const stageIds = ['stage1','stage2','stage3','stage4','stage5'];
+  const stageEls = stageIds.map(id => document.getElementById(id));
+  const dots = document.querySelectorAll('.dot');
+
+  function goTo(n){
+    stageEls.forEach((s,i) => s.classList.toggle('active', i === n-1));
+    dots.forEach((d,i) => {
+      d.classList.toggle('active', i === n-1);
+      d.classList.toggle('done', i < n-1);
+    });
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  /* ---------- STAGE 1: ANIMAL ---------- */
+  const animalBtns = document.querySelectorAll('#animalGrid .emo-btn');
+  const toStage2 = document.getElementById('toStage2');
+  const preview1 = document.getElementById('preview1');
+
+  animalBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      pick();
+      animalBtns.forEach(b => b.classList.remove('picked'));
+      btn.classList.add('picked');
+      state.animal = btn.dataset.animal;
+      state.name = btn.dataset.name;
+      preview1.innerHTML = `<div class="preview-chip">${state.animal}</div>`;
+      toStage2.disabled = false;
+    });
+  });
+  toStage2.addEventListener('click', () => { pop(); goTo(2); });
+
+  /* ---------- STAGE 2: MOOD ---------- */
+  const moodBtns = document.querySelectorAll('#moodGrid .emo-btn');
+  const toStage3 = document.getElementById('toStage3');
+  const preview2 = document.getElementById('preview2');
+
+  moodBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      pick();
+      moodBtns.forEach(b => b.classList.remove('picked'));
+      btn.classList.add('picked');
+      state.mood = btn.dataset.mood;
+      state.moodname = btn.dataset.moodname;
+      preview2.innerHTML =
+        `<div class="preview-chip">${state.animal}</div>
+         <div class="preview-chip">${state.mood}</div>`;
+      toStage3.disabled = false;
+    });
+  });
+  toStage3.addEventListener('click', () => { pop(); goTo(3); });
+
+  /* ---------- STAGE 3: ACCESSORY ---------- */
+  const accBtns = document.querySelectorAll('#accessoryGrid .emo-btn');
+  const toStage4 = document.getElementById('toStage4');
+  const preview3 = document.getElementById('preview3');
+
+  accBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      pick();
+      accBtns.forEach(b => b.classList.remove('picked'));
+      btn.classList.add('picked');
+      state.acc = btn.dataset.acc;
+      preview3.innerHTML =
+        `<div class="preview-chip">${state.animal}</div>
+         <div class="preview-chip">${state.mood}</div>
+         <div class="preview-chip">${state.acc}</div>`;
+      toStage4.disabled = false;
+    });
+  });
+  toStage4.addEventListener('click', () => { pop(); goTo(4); });
+
+  /* ---------- STAGE 4: POWER ---------- */
+  const powerBtns = document.querySelectorAll('#powerGrid .emo-btn');
+  const toStage5 = document.getElementById('toStage5');
+  const preview4 = document.getElementById('preview4');
+
+  powerBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      pick();
+      powerBtns.forEach(b => b.classList.remove('picked'));
+      btn.classList.add('picked');
+      state.power = btn.dataset.power;
+      preview4.innerHTML =
+        `<div class="preview-chip">${state.animal}</div>
+         <div class="preview-chip">${state.mood}</div>
+         <div class="preview-chip">${state.acc}</div>
+         <div class="preview-chip">${state.power}</div>`;
+      toStage5.disabled = false;
+    });
+  });
+
+  toStage5.addEventListener('click', () => {
+    win();
+    renderResult();
+    goTo(5);
+    launchConfetti();
+    createSparkles();
+  });
+
+  /* ---------- RESULT ---------- */
+  function renderResult(){
+    document.getElementById('rAnimal').textContent = state.animal;
+    document.getElementById('rMood').textContent = state.mood;
+    document.getElementById('rAccessory').textContent = state.acc;
+
+    const titleByAcc = {
+      '👑':'Король',
+      '🎩':'Важный',
+      '🧢':'Спортивный',
+      '🎧':'Музыкальный',
+      '🕶️':'Стильный',
+      '🎀':'Милый'
+    };
+    const pre = titleByAcc[state.acc] || 'Супер';
+    document.getElementById('rName').innerHTML =
+      `${pre} <span class="accent">${state.name}</span>`;
+  }
+
+  function createSparkles(){
+    const box = document.getElementById('sparkles');
+    box.innerHTML = '';
+    const chars = ['✨','⭐','💫','🌟'];
+    for(let i = 0; i < 8; i++){
+      const s = document.createElement('span');
+      s.className = 'sparkle';
+      s.textContent = chars[i % chars.length];
+      s.style.left = (10 + Math.random()*80) + '%';
+      s.style.top = (10 + Math.random()*80) + '%';
+      s.style.animationDelay = (Math.random()*2) + 's';
+      s.style.setProperty('--dx', (Math.random()*30-15) + 'px');
+      s.style.setProperty('--dy', (-15 - Math.random()*20) + 'px');
+      box.appendChild(s);
+    }
+  }
+
+  /* ---------- RESTART ---------- */
+  document.getElementById('restart').addEventListener('click', () => {
+    Object.assign(state, {animal:'', name:'', mood:'', moodname:'', acc:'', power:''});
+    animalBtns.forEach(b => b.classList.remove('picked'));
+    moodBtns.forEach(b => b.classList.remove('picked'));
+    accBtns.forEach(b => b.classList.remove('picked'));
+    powerBtns.forEach(b => b.classList.remove('picked'));
+    preview1.innerHTML = preview2.innerHTML = preview3.innerHTML = preview4.innerHTML = '';
+    toStage2.disabled = toStage3.disabled = toStage4.disabled = toStage5.disabled = true;
+    goTo(1);
+  });
+
+  /* ---------- CONFETTI ---------- */
+  const emojis = ['⭐','🎉','✨','💖','🌈','🎈','👑','🎀','💫'];
+  function launchConfetti(){
+    for(let i = 0; i < 32; i++){
+      setTimeout(() => {
+        const el = document.createElement('div');
+        el.className = 'confetti';
+        el.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+        el.style.left = Math.random()*100 + 'vw';
+        el.style.animationDuration = (1.6 + Math.random()*1.6) + 's';
+        el.style.fontSize = (20 + Math.random()*22) + 'px';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 3200);
+      }, i*45);
+    }
+  }
+
+  /* ---------- STARS ---------- */
+  function makeStars(){
+    const stars = document.getElementById('stars');
+    const chars = ['⭐','✨','🌟','💫','🎨','🎬'];
+    for(let i = 0; i < 14; i++){
+      const s = document.createElement('div');
+      s.className = 'star';
+      s.textContent = chars[Math.floor(Math.random()*chars.length)];
+      s.style.left = Math.random()*100 + 'vw';
+      s.style.top = Math.random()*100 + 'vh';
+      s.style.animationDelay = (Math.random()*3) + 's';
+      s.style.fontSize = (16 + Math.random()*16) + 'px';
+      stars.appendChild(s);
+    }
+  }
+  makeStars();
+
+  /* ---------- AUDIO UNLOCK ---------- */
+  document.body.addEventListener('touchstart', function unlock(){
+    if(!audioCtx){
+      try{ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){}
+    }
+    document.body.removeEventListener('touchstart', unlock);
+  }, {passive:true});
+</script>
+</body>
+</html>

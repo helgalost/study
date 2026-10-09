@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Собери рекламу!</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700;900&family=Inter:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fff5e1;
+    --bg2:#ffe0b8;
+    --ink:#2b1a0f;
+    --pink:#ff5d8f;
+    --yellow:#ffc93c;
+    --blue:#5bc0eb;
+    --green:#7bd389;
+    --purple:#a06cd5;
+    --white:#fffaf0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{
+    height:100%;
+    font-family:'Fredoka','Inter',system-ui,sans-serif;
+    background:radial-gradient(circle at 50% 0%, var(--bg) 0%, var(--bg2) 100%);
+    color:var(--ink);
+    overflow:hidden;
+    user-select:none;
+  }
+  body{
+    display:flex;
+    flex-direction:column;
+    padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+
+  /* PROGRESS */
+  .progress{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    padding:14px 0 6px;
+    flex-shrink:0;
+  }
+  .dot{
+    width:12px;height:12px;
+    border-radius:50%;
+    background:rgba(43,26,15,0.15);
+    transition:all .3s cubic-bezier(.34,1.56,.64,1);
+  }
+  .dot.active{background:var(--pink);transform:scale(1.5)}
+  .dot.done{background:var(--green)}
+
+  /* STAGE */
+  .stage{
+    flex:1;
+    display:none;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    padding:16px;
+    text-align:center;
+    gap:14px;
+    overflow-y:auto;
+  }
+  .stage.active{display:flex;animation:fadeIn .4s ease}
+  @keyframes fadeIn{
+    from{opacity:0;transform:scale(.96)}
+    to{opacity:1;transform:scale(1)}
+  }
+
+  /* ROLE BADGE */
+  .role{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:var(--ink);
+    color:var(--white);
+    padding:8px 20px;
+    border-radius:999px;
+    font-weight:900;
+    font-size:clamp(.85rem,3.2vw,1rem);
+    letter-spacing:.02em;
+  }
+  .role .ico{font-size:1.3em}
+
+  /* TITLES */
+  .title{
+    font-size:clamp(1.5rem,6.5vw,2.4rem);
+    font-weight:900;
+    line-height:1.05;
+    letter-spacing:-.02em;
+    max-width:16ch;
+  }
+  .title .accent{color:var(--pink)}
+  .hint{
+    font-size:clamp(.85rem,3.2vw,1rem);
+    font-weight:600;
+    opacity:.6;
+    max-width:24ch;
+    line-height:1.3;
+  }
+
+  /* BUTTON GRIDS */
+  .grid{
+    display:grid;
+    gap:12px;
+    width:100%;
+    max-width:540px;
+  }
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  .g6{grid-template-columns:repeat(3,1fr)}
+
+  /* BIG EMOJI BUTTON */
+  .emo-btn{
+    background:var(--white);
+    border:4px solid var(--ink);
+    border-radius:22px;
+    padding:16px 8px;
+    font-family:inherit;
+    font-weight:900;
+    color:var(--ink);
+    cursor:pointer;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    aspect-ratio:1;
+    box-shadow:0 5px 0 var(--ink);
+    transition:transform .12s cubic-bezier(.34,1.56,.64,1), box-shadow .12s;
+    position:relative;
+  }
+  .emo-btn:hover{transform:translateY(-3px);box-shadow:0 8px 0 var(--ink)}
+  .emo-btn:active{transform:translateY(3px);box-shadow:0 2px 0 var(--ink)}
+  .emo-btn .big{font-size:clamp(2rem,7vw,2.8rem);line-height:1}
+  .emo-btn .cap{font-size:clamp(.7rem,2.6vw,.85rem);opacity:.75;line-height:1}
+  .emo-btn.picked{
+    background:var(--yellow);
+    transform:translateY(3px);
+    box-shadow:0 2px 0 var(--ink);
+  }
+  .emo-btn.picked::after{
+    content:"✓";
+    position:absolute;
+    top:-10px;right:-10px;
+    width:32px;height:32px;
+    border-radius:50%;
+    background:var(--green);
+    color:#fff;
+    font-size:18px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:3px solid var(--ink);
+    animation:pop .3s cubic-bezier(.34,1.56,.64,1);
+  }
+  @keyframes pop{
+    0%{transform:scale(0) rotate(-90deg)}
+    100%{transform:scale(1) rotate(0)}
+  }
+
+  /* COLOR DOTS */
+  .colors{
+    display:flex;
+    gap:14px;
+    justify-content:center;
+    flex-wrap:wrap;
+    padding:8px 0;
+  }
+  .color-dot{
+    width:clamp(52px,15vw,68px);
+    height:clamp(52px,15vw,68px);
+    border-radius:50%;
+    border:4px solid var(--ink);
+    cursor:pointer;
+    box-shadow:0 4px 0 var(--ink);
+    transition:transform .15s cubic-bezier(.34,1.56,.64,1);
+    position:relative;
+  }
+  .color-dot:hover{transform:translateY(-3px)}
+  .color-dot:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+  .color-dot.picked{
+    transform:scale(1.15);
+    box-shadow:0 4px 0 var(--ink), 0 0 0 5px var(--white), 0 0 0 8px var(--ink);
+  }
+
+  /* SLOGAN WORD WALL */
+  .words{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    justify-content:center;
+    max-width:560px;
+    padding:10px;
+  }
+  .word{
+    background:var(--white);
+    border:3px solid var(--ink);
+    border-radius:999px;
+    padding:10px 18px;
+    font-family:inherit;
+    font-weight:800;
+    font-size:clamp(.9rem,3.4vw,1.1rem);
+    color:var(--ink);
+    cursor:pointer;
+    box-shadow:0 4px 0 var(--ink);
+    transition:transform .12s, box-shadow .12s, background .2s;
+  }
+  .word:hover{transform:translateY(-2px);box-shadow:0 6px 0 var(--ink)}
+  .word:active{transform:translateY(2px);box-shadow:0 2px 0 var(--ink)}
+  .word.picked{background:var(--yellow)}
+
+  /* COUNTER */
+  .counter{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:var(--white);
+    border:3px solid var(--ink);
+    border-radius:999px;
+    padding:6px 18px;
+    font-weight:900;
+    font-size:clamp(.9rem,3.4vw,1.05rem);
+    box-shadow:0 3px 0 var(--ink);
+  }
+  .counter .big{color:var(--pink);font-size:1.3em}
+
+  /* NEXT BTN */
+  .next-btn{
+    background:var(--pink);
+    color:#fff;
+    border:4px solid var(--ink);
+    border-radius:999px;
+    padding:14px 36px;
+    font-family:inherit;
+    font-weight:900;
+    font-size:clamp(1rem,4vw,1.3rem);
+    cursor:pointer;
+    box-shadow:0 5px 0 var(--ink);
+    transition:transform .12s, box-shadow .12s;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+  }
+  .next-btn:hover{transform:translateY(-3px);box-shadow:0 8px 0 var(--ink)}
+  .next-btn:active{transform:translateY(3px);box-shadow:0 2px 0 var(--ink)}
+  .next-btn:disabled{
+    background:#c8c8c8;
+    cursor:not-allowed;
+    transform:none;
+    box-shadow:0 5px 0 var(--ink);
+    opacity:.55;
+  }
+
+  /* PREVIEW (маленькая реклама сверху) */
+  .preview{
+    display:flex;
+    gap:8px;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+    min-height:36px;
+  }
+  .preview-chip{
+    background:var(--ink);
+    color:var(--white);
+    padding:5px 14px;
+    border-radius:999px;
+    font-weight:800;
+    font-size:clamp(.75rem,2.8vw,.9rem);
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    animation:pop .3s cubic-bezier(.34,1.56,.64,1);
+  }
+
+  /* RESULT AD */
+  .ad-poster{
+    background:var(--white);
+    border:5px solid var(--ink);
+    border-radius:28px;
+    padding:24px;
+    max-width:420px;
+    width:100%;
+    box-shadow:0 10px 0 var(--ink);
+    position:relative;
+    animation:cardIn .6s cubic-bezier(.34,1.56,.64,1);
+    text-align:center;
+  }
+  @keyframes cardIn{
+    0%{transform:scale(.5) rotate(-8deg);opacity:0}
+    100%{transform:scale(1) rotate(-1deg);opacity:1}
+  }
+  .ad-poster .product{
+    font-size:clamp(3.5rem,15vw,5rem);
+    line-height:1;
+    margin-bottom:12px;
+    animation:float 3s ease-in-out infinite;
+  }
+  @keyframes float{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-8px)}
+  }
+  .ad-poster .logo-circle{
+    width:clamp(80px,22vw,110px);
+    height:clamp(80px,22vw,110px);
+    border-radius:50%;
+    border:4px solid var(--ink);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:0 auto 14px;
+    font-size:clamp(2.4rem,10vw,3.4rem);
+    transition:background .3s;
+  }
+  .ad-poster .slogan{
+    font-size:clamp(1.2rem,5vw,1.6rem);
+    font-weight:900;
+    line-height:1.1;
+    letter-spacing:-.02em;
+    margin-bottom:16px;
+    text-transform:lowercase;
+  }
+  .ad-poster .music-tag{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    background:var(--blue);
+    color:#fff;
+    padding:6px 16px;
+    border-radius:999px;
+    font-weight:800;
+    font-size:clamp(.8rem,3vw,.95rem);
+    border:3px solid var(--ink);
+  }
+  .ad-poster .badge{
+    position:absolute;
+    top:-18px;left:50%;transform:translateX(-50%) rotate(-3deg);
+    background:var(--pink);
+    color:#fff;
+    padding:6px 20px;
+    border-radius:999px;
+    border:4px solid var(--ink);
+    font-weight:900;
+    font-size:clamp(.8rem,3.2vw,.95rem);
+    white-space:nowrap;
+  }
+
+  /* RESULT SUMMARY */
+  .result-summary{
+    max-width:520px;
+    width:100%;
+    background:var(--white);
+    border:4px solid var(--ink);
+    border-radius:24px;
+    padding:18px;
+    box-shadow:0 6px 0 var(--ink);
+    text-align:left;
+  }
+  .result-summary .line{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight:800;
+    font-size:clamp(.9rem,3.4vw,1.05rem);
+    padding:6px 0;
+  }
+  .result-summary .line .em{font-size:1.4em}
+  .result-summary .line .check{margin-left:auto;color:var(--green);font-weight:900;font-size:1.3em}
+  .result-summary h3{
+    font-size:clamp(1.1rem,4.5vw,1.4rem);
+    font-weight:900;
+    text-transform:uppercase;
+    letter-spacing:-.02em;
+    margin-bottom:10px;
+  }
+  .result-summary .why{
+    margin-top:14px;
+    padding-top:14px;
+    border-top:3px dashed var(--ink);
+    font-size:clamp(.95rem,3.8vw,1.15rem);
+    font-weight:800;
+    line-height:1.25;
+    text-align:center;
+  }
+  .result-summary .why em{
+    color:var(--pink);
+    font-style:italic;
+  }
+
+  /* RESTART */
+  .restart{
+    background:transparent;
+    border:3px dashed var(--ink);
+    border-radius:999px;
+    padding:10px 22px;
+    font-family:inherit;
+    font-weight:800;
+    font-size:.95rem;
+    cursor:pointer;
+    color:var(--ink);
+    transition:background .2s;
+  }
+  .restart:hover{background:rgba(255,255,255,.5)}
+
+  /* STARS BG */
+  .stars{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    overflow:hidden;
+    z-index:0;
+  }
+  .star{
+    position:absolute;
+    font-size:22px;
+    opacity:.3;
+    animation:twinkle 3s ease-in-out infinite;
+  }
+  @keyframes twinkle{
+    0%,100%{opacity:.15;transform:scale(1)}
+    50%{opacity:.5;transform:scale(1.15)}
+  }
+  .stage{position:relative;z-index:1}
+
+  /* CONFETTI */
+  .confetti{
+    position:fixed;
+    font-size:26px;
+    pointer-events:none;
+    z-index:999;
+    animation:fall 2.5s ease-in forwards;
+  }
+  @keyframes fall{
+    0%{transform:translateY(-10vh) rotate(0);opacity:1}
+    100%{transform:translateY(110vh) rotate(720deg);opacity:0}
+  }
+
+  /* RESPONSIVE */
+  @media(min-width:768px){
+    .grid{max-width:640px}
+    .words{max-width:640px}
+  }
+  @media(max-height:600px){
+    .title{font-size:clamp(1.2rem,5vw,1.8rem)}
+    .emo-btn{padding:10px 6px}
+    .emo-btn .big{font-size:clamp(1.6rem,6vw,2.2rem)}
+    .ad-poster{padding:16px}
+  }
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<div class="progress" id="progress">
+  <div class="dot active"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
+</div>
+
+<!-- STAGE 1: ВСТУПЛЕНИЕ -->
+<section class="stage active" id="stage1">
+  <div class="title">В рекламе можно стать <span class="accent">кем угодно!</span></div>
+  <div class="grid g6" id="jobsGrid">
+    <button class="emo-btn" disabled style="cursor:default">
+      <span class="big">🎨</span>
+      <span class="cap">Дизайнер</span>
+    </button>
+    <button class="emo-btn" disabled style="cursor:default">
+      <span class="big">✏️</span>
+      <span class="cap">Писатель</span>
+    </button>
+    <button class="emo-btn" disabled style="cursor:default">
+      <span class="big">🎥</span>
+      <span class="cap">Режиссёр</span>
+    </button>
+    <button class="emo-btn" disabled style="cursor:default">
+      <span class="big">🎵</span>
+      <span class="cap">Композитор</span>
+    </button>
+    <button class="emo-btn" disabled style="cursor:default">
+      <span class="big">💻</span>
+      <span class="cap">Программист</span>
+    </button>
+    <button class="emo-btn" disabled style="cursor:default">
+      <span class="big">📸</span>
+      <span class="cap">Фотограф</span>
+    </button>
+  </div>
+  <div class="hint">Сейчас попробуем 3 профессии за раз</div>
+  <button class="next-btn" id="startBtn">Попробовать →</button>
+</section>
+
+<!-- STAGE 2: ЧТО РЕКЛАМИРУЕМ -->
+<section class="stage" id="stage2">
+  <div class="title">Что будем <span class="accent">рекламировать?</span></div>
+  <div class="grid g3" id="productGrid">
+    <button class="emo-btn" data-product="🍕">
+      <span class="big">🍕</span>
+    </button>
+    <button class="emo-btn" data-product="🍦">
+      <span class="big">🍦</span>
+    </button>
+    <button class="emo-btn" data-product="🎮">
+      <span class="big">🎮</span>
+    </button>
+    <button class="emo-btn" data-product="🐶">
+      <span class="big">🐶</span>
+    </button>
+    <button class="emo-btn" data-product="📚">
+      <span class="big">📚</span>
+    </button>
+    <button class="emo-btn" data-product="🎁">
+      <span class="big">🎁</span>
+    </button>
+  </div>
+  <button class="next-btn" id="toStage3" disabled>Дальше →</button>
+</section>
+
+<!-- STAGE 3: ДИЗАЙНЕР -->
+<section class="stage" id="stage3">
+  <div class="role"><span class="ico">🎨</span> Ты — дизайнер</div>
+  <div class="preview" id="preview1"></div>
+  <div class="title">Придумай <span class="accent">логотип</span></div>
+  <div class="grid g4" id="logoGrid" style="max-width:460px">
+    <button class="emo-btn" data-logo="⭐"><span class="big">⭐</span></button>
+    <button class="emo-btn" data-logo="💖"><span class="big">💖</span></button>
+    <button class="emo-btn" data-logo="🌈"><span class="big">🌈</span></button>
+    <button class="emo-btn" data-logo="👑"><span class="big">👑</span></button>
+  </div>
+  <div class="hint">И выбери цвет</div>
+  <div class="colors" id="colorPicker">
+    <div class="color-dot" data-color="#ff5d8f" style="background:#ff5d8f"></div>
+    <div class="color-dot" data-color="#ffc93c" style="background:#ffc93c"></div>
+    <div class="color-dot" data-color="#5bc0eb" style="background:#5bc0eb"></div>
+    <div class="color-dot" data-color="#7bd389" style="background:#7bd389"></div>
+    <div class="color-dot" data-color="#a06cd5" style="background:#a06cd5"></div>
+  </div>
+  <button class="next-btn" id="toStage4" disabled>Дальше →</button>
+</section>
+
+<!-- STAGE 4: ПИСАТЕЛЬ -->
+<section class="stage" id="stage4">
+  <div class="role"><span class="ico">✏️</span> Ты — писатель</div>
+  <div class="preview" id="preview2"></div>
+  <div class="title">Собери <span class="accent">слоган</span></div>
+  <div class="counter">Выбрано: <span class="big" id="wordCount">0</span> / 3</div>
+  <div class="words" id="wordWall">
+    <button class="word" data-word="вкусно">вкусно</button>
+    <button class="word" data-word="весело">весело</button>
+    <button class="word" data-word="волшебно">волшебно</button>
+    <button class="word" data-word="звёздный">звёздный</button>
+    <button class="word" data-word="супер">супер</button>
+    <button class="word" data-word="милый">милый</button>
+    <button class="word" data-word="радужный">радужный</button>
+    <button class="word" data-word="сладкий">сладкий</button>
+    <button class="word" data-word="добрый">добрый</button>
+    <button class="word" data-word="быстрый">быстрый</button>
+    <button class="word" data-word="яркий">яркий</button>
+    <button class="word" data-word="любимый">любимый</button>
+  </div>
+  <button class="next-btn" id="toStage5" disabled>Дальше →</button>
+</section>
+
+<!-- STAGE 5: КОМПОЗИТОР -->
+<section class="stage" id="stage5">
+  <div class="role"><span class="ico">🎵</span> Ты — композитор</div>
+  <div class="preview" id="preview3"></div>
+  <div class="title">Придумай <span class="accent">музыку</span></div>
+  <div class="grid g2" id="musicGrid" style="max-width:440px">
+    <button class="emo-btn" data-music="🎉" style="aspect-ratio:auto;padding:20px 10px">
+      <span class="big">🎉</span>
+      <span class="cap">весёлая</span>
+    </button>
+    <button class="emo-btn" data-music="🌟" style="aspect-ratio:auto;padding:20px 10px">
+      <span class="big">🌟</span>
+      <span class="cap">волшебная</span>
+    </button>
+    <button class="emo-btn" data-music="🚀" style="aspect-ratio:auto;padding:20px 10px">
+      <span class="big">🚀</span>
+      <span class="cap">быстрая</span>
+    </button>
+    <button class="emo-btn" data-music="💖" style="aspect-ratio:auto;padding:20px 10px">
+      <span class="big">💖</span>
+      <span class="cap">добрая</span>
+    </button>
+  </div>
+  <button class="next-btn" id="toStage6" disabled>Показать рекламу!</button>
+</section>
+
+<!-- STAGE 6: РЕЗУЛЬТАТ -->
+<section class="stage" id="stage6">
+  <div class="ad-poster">
+    <div class="badge">🎬 Реклама готова!</div>
+    <div class="product" id="rProduct">🍕</div>
+    <div class="logo-circle" id="rLogo"></div>
+    <div class="slogan" id="rSlogan">вкусно · весело · волшебно</div>
+    <div class="music-tag" id="rMusic">🎉 весёлая</div>
+  </div>
+  <div class="result-summary">
+    <h3>Ты попробовал:</h3>
+    <div class="line"><span class="em">🎨</span> Быть дизайнером <span class="check">✓</span></div>
+    <div class="line"><span class="em">✏️</span> Быть писателем <span class="check">✓</span></div>
+    <div class="line"><span class="em">🎵</span> Быть композитором <span class="check">✓</span></div>
+    <div class="why">
+      Каждый делает свою часть —<br>
+      и получается <em>реклама</em>. 🌟
+    </div>
+  </div>
+  <button class="restart" id="restart">↻ Сделать ещё раз</button>
+</section>
+
+<script>
+  /* ------- SOUND ------- */
+  let audioCtx;
+  function tone(freq=660, dur=0.12, type='sine', vol=0.15){
+    try{
+      if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = type; o.frequency.value = freq;
+      g.gain.value = vol;
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start();
+      g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+      o.stop(audioCtx.currentTime + dur);
+    }catch(e){}
+  }
+  const pick = () => tone(523,0.1,'sine',0.18);
+  const pop = () => { tone(880,0.1,'triangle',0.2); setTimeout(()=>tone(1320,0.08,'triangle',0.15),60); };
+  const remove = () => tone(300,0.12,'sawtooth',0.12);
+  const win = () => {
+    tone(523,0.15); setTimeout(()=>tone(659,0.15),120);
+    setTimeout(()=>tone(784,0.15),240); setTimeout(()=>tone(1046,0.3),360);
+  };
+
+  /* ------- STATE ------- */
+  const state = {
+    product: '',
+    logo: '',
+    color: '',
+    words: [],
+    music: ''
+  };
+
+  /* ------- STAGES ------- */
+  const stageIds = ['stage1','stage2','stage3','stage4','stage5','stage6'];
+  const stageEls = stageIds.map(id => document.getElementById(id));
+  const dots = document.querySelectorAll('.dot');
+
+  function goTo(n){
+    stageEls.forEach((s,i) => s.classList.toggle('active', i === n-1));
+    dots.forEach((d,i) => {
+      d.classList.toggle('active', i === n-1);
+      d.classList.toggle('done', i < n-1);
+    });
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  /* ------- STAGE 1 ------- */
+  document.getElementById('startBtn').addEventListener('click', () => { pop(); goTo(2); });
+
+  /* ------- STAGE 2: PRODUCT ------- */
+  const productBtns = document.querySelectorAll('#productGrid .emo-btn');
+  const toStage3 = document.getElementById('toStage3');
+  productBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      pick();
+      productBtns.forEach(b => b.classList.remove('picked'));
+      btn.classList.add('picked');
+      state.product = btn.dataset.product;
+      toStage3.disabled = false;
+    });
+  });
+  toStage3.addEventListener('click', () => { pop(); goTo(3); });
+
+  /* ------- STAGE 3: LOGO + COLOR ------- */
+  const logoBtns = document.querySelectorAll('#logoGrid .emo-btn');
+  const colorDots = document.querySelectorAll('#colorPicker .color-dot');
+  const toStage4 = document.getElementById('toStage4');
+  const preview1 = document.getElementById('preview1');
+
+  function updateStage3(){
+    if(state.logo) preview1.innerHTML = `<span class="preview-chip">${state.logo}</span>`;
+    if(state.logo && state.color) toStage4.disabled = false;
+  }
+
+  logoBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      pick();
+      logoBtns.forEach(b => b.classList.remove('picked'));
+      btn.classList.add('picked');
+      state.logo = btn.dataset.logo;
+      updateStage3();
+    });
+  });
+  colorDots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      pick();
+      colorDots.forEach(d => d.classList.remove('picked'));
+      dot.classList.add('picked');
+      state.color = dot.dataset.color;
+      updateStage3();
+    });
+  });
+  toStage4.addEventListener('click', () => { pop(); goTo(4); });
+
+  /* ------- STAGE 4: SLOGAN ------- */
+  const wordBtns = document.querySelectorAll('#wordWall .word');
+  const wordCount = document.getElementById('wordCount');
+  const toStage5 = document.getElementById('toStage5');
+  const preview2 = document.getElementById('preview2');
+  const MAX_WORDS = 3;
+
+  wordBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const w = btn.dataset.word;
+      const idx = state.words.indexOf(w);
+      if(idx > -1){
+        state.words.splice(idx, 1);
+        btn.classList.remove('picked');
+        remove();
+      } else {
+        if(state.words.length >= MAX_WORDS){
+          tone(200,0.15,'sawtooth',0.1);
+          btn.animate([
+            {transform:'translateX(0)'},
+            {transform:'translateX(-6px)'},
+            {transform:'translateX(6px)'},
+            {transform:'translateX(0)'}
+          ], {duration:250});
+          return;
+        }
+        state.words.push(w);
+        btn.classList.add('picked');
+        pick();
+      }
+      wordCount.textContent = state.words.length;
+      preview2.innerHTML = state.words.map(w => `<span class="preview-chip">${w}</span>`).join('');
+      toStage5.disabled = state.words.length < MAX_WORDS;
+    });
+  });
+  toStage5.addEventListener('click', () => { pop(); goTo(5); });
+
+  /* ------- STAGE 5: MUSIC ------- */
+  const musicBtns = document.querySelectorAll('#musicGrid .emo-btn');
+  const toStage6 = document.getElementById('toStage6');
+  const preview3 = document.getElementById('preview3');
+  musicBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      pick();
+      musicBtns.forEach(b => b.classList.remove('picked'));
+      btn.classList.add('picked');
+      state.music = btn.dataset.music + ' ' + btn.querySelector('.cap').textContent;
+      preview3.innerHTML = `<span class="preview-chip">${state.music}</span>`;
+      toStage6.disabled = false;
+    });
+  });
+  toStage6.addEventListener('click', () => {
+    win();
+    renderResult();
+    goTo(6);
+    launchConfetti();
+  });
+
+  /* ------- STAGE 6: RESULT ------- */
+  function renderResult(){
+    document.getElementById('rProduct').textContent = state.product;
+    const logo = document.getElementById('rLogo');
+    logo.textContent = state.logo;
+    logo.style.background = state.color;
+    document.getElementById('rSlogan').textContent = state.words.join(' · ');
+    document.getElementById('rMusic').textContent = state.music;
+  }
+
+  /* ------- RESTART ------- */
+  document.getElementById('restart').addEventListener('click', () => {
+    Object.assign(state, {product:'', logo:'', color:'', words:[], music:''});
+    productBtns.forEach(b => b.classList.remove('picked'));
+    logoBtns.forEach(b => b.classList.remove('picked'));
+    colorDots.forEach(d => d.classList.remove('picked'));
+    wordBtns.forEach(b => b.classList.remove('picked'));
+    musicBtns.forEach(b => b.classList.remove('picked'));
+    wordCount.textContent = '0';
+    preview1.innerHTML = '';
+    preview2.innerHTML = '';
+    preview3.innerHTML = '';
+    toStage3.disabled = true;
+    toStage4.disabled = true;
+    toStage5.disabled = true;
+    toStage6.disabled = true;
+    goTo(1);
+  });
+
+  /* ------- CONFETTI ------- */
+  const emojis = ['⭐','🎉','✨','🍕','🍦','🎮','💖','🌈','🎈','🍩','🎁','👑'];
+  function launchConfetti(){
+    for(let i = 0; i < 30; i++){
+      setTimeout(() => {
+        const el = document.createElement('div');
+        el.className = 'confetti';
+        el.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+        el.style.left = Math.random()*100 + 'vw';
+        el.style.animationDuration = (1.5 + Math.random()*1.5) + 's';
+        el.style.fontSize = (20 + Math.random()*24) + 'px';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 3000);
+      }, i*50);
+    }
+  }
+
+  /* ------- STARS ------- */
+  function makeStars(){
+    const stars = document.getElementById('stars');
+    const chars = ['⭐','✨','🌟','💫','🎨','✏️','🎵','🎬'];
+    for(let i = 0; i < 16; i++){
+      const s = document.createElement('div');
+      s.className = 'star';
+      s.textContent = chars[Math.floor(Math.random()*chars.length)];
+      s.style.left = Math.random()*100 + 'vw';
+      s.style.top = Math.random()*100 + 'vh';
+      s.style.animationDelay = (Math.random()*3) + 's';
+      s.style.fontSize = (16 + Math.random()*18) + 'px';
+      stars.appendChild(s);
+    }
+  }
+  makeStars();
+
+  /* ------- AUDIO UNLOCK ------- */
+  document.body.addEventListener('touchstart', function unlock(){
+    if(!audioCtx){
+      try{ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){}
+    }
+    document.body.removeEventListener('touchstart', unlock);
+  }, {passive:true});
+</script>
+</body>
+</html>
