@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Слоган · Создай бренд</title>
+<script>document.documentElement.classList.add('js');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#ebe9e4; --paper-2:#f3f1ec; --paper-3:#e0ddd5;
+    --ink:#0b0b0c; --ink-2:#3a3a3c; --muted:#6f6d68;
+    --signal:#ff3d3d; --blue:#3a47d5; --yellow:#ffc93c; --green:#7bd389;
+    --line:rgba(11,11,12,0.12);
+    --ease-out:cubic-bezier(.16,1,.3,1);
+    --radius:26px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    background:var(--paper); color:var(--ink);
+    line-height:1.4; overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+
+  /* HEADER */
+  .top{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:1rem 1.25rem;
+    padding-top:max(1rem,env(safe-area-inset-top));
+    mix-blend-mode:difference;transform:translateZ(0);
+    color:#fff;pointer-events:none;
+    font-size:11px;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;
+  }
+  .top a{pointer-events:auto}
+  .top-brand{font-weight:900;font-size:14px;letter-spacing:-.02em}
+  .top-brand span{color:#ff3d3d;mix-blend-mode:normal}
+
+  /* SLIDE */
+  .slide{
+    min-height:100vh;min-height:100svh;
+    padding:5.5rem 1.25rem 7rem;
+    display:flex;flex-direction:column;position:relative;
+    scroll-margin-top:2rem;
+  }
+  .slide-content{max-width:1100px;width:100%;margin:auto}
+  @media(min-width:768px){.slide{padding:6rem 2rem 7rem}}
+
+  /* TYPOGRAPHY */
+  .display{
+    font-weight:900;font-size:clamp(2rem,8vw,4.5rem);
+    line-height:.88;letter-spacing:-.05em;text-transform:uppercase;
+  }
+  .display .it{font-style:italic;color:var(--signal)}
+
+  .lead{
+    font-size:clamp(1rem,2.6vw,1.15rem);
+    line-height:1.4;max-width:52ch;
+    color:var(--muted);margin:1rem 0;
+  }
+
+  /* MARQUEE */
+  .marquee{
+    background:var(--signal);color:#fff;padding:.8rem 0;
+    transform:rotate(-1.5deg);margin:-1rem -.5rem;overflow:hidden;
+  }
+  .marquee-track{
+    display:flex;width:max-content;animation:slide 40s linear infinite;
+  }
+  .marquee-track:hover{animation-play-state:paused}
+  .marquee-item{
+    display:flex;align-items:center;font-weight:900;
+    font-size:clamp(1rem,4vw,1.4rem);letter-spacing:-.02em;
+    text-transform:uppercase;padding:0 1rem;gap:1rem;white-space:nowrap;
+  }
+  .marquee-item svg{width:12px;height:12px;flex-shrink:0}
+  @keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  .section-head{margin-bottom:1.5rem}
+
+  /* CONCEPTS */
+  .concepts{display:grid;gap:12px;margin-top:1.5rem}
+  .concept{
+    background:var(--paper-2);border-radius:22px;
+    padding:1.25rem;display:flex;align-items:center;gap:1rem;
+  }
+  .concept .em{
+    font-size:32px;flex-shrink:0;width:56px;height:56px;
+    background:var(--paper);border-radius:16px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .concept h3{
+    font-size:clamp(1rem,3.4vw,1.15rem);font-weight:900;
+    text-transform:uppercase;letter-spacing:-.01em;line-height:1.1;
+  }
+  .concept p{font-size:13px;color:var(--muted);margin-top:4px}
+  @media(min-width:768px){
+    .concepts{grid-template-columns:repeat(3,1fr)}
+    .concept{flex-direction:column;align-items:flex-start;gap:.75rem}
+  }
+
+  /* LOGO — один пример, нормального размера */
+  .logo-solo{
+    margin-top:1.75rem;
+    background:#fff;border-radius:22px;
+    padding:2.25rem;
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:12px;
+    max-width:420px;
+  }
+  .logo-solo img{width:100%;max-width:300px;height:auto;object-fit:contain}
+  .logo-solo .cap{
+    font-size:11px;font-weight:700;
+    letter-spacing:.16em;text-transform:uppercase;
+    color:var(--muted);
+  }
+  .logo-solo .logo-txt{display:none;font-weight:900;font-size:22px}
+  .logo-solo.noimg .logo-txt{display:block}
+
+  /* SLOGAN CARDS */
+  .slogans{display:grid;gap:12px;margin-top:1.5rem}
+  .slogan-card{
+    border-radius:22px;padding:1.5rem;
+    display:flex;flex-direction:column;gap:10px;
+    min-height:150px;position:relative;overflow:hidden;
+  }
+  .slogan-card.a{background:var(--ink);color:var(--paper)}
+  .slogan-card.b{background:var(--signal);color:#fff}
+  .slogan-card.c{background:var(--yellow);color:var(--ink)}
+  .slogan-card .em{font-size:36px;line-height:1}
+  .slogan-card h3{
+    font-size:clamp(1.1rem,4vw,1.4rem);
+    font-weight:900;text-transform:uppercase;
+    letter-spacing:-.02em;line-height:1.05;margin-top:auto;
+  }
+  .slogan-card p{
+    font-size:13px;line-height:1.35;opacity:.75;
+  }
+  .slogan-card .ex{
+    font-style:italic;font-weight:800;
+    font-size:14px;
+    padding:6px 10px;
+    background:rgba(255,255,255,.12);
+    border-radius:10px;
+    display:inline-block;margin-top:6px;
+  }
+  .slogan-card.c .ex{background:rgba(11,11,12,.1)}
+  @media(min-width:768px){.slogans{grid-template-columns:repeat(3,1fr)}}
+
+  /* REAL SLOGANS — большие цитаты */
+  .real-slogans{
+    display:grid;gap:14px;margin-top:1.5rem;
+  }
+  .real{
+    background:var(--paper-2);border-radius:22px;
+    padding:1.75rem 1.5rem;
+    display:flex;align-items:flex-start;gap:1rem;
+    position:relative;overflow:hidden;
+  }
+  .real:nth-child(2){background:var(--yellow);transform:rotate(-1deg)}
+  .real:nth-child(3){background:var(--ink);color:var(--paper);transform:rotate(1deg)}
+  .real .qmark{
+    font-size:clamp(3rem,10vw,4.5rem);
+    font-weight:900;font-style:italic;
+    color:var(--signal);line-height:1;flex-shrink:0;
+  }
+  .real .quote{
+    font-size:clamp(1.1rem,4vw,1.5rem);
+    font-weight:900;line-height:1.1;
+    letter-spacing:-.02em;
+  }
+  .real .brand{
+    font-size:11px;font-weight:700;
+    letter-spacing:.16em;text-transform:uppercase;
+    opacity:.6;margin-top:6px;display:block;
+  }
+  /* кнопки «показать картинку» под слоганом */
+  .real-links{
+    display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;
+  }
+  .real-links a{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:8px 14px;border-radius:999px;
+    border:2px solid currentColor;
+    font-size:12px;font-weight:800;letter-spacing:.01em;
+    transition:transform .2s var(--ease-out), background .2s;
+  }
+  .real-links a:hover{transform:translateY(-2px)}
+  .real-links a.ya{background:rgba(255,61,61,.12)}
+  .real:nth-child(3) .real-links a.ya{background:rgba(255,61,61,.25)}
+  @media(min-width:768px){.real-slogans{grid-template-columns:repeat(3,1fr)}}
+
+  /* CATEGORY BLOCK */
+  .category{
+    margin-top:2rem;
+  }
+  .category-head{
+    display:flex;align-items:center;gap:12px;
+    margin-bottom:1rem;
+  }
+  .category-head .em{
+    font-size:clamp(2rem,7vw,2.6rem);line-height:1;
+    flex-shrink:0;
+  }
+  .category-head h3{
+    font-size:clamp(1.1rem,4.2vw,1.4rem);
+    font-weight:900;text-transform:uppercase;
+    letter-spacing:-.02em;line-height:1.05;
+  }
+  .category-head p{
+    font-size:12px;color:var(--muted);
+    margin-top:2px;font-weight:600;
+  }
+  .sl-ideas{
+    display:grid;gap:10px;
+    grid-template-columns:1fr;
+  }
+  .sl-idea{
+    background:var(--paper-2);border-radius:16px;
+    padding:14px 18px;
+    font-size:clamp(.95rem,3.4vw,1.1rem);
+    font-weight:800;line-height:1.25;
+    display:flex;align-items:center;gap:10px;
+  }
+  .sl-idea::before{
+    content:"💬";
+    font-size:1.2em;flex-shrink:0;
+    opacity:.5;
+  }
+  .category.magic .sl-idea::before{content:"✨"}
+  .category.taste .sl-idea::before{content:"⚡"}
+  @media(min-width:768px){
+    .sl-ideas{grid-template-columns:repeat(2,1fr)}
+  }
+
+  /* VIDEO — обложка + кнопки платформ, загрузка только по клику */
+  .video-block{margin-top:1.5rem}
+  .video-block + .video-block{margin-top:2.25rem}
+  .video-stage{
+    position:relative;
+    aspect-ratio:16/9;
+    background:linear-gradient(135deg,#26262a,#0b0b0c);
+    border-radius:18px;
+    overflow:hidden;
+    border:2px solid var(--ink);
+  }
+  .video-stage .thumb{
+    position:absolute;inset:0;
+    width:100%;height:100%;object-fit:cover;
+  }
+  .video-cover{
+    position:absolute;inset:0;z-index:2;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    cursor:pointer;
+    background:
+      radial-gradient(circle at 50% 42%, rgba(255,61,61,.22), transparent 62%),
+      linear-gradient(160deg, rgba(38,38,42,.35), rgba(11,11,12,.72));
+  }
+  .vplay{
+    width:70px;height:70px;border-radius:50%;
+    background:var(--signal);
+    display:grid;place-items:center;
+    color:#fff;
+    box-shadow:0 14px 34px -10px rgba(255,61,61,.8);
+    transition:transform .25s var(--ease-out);
+  }
+  .video-cover:hover .vplay,
+  .video-cover:focus-visible .vplay{transform:scale(1.1)}
+  .vplay svg{width:26px;height:26px;margin-left:4px}
+  .vlabel{
+    position:absolute;left:12px;bottom:12px;
+    max-width:calc(100% - 24px);
+    background:rgba(11,11,12,.78);
+    color:#fff;
+    padding:7px 14px;
+    border-radius:999px;
+    font-size:12px;font-weight:700;letter-spacing:.02em;
+  }
+  .video-frame{position:absolute;inset:0;display:none;background:#000}
+  .video-frame.on{display:block}
+  .video-frame iframe{width:100%;height:100%;border:0;display:block}
+  .video-sources{
+    display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+    margin-top:.9rem;
+  }
+  .vchip{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:.55rem 1.05rem;
+    border-radius:999px;
+    background:var(--paper-2);
+    border:2px solid var(--ink);
+    font:inherit;font-size:12px;font-weight:800;
+    color:var(--ink);
+    cursor:pointer;
+    transition:transform .2s var(--ease-out), background .2s, color .2s;
+  }
+  .vchip:hover{transform:translateY(-2px)}
+  .vchip.playing{background:var(--ink);color:var(--paper)}
+  @media(min-width:768px){
+    .video-block{max-width:720px;margin-left:auto;margin-right:auto}
+  }
+
+  /* EDITORS */
+  .editors{display:grid;gap:12px;margin-top:1.5rem}
+  .editor{
+    background:var(--paper-2);border-radius:22px;
+    padding:1.5rem;display:flex;gap:1rem;align-items:center;
+  }
+  .editor .em{
+    font-size:40px;line-height:1;flex-shrink:0;
+  }
+  .editor h3{
+    font-size:clamp(1rem,3.6vw,1.2rem);
+    font-weight:900;text-transform:uppercase;
+    letter-spacing:-.01em;line-height:1.05;
+  }
+  @media(min-width:768px){.editors{grid-template-columns:repeat(3,1fr)}}
+
+  /* TOOLS ROW */
+  .tools{
+    display:flex;gap:10px;flex-wrap:wrap;
+    margin-top:1.5rem;justify-content:center;
+  }
+  .tool{
+    background:var(--paper-2);border:2px solid var(--ink);
+    border-radius:20px;padding:16px 22px;
+    display:flex;flex-direction:column;align-items:center;gap:6px;
+    min-width:90px;
+    transition:transform .3s var(--ease-out);
+  }
+  .tool:hover{transform:translateY(-4px) rotate(-3deg)}
+  .tool .em{font-size:32px;line-height:1}
+  .tool .t{font-size:11px;font-weight:800;letter-spacing:.02em;text-transform:uppercase;color:var(--ink-2)}
+
+  /* TASK */
+  .task-hero{
+    background:var(--signal);color:#fff;border-radius:26px;
+    padding:2.5rem 1.75rem;margin-top:1.5rem;
+    text-align:center;position:relative;overflow:hidden;
+  }
+  .task-hero::before{
+    content:"";position:absolute;inset:0;
+    background:repeating-linear-gradient(45deg, transparent 0 20px, rgba(255,255,255,.06) 20px 22px);
+    pointer-events:none;
+  }
+  .task-hero h2{
+    position:relative;
+    font-size:clamp(1.8rem,7.5vw,3rem);
+    font-weight:900;text-transform:uppercase;
+    line-height:.95;letter-spacing:-.04em;
+  }
+  .task-hero h2 .it{font-style:italic}
+  .task-hero p{
+    position:relative;margin:1rem auto 0;max-width:36ch;
+    font-size:15px;line-height:1.4;color:rgba(255,255,255,.85);
+  }
+
+  /* TASK PARTS */
+  .task-parts{display:grid;gap:12px;margin-top:1.5rem}
+  .task-part{
+    background:var(--paper-2);border-radius:22px;
+    padding:1.5rem;display:flex;gap:1rem;align-items:flex-start;
+  }
+  .task-part .num-b{
+    flex-shrink:0;width:44px;height:44px;
+    background:var(--ink);color:var(--paper);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;font-weight:900;font-style:italic;
+  }
+  .task-part h3{
+    font-size:clamp(1rem,3.4vw,1.2rem);
+    font-weight:900;text-transform:uppercase;
+    letter-spacing:-.01em;line-height:1.05;margin-bottom:6px;
+  }
+  .task-part p{font-size:14px;color:var(--muted);line-height:1.4}
+  .task-part .em-row{
+    display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;
+  }
+  .task-part .em-row span{
+    font-size:24px;background:var(--paper);
+    border-radius:12px;padding:6px 8px;line-height:1;
+  }
+  @media(min-width:768px){.task-parts{grid-template-columns:repeat(2,1fr)}}
+
+  /* HINTS */
+  .hints{display:grid;gap:12px;margin-top:1.5rem}
+  .hints.cols-2{grid-template-columns:repeat(2,1fr)}
+  .hint-card{
+    background:var(--paper-2);border-radius:20px;
+    padding:1.25rem 1rem;
+    display:flex;flex-direction:column;
+    align-items:center;gap:.6rem;
+    text-align:center;
+  }
+  .hint-card .em{font-size:clamp(2rem,8vw,2.8rem);line-height:1}
+  .hint-card .txt{
+    font-size:clamp(.85rem,3vw,1rem);
+    font-weight:800;line-height:1.15;
+  }
+  .hint-card.y{background:var(--yellow)}
+  .hint-card.s{background:var(--signal);color:#fff}
+  .hint-card.i{background:var(--ink);color:var(--paper)}
+
+  /* IDEA GRID */
+  .idea-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    gap:10px;margin-top:1.5rem;
+  }
+  .idea{
+    aspect-ratio:1;background:var(--paper-2);
+    border-radius:20px;display:flex;
+    align-items:center;justify-content:center;
+    font-size:clamp(2.2rem,9vw,3.2rem);line-height:1;
+    transition:transform .3s var(--ease-out);
+  }
+  .idea:hover{transform:rotate(-6deg) scale(1.05)}
+  @media(min-width:640px){.idea-grid{grid-template-columns:repeat(6,1fr)}}
+
+  /* FORMULA */
+  .formula{
+    display:grid;gap:10px;margin-top:1.5rem;
+  }
+  .formula-row{
+    background:var(--paper-2);border-radius:20px;
+    padding:1rem 1.25rem;
+    display:flex;align-items:center;gap:12px;
+    font-size:clamp(1rem,3.6vw,1.2rem);
+    font-weight:800;
+  }
+  .formula-row .big{font-size:1.6em;line-height:1;flex-shrink:0}
+  .formula-row .txt{flex:1}
+  .formula-row .txt em{font-style:italic;color:var(--signal)}
+
+  /* EXHIBITION */
+  .exhibition{
+    background:var(--ink);color:var(--paper);
+    border-radius:26px;padding:2.5rem 1.75rem;
+    margin-top:1.5rem;text-align:center;
+  }
+  .exhibition .em{
+    font-size:72px;line-height:1;margin-bottom:1rem;display:block;
+    animation:float 3s ease-in-out infinite;
+  }
+  @keyframes float{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-10px)}
+  }
+  .exhibition h3{
+    font-size:clamp(1.6rem,7vw,2.6rem);
+    font-weight:900;text-transform:uppercase;
+    letter-spacing:-.03em;line-height:1;
+  }
+  .exhibition h3 em{font-style:italic;color:var(--signal)}
+  .exhibition p{
+    margin-top:1rem;font-size:15px;
+    color:rgba(235,233,228,.7);
+    max-width:32ch;margin-left:auto;margin-right:auto;
+  }
+
+  /* FINAL */
+  .final{background:var(--ink);color:var(--paper)}
+  .final-label{
+    display:flex;align-items:center;gap:8px;
+    font-size:11px;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;
+    color:rgba(235,233,228,.6);margin-bottom:1.5rem;
+  }
+  .final-label svg{width:12px;height:12px;color:var(--signal)}
+  .final .display{
+    color:var(--paper);font-size:clamp(2rem,9vw,4.5rem);
+  }
+  .final .display .it{color:var(--signal)}
+  .final-rule{
+    margin-top:2rem;padding-top:1.5rem;
+    border-top:1px solid rgba(235,233,228,.15);
+  }
+  .final-rule .lbl{
+    font-size:11px;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;
+    color:rgba(235,233,228,.5);
+  }
+  .final-rule h3{
+    margin-top:.8rem;
+    font-size:clamp(1.6rem,7vw,3rem);
+    font-weight:900;text-transform:uppercase;
+    letter-spacing:-.04em;line-height:.9;
+  }
+  .final-rule h3 span{
+    display:block;color:var(--signal);font-style:italic;
+  }
+  .final-rule h3 span.mid{color:var(--paper)}
+  .final-rule h3 span.end{color:var(--paper)}
+
+  /* DOCK */
+  .dock{
+    position:fixed;bottom:max(14px,env(safe-area-inset-bottom));
+    left:50%;transform:translateX(-50%);z-index:60;
+    background:var(--ink);color:var(--paper);
+    border-radius:999px;padding:5px;
+    display:flex;align-items:center;gap:2px;
+    box-shadow:0 20px 50px -12px rgba(11,11,12,.5);
+    max-width:calc(100% - 20px);overflow-x:auto;
+    scrollbar-width:none;
+  }
+  .dock::-webkit-scrollbar{display:none}
+  .dock a{
+    width:34px;height:34px;display:grid;place-items:center;
+    border-radius:50%;font-size:14px;
+    color:rgba(235,233,228,.55);
+    transition:color .3s,background .3s;
+    flex-shrink:0;position:relative;
+  }
+  .dock a:hover{color:var(--paper)}
+  .dock a.active{color:var(--paper);background:rgba(255,255,255,.08)}
+  .dock a.active::before{
+    content:"";position:absolute;inset:2px;border-radius:50%;
+    border:1.5px solid var(--signal);
+  }
+
+  /* ANIMATIONS */
+  .hero-title span{
+    display:inline-block;transform:translateY(20%);
+    opacity:0;animation:rise .9s var(--ease-out) both;
+  }
+  .hero-title span:nth-child(1){animation-delay:.05s}
+  .hero-title span:nth-child(2){animation-delay:.12s}
+  .hero-title span:nth-child(3){animation-delay:.19s}
+  .hero-title span:nth-child(4){animation-delay:.26s}
+  .hero-title span:nth-child(5){animation-delay:.33s}
+  .hero-title span:nth-child(6){animation-delay:.4s}
+  @keyframes rise{to{transform:translateY(0);opacity:1}}
+
+  .js .slide .rv{opacity:0}
+  .js .slide.in .rv{animation:revealIn .8s var(--ease-out) both}
+  @keyframes revealIn{
+    from{opacity:0;transform:translateY(26px)}
+    to{opacity:1;transform:none}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{
+      animation-duration:.01ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:.01ms !important;
+    }
+    .js .slide .rv{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="top">
+  <a class="top-brand" href="#top">Слоган<span>✦</span></a>
+  <span>Ольга</span>
+</header>
+
+<!-- HERO -->
+<section class="slide" id="top">
+  <div class="slide-content">
+    <h1 class="hero-title rv" style="font-size:clamp(3rem,15vw,10rem);display:flex;justify-content:space-between;line-height:.8;">
+      <span>С</span><span>Л</span><span>О</span><span>Г</span><span>А</span><span>Н</span>
+    </h1>
+    <div class="rv" style="margin-top:2rem;border-top:1px solid var(--line);padding-top:1rem;display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">и как создать <b style="color:var(--ink);">свой бренд</b></div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">↓ листай</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <div class="marquee-item">Нейм <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg></div>
+    <div class="marquee-item">Слоган <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg></div>
+    <div class="marquee-item">Логотип <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg></div>
+    <div class="marquee-item">Бренд <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg></div>
+    <div class="marquee-item">Нейм <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg></div>
+    <div class="marquee-item">Слоган <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg></div>
+    <div class="marquee-item">Логотип <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg></div>
+    <div class="marquee-item">Бренд <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg></div>
+  </div>
+</div>
+
+<!-- 01 · ВСПОМИНАЕМ -->
+<section class="slide" id="brand">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Что такое<br><span class="it">бренд?</span></h2>
+    </div>
+    <div class="concepts rv">
+      <div class="concept">
+        <div class="em">🏷️</div>
+        <div>
+          <h3>Нейм</h3>
+          <p>Название.</p>
+        </div>
+      </div>
+      <div class="concept">
+        <div class="em">🎨</div>
+        <div>
+          <h3>Логотип</h3>
+          <p>Знак, по которому узнают.</p>
+        </div>
+      </div>
+      <div class="concept">
+        <div class="em">✨</div>
+        <div>
+          <h3>Бренд</h3>
+          <p>Нейм и логотип вместе.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- единственный логотип — по прямой ссылке, которая работает -->
+    <div class="logo-solo rv">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Vkusno_i_Tochka_logo.svg/512px-Vkusno_i_Tochka_logo.svg.png"
+           alt="Вкусно и точка"
+           loading="lazy" referrerpolicy="no-referrer"
+           onerror="this.parentElement.classList.add('noimg');this.remove()">
+      <span class="logo-txt">Вкусно — и точка</span>
+      <span class="cap">пример логотипа</span>
+    </div>
+  </div>
+</section>
+
+<!-- 02 · ЧТО ТАКОЕ СЛОГАН -->
+<section class="slide" id="slogan">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Что такое<br><span class="it">слоган?</span></h2>
+    </div>
+    <div class="exhibition rv" style="margin-top:1.5rem">
+      <span class="em">💬</span>
+      <h3>Короткая фраза, <em>которую запоминают</em></h3>
+      <p>Слоган работает вместе с неймом и логотипом — вместе они и есть бренд.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 03 · НАСТОЯЩИЕ СЛОГАНЫ -->
+<section class="slide" id="real">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Слоганы,<br>которые <span class="it">знают все</span></h2>
+    </div>
+
+    <div class="real-slogans rv">
+      <div class="real">
+        <span class="qmark">«</span>
+        <div>
+          <div class="quote">Не тормози — сникерсни!</div>
+          <span class="brand">Snickers</span>
+          <div class="real-links">
+            <a class="ya" href="https://yandex.ru/images/search?text=сникерс+реклама" target="_blank" rel="noopener">Яндекс.Картинки ↗</a>
+            <a href="https://www.google.com/search?tbm=isch&q=сникерс+реклама" target="_blank" rel="noopener">Google.Картинки ↗</a>
+          </div>
+        </div>
+      </div>
+      <div class="real">
+        <span class="qmark">«</span>
+        <div>
+          <div class="quote">Сделай паузу — скушай Twix</div>
+          <span class="brand">Twix</span>
+          <div class="real-links">
+            <a class="ya" href="https://yandex.ru/images/search?text=твикс+реклама" target="_blank" rel="noopener">Яндекс.Картинки ↗</a>
+            <a href="https://www.google.com/search?tbm=isch&q=твикс+реклама" target="_blank" rel="noopener">Google.Картинки ↗</a>
+          </div>
+        </div>
+      </div>
+      <div class="real">
+        <span class="qmark">«</span>
+        <div>
+          <div class="quote">Россия — щедрая душа»</div>
+          <span class="brand">Россия</span>
+          <div class="real-links">
+            <a class="ya" href="https://yandex.ru/images/search?text=шоколад+россия+щедрая+душа+реклама" target="_blank" rel="noopener">Яндекс.Картинки ↗</a>
+            <a href="https://www.google.com/search?tbm=isch&q=шоколад+россия+щедрая+душа" target="_blank" rel="noopener">Google.Картинки ↗</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 · КАК ПРИДУМАТЬ СЛОГАН -->
+<section class="slide" id="how">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Как придумать<br><span class="it">слоган?</span></h2>
+    </div>
+    <p class="lead rv">Слоган должен дать <strong>эмоцию</strong>, а не просто рассказать про товар.</p>
+
+    <!-- Категория 1: Игрушки -->
+    <div class="category magic rv">
+      <div class="category-head">
+        <span class="em">🧸</span>
+        <div>
+          <h3>Для игрушек и игр</h3>
+          <p>магия и действие</p>
+        </div>
+      </div>
+      <div class="sl-ideas">
+        <div class="sl-idea">Построй свой мир!</div>
+        <div class="sl-idea">Оживи свою сказку</div>
+        <div class="sl-idea">Игрушки, которые умеют дружить</div>
+        <div class="sl-idea">Включай веселье на полную!</div>
+        <div class="sl-idea">Твой карманный супергерой</div>
+      </div>
+    </div>
+
+    <!-- Категория 2: Еда -->
+    <div class="category taste rv">
+      <div class="category-head">
+        <span class="em">🍫</span>
+        <div>
+          <h3>Для вкусного и полезного</h3>
+          <p>сила и вкус</p>
+        </div>
+      </div>
+      <div class="sl-ideas">
+        <div class="sl-idea">Зарядись на полную!</div>
+        <div class="sl-idea">Расти большой и сильный</div>
+        <div class="sl-idea">Вкусно, как у мамы, весело, как с друзьями!</div>
+        <div class="sl-idea">Хрусти с пользой!</div>
+        <div class="sl-idea">Маленький секрет больших чемпионов</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 · ВИДЕО -->
+<section class="slide" id="video">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Слоганы<br>в <span class="it">мультиках</span></h2>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         КАК ВСТАВИТЬ ВИДЕО, ЧТОБЫ ОНО ИГРАЛО ПРЯМО НА СТРАНИЦЕ:
+         • YouTube: из ссылки ролика скопируй код после watch?v=
+           (всегда 11 символов, напр. dQw4w9WgXcQ) → data-yt
+         • VK Видео: «Ещё» → «Скопировать код» →
+           в коде найди oid=…&id=… → вставь в data-vk:  oid=123&id=456
+         • RuTube: «Поделиться» → «Код вставки» →
+           ID из rutube.ru/play/embed/ID → data-rt
+         • Одноклассники: «Код для вставки» →
+           число из ok.ru/videoembed/ЧИСЛО → data-ok
+         Пока поле пустое — кнопка платформы открывает поиск по названию.
+         ══════════════════════════════════════════════════════════════ -->
+
+    <div class="video-block rv"
+         data-title="Смешарики"
+         data-yt=""
+         data-yt-search="смешарики реклама слоган"
+         data-vk=""
+         data-ok=""
+         data-rt="">
+    </div>
+
+    <div class="video-block rv"
+         data-title="Три кота"
+         data-yt=""
+         data-yt-search="три кота реклама"
+         data-vk=""
+         data-ok=""
+         data-rt="">
+    </div>
+
+    <div class="video-block rv"
+         data-title="Фиксики"
+         data-yt=""
+         data-yt-search="фиксики реклама"
+         data-vk=""
+         data-ok=""
+         data-rt="">
+    </div>
+  </div>
+</section>
+
+<!-- 06 · РЕДАКТОРЫ -->
+<section class="slide" id="editors">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Где рисовать<br><span class="it">логотип?</span></h2>
+    </div>
+
+    <div class="editors rv">
+      <div class="editor">
+        <span class="em">💻</span>
+        <h3>Paint 3D</h3>
+      </div>
+      <div class="editor">
+        <span class="em">🎨</span>
+        <h3>SUPA</h3>
+      </div>
+      <div class="editor">
+        <span class="em">🖌️</span>
+        <h3>Photoshop / Illustrator</h3>
+      </div>
+    </div>
+
+    <div class="tools rv">
+      <div class="tool"><span class="em">🖌️</span><span class="t">Кисть</span></div>
+      <div class="tool"><span class="em">⚪</span><span class="t">Кружки</span></div>
+      <div class="tool"><span class="em">◼️</span><span class="t">Квадраты</span></div>
+      <div class="tool"><span class="em">✏️</span><span class="t">Линии</span></div>
+      <div class="tool"><span class="em">🅰️</span><span class="t">Текст</span></div>
+      <div class="tool"><span class="em">🌈</span><span class="t">Цвет</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 · ЗАДАНИЕ -->
+<section class="slide" id="task">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Задание<br><span class="it">сегодня</span></h2>
+    </div>
+    <div class="task-hero rv">
+      <h2>Создай бренд<br>для <span class="it">магазина игрушек</span></h2>
+      <p>Представь, что в твоём городе открывается маленький магазин авторских игрушек.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 08 · ЧТО НУЖНО СДЕЛАТЬ -->
+<section class="slide" id="steps">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Три <span class="it">шага</span></h2>
+    </div>
+    <div class="task-parts rv">
+      <div class="task-part">
+        <div class="num-b">1</div>
+        <div>
+          <h3>Нейм</h3>
+          <p>Как назвать магазин?</p>
+        </div>
+      </div>
+      <div class="task-part">
+        <div class="num-b">2</div>
+        <div>
+          <h3>Слоган</h3>
+          <p>Короткая фраза для рекламы.</p>
+        </div>
+      </div>
+      <div class="task-part">
+        <div class="num-b">3</div>
+        <div>
+          <h3>Логотип</h3>
+          <p>Знак, который узнают.</p>
+        </div>
+      </div>
+      <div class="task-part">
+        <div class="num-b" style="background:var(--signal)">✓</div>
+        <div>
+          <h3>Красиво оформить</h3>
+          <p>Нарисовать, подписать, раскрасить.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 09 · ИДЕИ ДЛЯ НЕЙМА -->
+<section class="slide" id="idea-name">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Идеи для<br><span class="it">нейма</span></h2>
+    </div>
+    <div class="idea-grid rv">
+      <div class="idea">🧸</div>
+      <div class="idea">🐰</div>
+      <div class="idea">🐱</div>
+      <div class="idea">🐉</div>
+      <div class="idea">🚗</div>
+      <div class="idea">🎲</div>
+      <div class="idea">🪁</div>
+      <div class="idea">🦄</div>
+      <div class="idea">🧩</div>
+      <div class="idea">🎠</div>
+      <div class="idea">🌈</div>
+      <div class="idea">⭐</div>
+    </div>
+
+    <div class="formula rv">
+      <div class="formula-row">
+        <span class="big">🧸</span>
+        <span class="txt"><em>Мишкины</em> истории</span>
+      </div>
+      <div class="formula-row">
+        <span class="big">🌈</span>
+        <span class="txt"><em>Радужная</em> мастерская</span>
+      </div>
+      <div class="formula-row">
+        <span class="big">⭐</span>
+        <span class="txt"><em>Звёздные</em> игрушки</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 · ИДЕИ ДЛЯ СЛОГАНА -->
+<section class="slide" id="idea-slogan">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Идеи для<br><span class="it">слогана</span></h2>
+    </div>
+    <div class="slogans rv">
+      <div class="slogan-card a">
+        <span class="em">🧸</span>
+        <h3>Игрушка, сделанная с любовью</h3>
+      </div>
+      <div class="slogan-card b">
+        <span class="em">🎁</span>
+        <h3>Каждая — особенная</h3>
+      </div>
+      <div class="slogan-card c">
+        <span class="em">✨</span>
+        <h3>Твоя любимая игрушка ждёт</h3>
+      </div>
+      <div class="slogan-card b" style="background:var(--blue);color:#fff">
+        <span class="em">🪁</span>
+        <h3>Играй, мечтай, твори</h3>
+      </div>
+      <div class="slogan-card c" style="background:var(--green)">
+        <span class="em">🌈</span>
+        <h3>Маленькие чудеса — для тебя</h3>
+      </div>
+      <div class="slogan-card a">
+        <span class="em">💖</span>
+        <h3>Тёплые игрушки — тёплые сердца</h3>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 11 · ЛОГОТИП -->
+<section class="slide" id="logo">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Придумай<br><span class="it">логотип</span></h2>
+    </div>
+    <div class="idea-grid rv">
+      <div class="idea">🧸</div>
+      <div class="idea">🎠</div>
+      <div class="idea">⭐</div>
+      <div class="idea">🌈</div>
+      <div class="idea">💖</div>
+      <div class="idea">🎁</div>
+    </div>
+    <p class="lead rv" style="text-align:center;margin-top:1.5rem">Нарисуй свой знак для магазина игрушек.</p>
+  </div>
+</section>
+
+<!-- 12 · ПОДСКАЗКИ -->
+<section class="slide" id="hints">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Подсказки<br><span class="it">для идей</span></h2>
+    </div>
+    <div class="hints cols-2 rv">
+      <div class="hint-card y">
+        <span class="em">🧸</span>
+        <span class="txt">что продаётся в магазине</span>
+      </div>
+      <div class="hint-card s">
+        <span class="em">👨‍👩‍👧</span>
+        <span class="txt">кому это понравится</span>
+      </div>
+      <div class="hint-card i">
+        <span class="em">💛</span>
+        <span class="txt">что делает магазин особенным</span>
+      </div>
+      <div class="hint-card y">
+        <span class="em">🎨</span>
+        <span class="txt">какие цвета подойдут</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 13 · ВЫСТАВКА -->
+<section class="slide" id="exhibition">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Покажи<br>свой <span class="it">бренд</span></h2>
+    </div>
+    <div class="exhibition rv">
+      <span class="em">🎨</span>
+      <h3>Как назвал? Что придумал?</h3>
+      <p>Почему ты выбрал такое имя и такой слоган?</p>
+    </div>
+  </div>
+</section>
+
+<!-- 14 · ФИНАЛ -->
+<section class="slide final" id="end">
+  <div class="slide-content">
+    <p class="final-label rv">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg>
+      ты создал бренд
+    </p>
+    <h2 class="display rv">
+      Нейм.<br>
+      Слоган.<br>
+      Логотип.<br>
+      <span class="it">Твой бренд.</span>
+    </h2>
+    <div class="final-rule rv">
+      <p class="lbl">Правило бренда</p>
+      <h3>
+        <span>Придумай.</span>
+        <span class="mid">Назови.</span>
+        <span class="end">Нарисуй.</span>
+      </h3>
+    </div>
+  </div>
+</section>
+
+<!-- DOCK -->
+<nav class="dock" id="dock">
+  <a href="#top" class="active" title="Старт">↑</a>
+  <a href="#brand" title="Бренд">🏷️</a>
+  <a href="#slogan" title="Что такое слоган">💬</a>
+  <a href="#real" title="Настоящие">⭐</a>
+  <a href="#how" title="Как придумать">💡</a>
+  <a href="#video" title="Видео">▶️</a>
+  <a href="#editors" title="Редакторы">💻</a>
+  <a href="#task" title="Задание">📋</a>
+  <a href="#steps" title="Шаги">1️⃣</a>
+  <a href="#idea-name" title="Нейм">🧸</a>
+  <a href="#idea-slogan" title="Слоган">💬</a>
+  <a href="#logo" title="Логотип">🎨</a>
+  <a href="#hints" title="Подсказки">💡</a>
+  <a href="#exhibition" title="Выставка">🖼️</a>
+  <a href="#end" title="Финал">⭐</a>
+</nav>
+
+<script>
+(function(){
+  /* ===== ДОК + появление слайдов ===== */
+  const links = [...document.querySelectorAll('.dock a')];
+  const sections = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+
+  function show(s){
+    if (s.dataset.done) return;
+    s.dataset.done = '1';
+    s.classList.add('in');
+    s.querySelectorAll('.rv').forEach((el, i) => {
+      el.style.animationDelay = (i * 0.09).toFixed(2) + 's';
+    });
+  }
+
+  if ('IntersectionObserver' in window) {
+    let current = null;
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(en => {
+        if (!en.isIntersecting) return;
+        show(en.target);
+        current = en.target.id;
+      });
+      if (current) links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + current));
+    }, { threshold: 0, rootMargin: '-12% 0px -12% 0px' });
+    sections.forEach(s => io.observe(s));
+  } else {
+    sections.forEach(show);
+  }
+
+  links.forEach(a => {
+    a.addEventListener('click', e => {
+      const id = a.getAttribute('href');
+      if (id.startsWith('#')) {
+        e.preventDefault();
+        document.querySelector(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  /* ===== ВИДЕО: обложка + кнопки YouTube / VK / OK / RuTube ===== */
+  document.querySelectorAll('.video-block').forEach(block => {
+    const d = block.dataset;
+    const title  = d.title || 'Рекламный ролик';
+    const yt     = (d.yt  || '').trim();
+    const vk     = (d.vk  || '').trim();
+    const ok     = (d.ok  || '').trim();
+    const rt     = (d.rt  || '').trim();
+    const q      = encodeURIComponent((d.ytSearch || title).trim());
+    const validYt = /^[A-Za-z0-9_-]{11}$/.test(yt);
+
+    const stage = document.createElement('div');
+    stage.className = 'video-stage';
+    stage.innerHTML =
+      '<div class="video-cover" role="button" tabindex="0" aria-label="Смотреть: ' + title + '">' +
+        (validYt ? '<img class="thumb" alt="" loading="lazy" src="https://i.ytimg.com/vi/' + yt + '/hqdefault.jpg" onerror="this.remove()">' : '') +
+        '<span class="vplay"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>' +
+        '<span class="vlabel">' + title + '</span>' +
+      '</div><div class="video-frame"></div>';
+    const cover = stage.querySelector('.video-cover');
+    const frame = stage.querySelector('.video-frame');
+
+    const btns = [];
+    if (validYt) btns.push({ label: 'YouTube',       make: () => 'https://www.youtube-nocookie.com/embed/' + yt + '?autoplay=1&rel=0&modestbranding=1&playsinline=1' });
+    if (vk)      btns.push({ label: 'VK Видео',      make: () => 'https://vk.com/video_ext.php?' + vk + '&autoplay=1' });
+    if (ok)      btns.push({ label: 'Одноклассники', make: () => 'https://ok.ru/videoembed/' + ok + '?autoplay=1' });
+    if (rt)      btns.push({ label: 'RuTube',        make: () => 'https://rutube.ru/play/embed/' + rt + '?autoplay=1' });
+    if (!validYt) btns.push({ label: 'Найти на YouTube ↗', href: 'https://www.youtube.com/results?search_query=' + q });
+    if (!vk)      btns.push({ label: 'VK Видео ↗',         href: 'https://vk.com/video?q=' + q });
+    if (!ok)      btns.push({ label: 'Одноклассники ↗',    href: 'https://ok.ru/search?st.query=' + q + '&st.mode=Videos' });
+    if (!rt)      btns.push({ label: 'RuTube ↗',           href: 'https://rutube.ru/search/?query=' + q });
+
+    const row = document.createElement('div');
+    row.className = 'video-sources';
+    let primary = null;
+
+    function play(make, btn) {
+      frame.innerHTML = '<iframe src="' + make() + '" title="' + title + '" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>';
+      frame.classList.add('on');
+      cover.style.display = 'none';
+      row.querySelectorAll('.vchip').forEach(b => b.classList.toggle('playing', b === btn));
+    }
+
+    btns.forEach(s => {
+      let el;
+      if (s.make) {
+        el = document.createElement('button');
+        el.type = 'button';
+        el.addEventListener('click', () => play(s.make, el));
+        if (!primary) primary = () => play(s.make, el);
+      } else {
+        el = document.createElement('a');
+        el.href = s.href;
+        el.target = '_blank';
+        el.rel = 'noopener';
+      }
+      el.className = 'vchip';
+      el.textContent = s.label;
+      row.appendChild(el);
+    });
+
+    function activate() {
+      if (primary) { primary(); return; }
+      const a = row.querySelector('a');
+      if (a) a.click();
+    }
+    cover.addEventListener('click', activate);
+    cover.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); }
+    });
+
+    block.appendChild(stage);
+    block.appendChild(row);
+  });
+})();
+</script>
+</body>
+</html>
