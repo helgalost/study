@@ -145,59 +145,52 @@
     to{transform:translateX(-50%)}
   }
 
-  /* MODULES GRID */
+  /* MODULES LIST */
   .modules-grid{
-    display:grid;
-    grid-template-columns:1fr;
+    display:flex;
+    flex-direction:column;
     gap:12px;
     margin-top:1.5rem;
   }
   .module-card{
     display:flex;
-    flex-direction:column;
+    align-items:center;
     justify-content:space-between;
     background:var(--paper-2);
     border-radius:20px;
-    padding:1.5rem;
-    min-height:140px;
+    padding:1.5rem 2rem;
     border:2px solid transparent;
     transition:transform .3s var(--ease-out), border-color .3s, background .3s;
     position:relative;
-    overflow:hidden;
+    text-decoration:none;
   }
   .module-card:hover{
     transform:translateY(-4px);
     border-color:var(--ink);
     background:var(--paper);
   }
-  .module-card .num{
-    font-size:11px;font-weight:700;letter-spacing:.14em;
-    text-transform:uppercase;color:var(--signal);
-    margin-bottom:.5rem;display:block;
-  }
   .module-card .title{
     font-weight:900;
-    font-size:clamp(1.2rem, 4vw, 1.6rem);
+    font-size:clamp(1.2rem, 3.5vw, 1.8rem);
     text-transform:uppercase;
     letter-spacing:-.03em;
-    line-height:.95;
+    line-height:1.1;
   }
   .module-card .arrow{
-    position:absolute;top:1.5rem;right:1.5rem;
-    font-size:1.2rem;transition:transform .3s var(--ease-out);
+    font-size:1.5rem;
+    transition:transform .3s var(--ease-out);
   }
   .module-card:hover .arrow{transform:translate(4px, -4px)}
 
-  .module-card.dark{background:var(--ink);color:var(--paper)}
-  .module-card.dark .num{color:var(--signal)}
-  .module-card.dark:hover{background:var(--ink-2);border-color:var(--signal)}
-  
-  .module-card.accent{background:var(--signal);color:#fff}
-  .module-card.accent .num{color:rgba(255,255,255,.7)}
-  .module-card.accent:hover{background:#e62e2e;border-color:#fff}
-
-  @media(min-width:560px){.modules-grid{grid-template-columns:repeat(2,1fr)}}
-  @media(min-width:900px){.modules-grid{grid-template-columns:repeat(3,1fr)}}
+  /* Специальный цвет для игр */
+  .module-card.game{
+    background:var(--blue);
+    color:#fff;
+  }
+  .module-card.game:hover{
+    background:#2e39b5;
+    border-color:#fff;
+  }
 
   /* FINAL */
   .final{
@@ -269,6 +262,10 @@
     }
     .js .slide .rv{opacity:1;transform:none}
   }
+  
+  @media(max-width:600px){
+    .module-card{padding:1.25rem 1.5rem;}
+  }
 </style>
 </head>
 <body>
@@ -276,7 +273,7 @@
 <!-- HEADER -->
 <header class="top">
   <a class="top-brand" href="index.html">Реклама<span>✦</span></a>
-  <span>Ольга Чуманева</span>
+  <span> Ольга Чуманева @helgalost</span>
 </header>
 
 <!-- HERO -->
@@ -318,36 +315,47 @@
       <h2 class="display">Темы<br><span class="it">курса</span></h2>
     </div>
     <div class="modules-grid rv">
-      <a href="welcome.html" class="module-card dark">
-        <span class="num">Модуль 01</span>
-        <span class="title">Введение<br>в рекламу</span>
+      
+      <!-- Лекции -->
+      <a href="welcome.html" class="module-card">
+        <span class="title">Введение и знакомтсво</span>
         <span class="arrow">↗</span>
       </a>
       <a href="brand.html" class="module-card">
-        <span class="num">Модуль 02</span>
-        <span class="title">Бренд<br>и айдентика</span>
+        <span class="title">Бренд</span>
         <span class="arrow">↗</span>
       </a>
-      <a href="slogan.html" class="module-card accent">
-        <span class="num">Модуль 03</span>
-        <span class="title">Слоганы<br>и тексты</span>
+      <a href="slogan.html" class="module-card">
+        <span class="title">Слоган</span>
         <span class="arrow">↗</span>
       </a>
-      <a href="game1.html" class="module-card">
-        <span class="num">Модуль 04</span>
-        <span class="title">Игра 1<br>Собери свой ресторан</span>
+      <a href="paint.html" class="module-card">
+        <span class="title">Рисование</span>
         <span class="arrow">↗</span>
       </a>
-      <a href="game2.html" class="module-card dark">
-        <span class="num">Модуль 05</span>
-        <span class="title">Игра 2<br>Профессии в рекламе</span>
+      <a href="idea.html" class="module-card">
+        <span class="title">Как придумать идею</span>
         <span class="arrow">↗</span>
       </a>
-      <a href="game3.html" class="module-card">
-        <span class="num">Модуль 06</span>
-        <span class="title">Игра 3<br>Создай героя в рекламе</span>
+      <a href="impact.html" class="module-card">
+        <span class="title">Влияние рекламы</span>
         <span class="arrow">↗</span>
       </a>
+
+      <!-- Игры (отдельный цвет) -->
+      <a href="game1.html" class="module-card game">
+        <span class="title">Игра: Собери свой ресторан</span>
+        <span class="arrow">↗</span>
+      </a>
+      <a href="game2.html" class="module-card game">
+        <span class="title">Игра: Профессии в рекламе</span>
+        <span class="arrow">↗</span>
+      </a>
+      <a href="game3.html" class="module-card game">
+        <span class="title">Игра: Создай героя в рекламе</span>
+        <span class="arrow">↗</span>
+      </a>
+
     </div>
   </div>
 </section>
