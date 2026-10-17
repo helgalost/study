@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Рисуем логотип</title>
+<script>document.documentElement.classList.add('js');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#ebe9e4; --paper-2:#f3f1ec; --paper-3:#e0ddd5;
+    --ink:#0b0b0c; --ink-2:#3a3a3c; --muted:#6f6d68;
+    --signal:#ff3d3d; --blue:#3a47d5; --yellow:#ffc93c; --green:#7bd389;
+    --line:rgba(11,11,12,0.12);
+    --ease-out:cubic-bezier(.16,1,.3,1);
+    --radius:26px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    background:var(--paper); color:var(--ink);
+    line-height:1.4; overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+
+  /* HEADER */
+  .top{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:1rem 1.25rem;
+    padding-top:max(1rem,env(safe-area-inset-top));
+    mix-blend-mode:difference;transform:translateZ(0);
+    color:#fff;pointer-events:none;
+    font-size:11px;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;
+  }
+  .top a{pointer-events:auto}
+  .top-brand{font-weight:900;font-size:14px;letter-spacing:-.02em}
+  .top-brand span{color:#ff3d3d;mix-blend-mode:normal}
+
+  /* SLIDE */
+  .slide{
+    min-height:100vh;min-height:100svh;
+    padding:5.5rem 1.25rem 7rem;
+    display:flex;flex-direction:column;position:relative;
+    scroll-margin-top:2rem;
+  }
+  .slide-content{max-width:1100px;width:100%;margin:auto}
+  @media(min-width:768px){.slide{padding:6rem 2rem 7rem}}
+
+  /* TYPOGRAPHY */
+  .display{
+    font-weight:900;font-size:clamp(2rem,8vw,4.5rem);
+    line-height:.88;letter-spacing:-.05em;text-transform:uppercase;
+  }
+  .display .it{font-style:italic;color:var(--signal)}
+
+  .lead{
+    font-size:clamp(1rem,2.6vw,1.15rem);
+    line-height:1.4;max-width:52ch;
+    color:var(--muted);margin:1rem 0;
+  }
+
+  /* MARQUEE */
+  .marquee{
+    background:var(--signal);color:#fff;padding:.8rem 0;
+    transform:rotate(-1.5deg);margin:-1rem -.5rem;overflow:hidden;
+  }
+  .marquee-track{
+    display:flex;width:max-content;animation:slide 40s linear infinite;
+  }
+  .marquee-track:hover{animation-play-state:paused}
+  .marquee-item{
+    display:flex;align-items:center;font-weight:900;
+    font-size:clamp(1rem,4vw,1.4rem);letter-spacing:-.02em;
+    text-transform:uppercase;padding:0 1rem;gap:1rem;white-space:nowrap;
+  }
+  .marquee-item svg{width:12px;height:12px;flex-shrink:0}
+  @keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  .section-head{margin-bottom:1.5rem}
+
+  /* TOOLS GRID */
+  .tools-big{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;margin-top:1.5rem;
+  }
+  .tool-card{
+    background:var(--paper-2);border-radius:22px;
+    padding:1.25rem 1rem;
+    display:flex;flex-direction:column;
+    align-items:center;gap:.6rem;
+    text-align:center;
+  }
+  .tool-card .ico{
+    font-size:clamp(2.6rem,11vw,3.8rem);line-height:1;
+  }
+  .tool-card .name{
+    font-size:clamp(.95rem,3.4vw,1.15rem);
+    font-weight:900;text-transform:uppercase;
+    letter-spacing:-.02em;line-height:1.05;
+  }
+  .tool-card .desc{
+    font-size:12px;color:var(--muted);
+    font-weight:600;line-height:1.3;
+  }
+  .tool-card.hot{background:var(--yellow)}
+  .tool-card.hot .desc{color:var(--ink-2)}
+  @media(min-width:640px){.tools-big{grid-template-columns:repeat(3,1fr)}}
+  @media(min-width:900px){.tools-big{grid-template-columns:repeat(6,1fr)}}
+
+  /* STEPS BIG */
+  .steps-big{
+    display:grid;gap:14px;margin-top:1.5rem;
+  }
+  .step-big{
+    background:var(--paper-2);border-radius:22px;
+    padding:1.5rem;
+    display:flex;align-items:center;gap:1.25rem;
+  }
+  .step-big .num-b{
+    flex-shrink:0;
+    width:52px;height:52px;
+    border-radius:50%;
+    background:var(--ink);color:var(--paper);
+    display:flex;align-items:center;justify-content:center;
+    font-size:22px;font-weight:900;font-style:italic;
+  }
+  .step-big .body{flex:1}
+  .step-big h3{
+    font-size:clamp(1.05rem,3.8vw,1.35rem);
+    font-weight:900;text-transform:uppercase;
+    letter-spacing:-.02em;line-height:1.05;
+    margin-bottom:4px;
+  }
+  .step-big p{
+    font-size:clamp(.85rem,3vw,1rem);
+    color:var(--muted);line-height:1.35;
+  }
+  .step-big .em-big{
+    font-size:clamp(2rem,7vw,2.6rem);line-height:1;
+    flex-shrink:0;
+  }
+
+  /* SHAPES ROW */
+  .shapes{
+    display:grid;grid-template-columns:repeat(4,1fr);
+    gap:10px;margin-top:1.5rem;
+  }
+  .shape{
+    aspect-ratio:1;background:var(--paper-2);
+    border-radius:20px;
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    gap:.4rem;
+    padding:.75rem;
+    transition:transform .3s var(--ease-out);
+  }
+  .shape:hover{transform:translateY(-4px)}
+  .shape .sym{
+    font-size:clamp(2.2rem,9vw,3.2rem);line-height:1;
+  }
+  .shape .lbl{
+    font-size:10px;font-weight:800;
+    letter-spacing:.02em;text-transform:uppercase;
+    color:var(--ink-2);text-align:center;
+  }
+  .shape.k{background:var(--yellow)}
+  .shape.s{background:var(--signal);color:#fff}
+  .shape.s .lbl{color:#fff}
+  .shape.b{background:var(--blue);color:#fff}
+  .shape.b .lbl{color:#fff}
+  .shape.g{background:var(--green)}
+
+  /* LOGO RECIPE */
+  .recipe{
+    display:grid;gap:14px;margin-top:1.5rem;
+  }
+  .recipe-row{
+    background:var(--paper-2);border-radius:22px;
+    padding:1.5rem;
+    display:flex;align-items:center;gap:1rem;
+    flex-wrap:wrap;
+  }
+  .recipe-row .plus{
+    font-size:clamp(1.4rem,5vw,2rem);
+    font-weight:900;color:var(--signal);font-style:italic;
+    flex-shrink:0;
+  }
+  .recipe-row .piece{
+    display:flex;align-items:center;gap:8px;
+    flex:1;min-width:120px;
+    font-size:clamp(.9rem,3.4vw,1.1rem);
+    font-weight:800;
+  }
+  .recipe-row .piece .em{
+    font-size:clamp(1.8rem,7vw,2.4rem);line-height:1;
+  }
+  .recipe-row .equals{
+    font-size:clamp(1.4rem,5vw,2rem);
+    font-weight:900;color:var(--signal);
+    flex-shrink:0;
+  }
+  .recipe-row .result{
+    flex:1;min-width:120px;
+    font-size:clamp(1rem,3.8vw,1.2rem);
+    font-weight:900;text-transform:uppercase;
+    letter-spacing:-.02em;
+    display:flex;align-items:center;gap:10px;
+  }
+  .recipe-row .result .badge{
+    width:44px;height:44px;border-radius:50%;
+    background:var(--yellow);
+    border:3px solid var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    font-size:24px;flex-shrink:0;
+  }
+
+  /* PRACTICE */
+  .practice-box{
+    background:var(--ink);color:var(--paper);
+    border-radius:26px;padding:2.5rem 1.75rem;
+    margin-top:1.5rem;text-align:center;
+    position:relative;overflow:hidden;
+  }
+  .practice-box::before{
+    content:"";position:absolute;inset:0;
+    background:repeating-linear-gradient(45deg, transparent 0 20px, rgba(255,255,255,.05) 20px 22px);
+    pointer-events:none;
+  }
+  .practice-box .em-big{
+    position:relative;
+    font-size:clamp(4rem,16vw,6rem);
+    line-height:1;margin-bottom:1rem;display:block;
+    animation:float 3s ease-in-out infinite;
+  }
+  @keyframes float{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-10px)}
+  }
+  .practice-box h3{
+    position:relative;
+    font-size:clamp(1.6rem,7vw,2.6rem);
+    font-weight:900;text-transform:uppercase;
+    letter-spacing:-.03em;line-height:1;
+  }
+  .practice-box h3 em{font-style:italic;color:var(--signal)}
+  .practice-box p{
+    position:relative;
+    margin-top:1rem;font-size:15px;
+    color:rgba(235,233,228,.7);
+    max-width:32ch;margin-left:auto;margin-right:auto;
+  }
+
+  /* KEYBOARD HINT */
+  .kbd{
+    display:inline-block;
+    padding:4px 10px;
+    background:var(--paper-3);
+    border-radius:8px;
+    border-bottom:3px solid rgba(11,11,12,.25);
+    font-family:'Courier New',monospace;
+    font-weight:900;font-size:14px;
+    color:var(--ink);
+  }
+  .kbd-row{
+    display:flex;gap:8px;justify-content:center;
+    flex-wrap:wrap;margin-top:1rem;
+  }
+
+  /* HINT CARD */
+  .hint-block{
+    background:var(--yellow);
+    border-radius:22px;
+    padding:1.5rem;
+    margin-top:1.5rem;
+    display:flex;
+    align-items:center;
+    gap:1rem;
+  }
+  .hint-block .em{
+    font-size:clamp(2.5rem,10vw,3.4rem);line-height:1;
+    flex-shrink:0;
+  }
+  .hint-block .txt{
+    font-size:clamp(.95rem,3.6vw,1.15rem);
+    font-weight:800;line-height:1.25;
+  }
+
+  /* LOGO EXAMPLE */
+  .logo-strip{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    gap:10px;margin-top:1.5rem;
+  }
+  .logo-strip .item{
+    aspect-ratio:1;background:#fff;
+    border-radius:20px;
+    border:2px solid var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    font-size:clamp(2.4rem,10vw,3.6rem);line-height:1;
+    transition:transform .25s var(--ease-out);
+  }
+  .logo-strip .item:hover{transform:rotate(-6deg) scale(1.05)}
+  @media(min-width:640px){.logo-strip{grid-template-columns:repeat(6,1fr)}}
+
+  /* EDITORS */
+  .editors{display:grid;gap:12px;margin-top:1.5rem}
+  .editor{
+    background:var(--paper-2);border-radius:22px;
+    padding:1.5rem;display:flex;gap:1rem;align-items:flex-start;
+  }
+  .editor .em{
+    font-size:40px;line-height:1;flex-shrink:0;
+  }
+  .editor h3{
+    font-size:clamp(1rem,3.6vw,1.2rem);
+    font-weight:900;text-transform:uppercase;
+    letter-spacing:-.01em;line-height:1.05;margin-bottom:6px;
+  }
+  .editor p{font-size:14px;color:var(--muted);line-height:1.4}
+  @media(min-width:768px){.editors{grid-template-columns:repeat(3,1fr)}}
+
+  /* FINAL */
+  .final{background:var(--ink);color:var(--paper)}
+  .final-label{
+    display:flex;align-items:center;gap:8px;
+    font-size:11px;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;
+    color:rgba(235,233,228,.6);margin-bottom:1.5rem;
+  }
+  .final-label svg{width:12px;height:12px;color:var(--signal)}
+  .final .display{
+    color:var(--paper);font-size:clamp(2rem,9vw,4.5rem);
+  }
+  .final .display .it{color:var(--signal)}
+  .final-rule{
+    margin-top:2rem;padding-top:1.5rem;
+    border-top:1px solid rgba(235,233,228,.15);
+  }
+  .final-rule .lbl{
+    font-size:11px;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;
+    color:rgba(235,233,228,.5);
+  }
+  .final-rule h3{
+    margin-top:.8rem;
+    font-size:clamp(1.6rem,7vw,3rem);
+    font-weight:900;text-transform:uppercase;
+    letter-spacing:-.04em;line-height:.9;
+  }
+  .final-rule h3 span{
+    display:block;color:var(--signal);font-style:italic;
+  }
+  .final-rule h3 span.mid{color:var(--paper)}
+  .final-rule h3 span.end{color:var(--paper)}
+
+  /* DOCK */
+  .dock{
+    position:fixed;bottom:max(14px,env(safe-area-inset-bottom));
+    left:50%;transform:translateX(-50%);z-index:60;
+    background:var(--ink);color:var(--paper);
+    border-radius:999px;padding:5px;
+    display:flex;align-items:center;gap:2px;
+    box-shadow:0 20px 50px -12px rgba(11,11,12,.5);
+    max-width:calc(100% - 20px);overflow-x:auto;
+    scrollbar-width:none;
+  }
+  .dock::-webkit-scrollbar{display:none}
+  .dock a{
+    width:34px;height:34px;display:grid;place-items:center;
+    border-radius:50%;font-size:14px;
+    color:rgba(235,233,228,.55);
+    transition:color .3s,background .3s;
+    flex-shrink:0;position:relative;
+  }
+  .dock a:hover{color:var(--paper)}
+  .dock a.active{color:var(--paper);background:rgba(255,255,255,.08)}
+  .dock a.active::before{
+    content:"";position:absolute;inset:2px;border-radius:50%;
+    border:1.5px solid var(--signal);
+  }
+
+  /* ANIMATIONS */
+  .hero-title span{
+    display:inline-block;transform:translateY(20%);
+    opacity:0;animation:rise .9s var(--ease-out) both;
+  }
+  .hero-title span:nth-child(1){animation-delay:.05s}
+  .hero-title span:nth-child(2){animation-delay:.12s}
+  .hero-title span:nth-child(3){animation-delay:.19s}
+  .hero-title span:nth-child(4){animation-delay:.26s}
+  .hero-title span:nth-child(5){animation-delay:.33s}
+  @keyframes rise{to{transform:translateY(0);opacity:1}}
+
+  .js .slide .rv{opacity:0}
+  .js .slide.in .rv{animation:revealIn .8s var(--ease-out) both}
+  @keyframes revealIn{
+    from{opacity:0;transform:translateY(26px)}
+    to{opacity:1;transform:none}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{
+      animation-duration:.01ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:.01ms !important;
+    }
+    .js .slide .rv{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="top">
+  <a class="top-brand" href="#top">Рисуем<span>✦</span></a>
+  <span>Ольга</span>
+</header>
+
+<!-- HERO -->
+<section class="slide" id="top">
+  <div class="slide-content">
+    <h1 class="hero-title rv" style="font-size:clamp(3rem,15vw,10rem);display:flex;justify-content:space-between;line-height:.8;">
+      <span>Р</span><span>И</span><span>С</span><span>У</span><span>Е</span><span>М</span>
+    </h1>
+    <div class="rv" style="margin-top:2rem;border-top:1px solid var(--line);padding-top:1rem;display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">учимся рисовать <b style="color:var(--ink);">логотип</b></div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">↓ листай</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <div class="marquee-item">Кисть <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg></div>
+    <div class="marquee-item">Фигуры <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg></div>
+    <div class="marquee-item">Цвет <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg></div>
+    <div class="marquee-item">Текст <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg></div>
+    <div class="marquee-item">Логотип <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg></div>
+  </div>
+</div>
+
+<!-- 01 · ИНСТРУМЕНТЫ PAINT -->
+<section class="slide" id="tools">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Инструменты<br><span class="it">Paint</span></h2>
+    </div>
+    <p class="lead rv">Шесть кнопок — и ты умеешь рисовать что угодно.</p>
+
+    <div class="tools-big rv">
+      <div class="tool-card hot">
+        <span class="ico">🖌️</span>
+        <span class="name">Кисть</span>
+        <span class="desc">рисует от руки</span>
+      </div>
+      <div class="tool-card">
+        <span class="ico">⚪</span>
+        <span class="name">Овал</span>
+        <span class="desc">круг и овал</span>
+      </div>
+      <div class="tool-card">
+        <span class="ico">◼️</span>
+        <span class="name">Квадрат</span>
+        <span class="desc">квадрат и прямоугольник</span>
+      </div>
+      <div class="tool-card">
+        <span class="ico">📏</span>
+        <span class="name">Линия</span>
+        <span class="desc">прямая черта</span>
+      </div>
+      <div class="tool-card hot">
+        <span class="ico">🪣</span>
+        <span class="name">Заливка</span>
+        <span class="desc">закрасить фигуру</span>
+      </div>
+      <div class="tool-card">
+        <span class="ico">🅰️</span>
+        <span class="name">Текст</span>
+        <span class="desc">напиши буквы</span>
+      </div>
+    </div>
+
+    <div class="hint-block rv">
+      <span class="em">🎨</span>
+      <span class="txt">Цвет меняется в палитре сверху — нажми и выбери!</span>
+    </div>
+  </div>
+</section>
+
+<!-- 02 · ЧЕТЫРЕ ФИГУРЫ = ВСЁ -->
+<section class="slide" id="shapes">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Только <span class="it">4 фигуры</span></h2>
+    </div>
+    <p class="lead rv">Из них состоит любой логотип.</p>
+
+    <div class="shapes rv">
+      <div class="shape k">
+        <span class="sym">⚪</span>
+        <span class="lbl">круг</span>
+      </div>
+      <div class="shape s">
+        <span class="sym">◼️</span>
+        <span class="lbl">квадрат</span>
+      </div>
+      <div class="shape b">
+        <span class="sym">🔺</span>
+        <span class="lbl">треугольник</span>
+      </div>
+      <div class="shape g">
+        <span class="sym">⭐</span>
+        <span class="lbl">звезда</span>
+      </div>
+    </div>
+
+    <p class="lead rv" style="text-align:center;margin-top:1.5rem">Плюс — <strong>буквы</strong> и <strong>цвет</strong>. Всё!</p>
+  </div>
+</section>
+
+<!-- 03 · ТРЕНАЖЁР -->
+<section class="slide" id="train">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Тренажёр —<br><span class="it">повтори!</span></h2>
+    </div>
+
+    <div class="steps-big rv">
+      <div class="step-big">
+        <span class="num-b">1</span>
+        <div class="body">
+          <h3>Нарисуй круг</h3>
+          <p>Выбери «Овал», зажми Shift и веди мышкой.</p>
+        </div>
+        <span class="em-big">⚪</span>
+      </div>
+      <div class="step-big">
+        <span class="num-b">2</span>
+        <div class="body">
+          <h3>Закрась его</h3>
+          <p>Выбери «Заливка» и кликни внутри круга.</p>
+        </div>
+        <span class="em-big">🪣</span>
+      </div>
+      <div class="step-big">
+        <span class="num-b">3</span>
+        <div class="body">
+          <h3>Добавь квадрат рядом</h3>
+          <p>Тот же приём, только с квадратом.</p>
+        </div>
+        <span class="em-big">◼️</span>
+      </div>
+      <div class="step-big">
+        <span class="num-b">4</span>
+        <div class="body">
+          <h3>Напиши слово</h3>
+          <p>Инструмент «Текст» — и печатай название.</p>
+        </div>
+        <span class="em-big">🅰️</span>
+      </div>
+      <div class="step-big">
+        <span class="num-b">5</span>
+        <div class="body">
+          <h3>Ошибся? Не беда!</h3>
+          <p>Нажми <span class="kbd">Ctrl</span> + <span class="kbd">Z</span> — шаг назад.</p>
+        </div>
+        <span class="em-big">↩️</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 · ИЗ ЧЕГО СОБИРАЕТСЯ ЛОГОТИП -->
+<section class="slide" id="recipe">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Как собрать<br><span class="it">логотип?</span></h2>
+    </div>
+
+    <div class="recipe rv">
+      <div class="recipe-row">
+        <div class="piece"><span class="em">⚪</span> круг</div>
+        <span class="plus">+</span>
+        <div class="piece"><span class="em">🅰️</span> буква</div>
+        <span class="equals">=</span>
+        <div class="result">
+          <span class="badge">Ⓜ️</span>
+          значок
+        </div>
+      </div>
+
+      <div class="recipe-row">
+        <div class="piece"><span class="em">🧸</span> персонаж</div>
+        <span class="plus">+</span>
+        <div class="piece"><span class="em">🅰️</span> название</div>
+        <span class="equals">=</span>
+        <div class="result">
+          <span class="badge">🎪</span>
+          бренд
+        </div>
+      </div>
+
+      <div class="recipe-row">
+        <div class="piece"><span class="em">⭐</span> фигура</div>
+        <span class="plus">+</span>
+        <div class="piece"><span class="em">🌈</span> цвет</div>
+        <span class="equals">=</span>
+        <div class="result">
+          <span class="badge">✨</span>
+          логотип
+        </div>
+      </div>
+    </div>
+
+    <div class="hint-block rv">
+      <span class="em">💡</span>
+      <span class="txt">Простой логотип — это фигура + название рядом с ней.</span>
+    </div>
+  </div>
+</section>
+
+<!-- 05 · ПРИМЕРЫ -->
+<section class="slide" id="examples">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Вот <span class="it">примеры</span></h2>
+    </div>
+    <p class="lead rv">Всё нарисовано простыми фигурами.</p>
+
+    <div class="logo-strip rv">
+      <div class="item">🧸</div>
+      <div class="item">🚀</div>
+      <div class="item">🐱</div>
+      <div class="item">⭐</div>
+      <div class="item">🌈</div>
+      <div class="item">🎁</div>
+    </div>
+
+    <div class="steps-big rv" style="margin-top:1.5rem">
+      <div class="step-big">
+        <span class="em-big">🧸</span>
+        <div class="body">
+          <h3>Мишка + круг</h3>
+          <p>Круг + два маленьких круга сверху + буква «М».</p>
+        </div>
+      </div>
+      <div class="step-big">
+        <span class="em-big">🚀</span>
+        <div class="body">
+          <h3>Ракета + треугольник</h3>
+          <p>Треугольник + круг + три линии — вот и ракета.</p>
+        </div>
+      </div>
+      <div class="step-big">
+        <span class="em-big">⭐</span>
+        <div class="body">
+          <h3>Звезда + буква</h3>
+          <p>Одна фигура + одна буква = готовый знак.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 · ПОРЯДОК РАБОТЫ -->
+<section class="slide" id="order">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Порядок<br><span class="it">работы</span></h2>
+    </div>
+
+    <div class="steps-big rv">
+      <div class="step-big">
+        <span class="num-b">1</span>
+        <div class="body">
+          <h3>Подумай: что рисуем?</h3>
+          <p>Выбери продукт — мишка? ракета? пицца?</p>
+        </div>
+        <span class="em-big">🧠</span>
+      </div>
+      <div class="step-big">
+        <span class="num-b">2</span>
+        <div class="body">
+          <h3>Набросай на бумаге</h3>
+          <p>Карандашом, быстро, как придумал.</p>
+        </div>
+        <span class="em-big">✏️</span>
+      </div>
+      <div class="step-big">
+        <span class="num-b">3</span>
+        <div class="body">
+          <h3>Открой Paint</h3>
+          <p>Пустой лист, инструменты перед тобой.</p>
+        </div>
+        <span class="em-big">💻</span>
+      </div>
+      <div class="step-big">
+        <span class="num-b">4</span>
+        <div class="body">
+          <h3>Нарисуй фигуру</h3>
+          <p>Круг, квадрат или треугольник — по очереди.</p>
+        </div>
+        <span class="em-big">⚪</span>
+      </div>
+      <div class="step-big">
+        <span class="num-b">5</span>
+        <div class="body">
+          <h3>Раскрась и напиши название</h3>
+          <p>Заливка + инструмент «Текст».</p>
+        </div>
+        <span class="em-big">🎨</span>
+      </div>
+      <div class="step-big">
+        <span class="num-b">6</span>
+        <div class="body">
+          <h3>Сохрани файл</h3>
+          <p><span class="kbd">Ctrl</span> + <span class="kbd">S</span> — и готово.</p>
+        </div>
+        <span class="em-big">💾</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 · ПРАКТИКА -->
+<section class="slide" id="practice">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">А теперь —<br><span class="it">рисуем!</span></h2>
+    </div>
+
+    <div class="practice-box rv">
+      <span class="em-big">🎨</span>
+      <h3>Нарисуй знак для <em>своего магазина</em></h3>
+      <p>Фигура + название. Просто и красиво.</p>
+    </div>
+
+    <div class="kbd-row rv">
+      <span class="kbd">Ctrl</span><span class="kbd">Z</span>
+      <span style="font-weight:800;font-size:14px">шаг назад</span>
+      <span class="kbd">Ctrl</span><span class="kbd">S</span>
+      <span style="font-weight:800;font-size:14px">сохранить</span>
+    </div>
+  </div>
+</section>
+
+<!-- 08 · ПОДСКАЗКИ -->
+<section class="slide" id="hints">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Если <span class="it">застрял</span></h2>
+    </div>
+
+    <div class="steps-big rv">
+      <div class="step-big">
+        <span class="em-big">🧸</span>
+        <div class="body">
+          <h3>Не знаешь что рисовать?</h3>
+          <p>Возьми любую игрушку — она и будет логотипом.</p>
+        </div>
+      </div>
+      <div class="step-big">
+        <span class="em-big">⚪</span>
+        <div class="body">
+          <h3>Не получается фигура?</h3>
+          <p>Зажми Shift — получится ровный круг или квадрат.</p>
+        </div>
+      </div>
+      <div class="step-big">
+        <span class="em-big">🎨</span>
+        <div class="body">
+          <h3>Цвет не тот?</h3>
+          <p>Нажми на палитру сверху — там все цвета.</p>
+        </div>
+      </div>
+      <div class="step-big">
+        <span class="em-big">↩️</span>
+        <div class="body">
+          <h3>Случайно стёр?</h3>
+          <p><span class="kbd">Ctrl</span> + <span class="kbd">Z</span> — и всё вернётся.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 09 · ФИНАЛ -->
+<section class="slide final" id="end">
+  <div class="slide-content">
+    <p class="final-label rv">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg>
+      ты умеешь рисовать
+    </p>
+    <h2 class="display rv">
+      Круг.<br>
+      Квадрат.<br>
+      Линия.<br>
+      Буква.<br>
+      <span class="it">Твой логотип.</span>
+    </h2>
+    <div class="final-rule rv">
+      <p class="lbl">Простое правило</p>
+      <h3>
+        <span>Нарисуй фигуру.</span>
+        <span class="mid">Закрась цветом.</span>
+        <span class="end">Напиши название.</span>
+      </h3>
+    </div>
+  </div>
+</section>
+
+<!-- DOCK -->
+<nav class="dock" id="dock">
+  <a href="#top" class="active" title="Старт">↑</a>
+  <a href="#tools" title="Инструменты">🖌️</a>
+  <a href="#shapes" title="Фигуры">⚪</a>
+  <a href="#train" title="Тренажёр">🎯</a>
+  <a href="#recipe" title="Рецепт">📐</a>
+  <a href="#examples" title="Примеры">✨</a>
+  <a href="#order" title="Порядок">1️⃣</a>
+  <a href="#practice" title="Практика">🎨</a>
+  <a href="#hints" title="Подсказки">💡</a>
+  <a href="#end" title="Финал">⭐</a>
+</nav>
+
+<script>
+(function(){
+  const links = [...document.querySelectorAll('.dock a')];
+  const sections = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+
+  function show(s){
+    if (s.dataset.done) return;
+    s.dataset.done = '1';
+    s.classList.add('in');
+    s.querySelectorAll('.rv').forEach((el, i) => {
+      el.style.animationDelay = (i * 0.09).toFixed(2) + 's';
+    });
+  }
+
+  if ('IntersectionObserver' in window) {
+    let current = null;
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(en => {
+        if (!en.isIntersecting) return;
+        show(en.target);
+        current = en.target.id;
+      });
+      if (current) links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + current));
+    }, { threshold: 0, rootMargin: '-12% 0px -12% 0px' });
+    sections.forEach(s => io.observe(s));
+  } else {
+    sections.forEach(show);
+  }
+
+  links.forEach(a => {
+    a.addEventListener('click', e => {
+      const id = a.getAttribute('href');
+      if (id.startsWith('#')) {
+        e.preventDefault();
+        document.querySelector(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>

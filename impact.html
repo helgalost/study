@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Реклама влияет</title>
+<script>document.documentElement.classList.add('js');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#ebe9e4; --paper-2:#f3f1ec; --paper-3:#e0ddd5;
+    --ink:#0b0b0c; --ink-2:#3a3a3c; --muted:#6f6d68;
+    --signal:#ff3d3d; --blue:#3a47d5; --yellow:#ffc93c; --green:#7bd389;
+    --purple:#a06cd5;
+    --line:rgba(11,11,12,0.12);
+    --ease-out:cubic-bezier(.16,1,.3,1);
+    --radius:26px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    background:var(--paper); color:var(--ink);
+    line-height:1.4; overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+
+  .top{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:1rem 1.25rem;
+    padding-top:max(1rem,env(safe-area-inset-top));
+    mix-blend-mode:difference;transform:translateZ(0);
+    color:#fff;pointer-events:none;
+    font-size:11px;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;
+  }
+  .top a{pointer-events:auto}
+  .top-brand{font-weight:900;font-size:14px;letter-spacing:-.02em}
+  .top-brand span{color:#ff3d3d;mix-blend-mode:normal}
+
+  .slide{
+    min-height:100vh;min-height:100svh;
+    padding:5.5rem 1.25rem 7rem;
+    display:flex;flex-direction:column;position:relative;
+    scroll-margin-top:2rem;
+  }
+  .slide-content{max-width:1100px;width:100%;margin:auto}
+  @media(min-width:768px){.slide{padding:6rem 2rem 7rem}}
+
+  .display{
+    font-weight:900;font-size:clamp(2rem,8vw,4.5rem);
+    line-height:.88;letter-spacing:-.05em;text-transform:uppercase;
+  }
+  .display .it{font-style:italic;color:var(--signal)}
+
+  .lead{
+    font-size:clamp(1rem,2.6vw,1.15rem);
+    line-height:1.4;max-width:52ch;
+    color:var(--muted);margin:1rem 0;
+  }
+
+  .marquee{
+    background:var(--signal);color:#fff;padding:.8rem 0;
+    transform:rotate(-1.5deg);margin:-1rem -.5rem;overflow:hidden;
+  }
+  .marquee-track{
+    display:flex;width:max-content;animation:slide 40s linear infinite;
+  }
+  .marquee-track:hover{animation-play-state:paused}
+  .marquee-item{
+    display:flex;align-items:center;font-weight:900;
+    font-size:clamp(1rem,4vw,1.4rem);letter-spacing:-.02em;
+    text-transform:uppercase;padding:0 1rem;gap:1rem;white-space:nowrap;
+  }
+  .marquee-item svg{width:12px;height:12px;flex-shrink:0}
+  @keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  .section-head{margin-bottom:1.5rem}
+
+  /* VIDEO — обложка + кнопки платформ, загрузка только по клику */
+  .video-block{margin-top:1.5rem}
+  .video-stage{
+    position:relative;
+    aspect-ratio:16/9;
+    background:linear-gradient(135deg,#26262a,#0b0b0c);
+    border-radius:18px;
+    overflow:hidden;
+    border:2px solid var(--ink);
+  }
+  .video-stage .thumb{
+    position:absolute;inset:0;
+    width:100%;height:100%;object-fit:cover;
+  }
+  .video-cover{
+    position:absolute;inset:0;z-index:2;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    cursor:pointer;
+    background:
+      radial-gradient(circle at 50% 42%, rgba(255,61,61,.22), transparent 62%),
+      linear-gradient(160deg, rgba(38,38,42,.35), rgba(11,11,12,.72));
+  }
+  .vplay{
+    width:70px;height:70px;border-radius:50%;
+    background:var(--signal);
+    display:grid;place-items:center;
+    color:#fff;
+    box-shadow:0 14px 34px -10px rgba(255,61,61,.8);
+    transition:transform .25s var(--ease-out);
+  }
+  .video-cover:hover .vplay,
+  .video-cover:focus-visible .vplay{transform:scale(1.1)}
+  .vplay svg{width:26px;height:26px;margin-left:4px}
+  .vlabel{
+    position:absolute;left:12px;bottom:12px;
+    max-width:calc(100% - 24px);
+    background:rgba(11,11,12,.78);
+    color:#fff;
+    padding:7px 14px;
+    border-radius:999px;
+    font-size:12px;font-weight:700;letter-spacing:.02em;
+  }
+  .video-frame{position:absolute;inset:0;display:none;background:#000}
+  .video-frame.on{display:block}
+  .video-frame iframe{width:100%;height:100%;border:0;display:block}
+  .video-sources{
+    display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+    margin-top:.9rem;
+  }
+  .vchip{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:.55rem 1.05rem;
+    border-radius:999px;
+    background:var(--paper-2);
+    border:2px solid var(--ink);
+    font:inherit;font-size:12px;font-weight:800;
+    color:var(--ink);
+    cursor:pointer;
+    transition:transform .2s var(--ease-out), background .2s, color .2s;
+  }
+  .vchip:hover{transform:translateY(-2px)}
+  .vchip.playing{background:var(--ink);color:var(--paper)}
+  @media(min-width:768px){
+    .video-block{max-width:720px;margin-left:auto;margin-right:auto}
+  }
+
+  .impact{
+    display:grid;gap:12px;margin-top:1.5rem;
+  }
+  .impact-card{
+    border-radius:22px;
+    padding:1.5rem;
+    display:flex;align-items:center;gap:1rem;
+    background:var(--paper-2);
+  }
+  .impact-card .em{
+    font-size:clamp(2.6rem,11vw,3.6rem);line-height:1;
+    flex-shrink:0;
+  }
+  .impact-card .txt{
+    font-size:clamp(1.05rem,4vw,1.3rem);
+    font-weight:900;text-transform:uppercase;
+    letter-spacing:-.02em;line-height:1.1;
+  }
+  .impact-card.dark{background:var(--ink);color:var(--paper)}
+  .impact-card.sig{background:var(--signal);color:#fff}
+  .impact-card.yel{background:var(--yellow)}
+  .impact-card.blu{background:var(--blue);color:#fff}
+  @media(min-width:640px){
+    .impact{grid-template-columns:repeat(2,1fr)}
+  }
+
+  .ad-types{
+    display:grid;gap:14px;margin-top:1.5rem;
+  }
+  .ad-type{
+    border-radius:24px;
+    padding:1.75rem 1.5rem;
+    display:flex;flex-direction:column;gap:1rem;
+    position:relative;overflow:hidden;
+    min-height:220px;
+  }
+  .ad-type.out{background:var(--blue);color:#fff}
+  .ad-type.fly{background:var(--yellow)}
+  .ad-type.card{background:var(--signal);color:#fff}
+  .ad-type.vid{background:var(--ink);color:var(--paper)}
+  .ad-type .big-em{
+    font-size:clamp(3.5rem,14vw,5rem);
+    line-height:1;margin-bottom:.5rem;
+  }
+  .ad-type h3{
+    font-size:clamp(1.4rem,5.5vw,1.8rem);
+    font-weight:900;text-transform:uppercase;
+    letter-spacing:-.03em;line-height:1;
+  }
+  .ad-type h3 em{font-style:italic}
+  .ad-type .desc{
+    font-size:clamp(.85rem,3.2vw,1rem);
+    font-weight:600;line-height:1.3;
+    opacity:.85;
+    margin-top:auto;
+  }
+  .ad-type .where{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:6px 14px;
+    border-radius:999px;
+    background:rgba(255,255,255,.15);
+    font-size:11px;font-weight:800;
+    letter-spacing:.08em;text-transform:uppercase;
+    align-self:flex-start;
+  }
+  .ad-type.fly .where{background:rgba(11,11,12,.1)}
+  @media(min-width:768px){
+    .ad-types{grid-template-columns:repeat(2,1fr)}
+  }
+
+  .match{
+    display:grid;gap:12px;margin-top:1.5rem;
+  }
+  .match-row{
+    background:var(--paper-2);border-radius:22px;
+    padding:1.25rem 1.5rem;
+    display:flex;align-items:center;gap:14px;
+    flex-wrap:wrap;
+  }
+  .match-row .thing{
+    display:flex;align-items:center;gap:8px;
+    font-size:clamp(.95rem,3.6vw,1.15rem);
+    font-weight:800;
+    flex:1;min-width:140px;
+  }
+  .match-row .thing .em{
+    font-size:clamp(1.8rem,7vw,2.2rem);line-height:1;
+  }
+  .match-row .arrow{
+    font-size:clamp(1.4rem,5vw,1.8rem);
+    font-weight:900;color:var(--signal);
+    flex-shrink:0;
+  }
+  .match-row .medium{
+    display:flex;align-items:center;gap:8px;
+    font-size:clamp(.95rem,3.6vw,1.15rem);
+    font-weight:900;text-transform:uppercase;
+    letter-spacing:-.01em;
+    flex:1;min-width:140px;
+  }
+  .match-row .medium .em{
+    font-size:clamp(1.8rem,7vw,2.2rem);line-height:1;
+  }
+  @media(min-width:768px){
+    .match-row .thing{flex:0 0 40%}
+    .match-row .medium{flex:1}
+  }
+
+  .goals{
+    display:grid;gap:12px;margin-top:1.5rem;
+  }
+  .goal{
+    background:var(--paper-2);border-radius:22px;
+    padding:1.5rem;
+    display:flex;flex-direction:column;
+    align-items:center;text-align:center;gap:.6rem;
+  }
+  .goal .em{
+    font-size:clamp(2.6rem,11vw,3.6rem);line-height:1;
+    animation:float 3s ease-in-out infinite;
+  }
+  @keyframes float{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-8px)}
+  }
+  .goal:nth-child(2) .em{animation-delay:.3s}
+  .goal:nth-child(3) .em{animation-delay:.6s}
+  .goal:nth-child(4) .em{animation-delay:.9s}
+  .goal .txt{
+    font-size:clamp(.9rem,3.4vw,1.1rem);
+    font-weight:900;text-transform:uppercase;
+    letter-spacing:-.01em;line-height:1.1;
+  }
+  @media(min-width:640px){
+    .goals{grid-template-columns:repeat(4,1fr)}
+  }
+
+  .pick-hero{
+    background:var(--ink);color:var(--paper);
+    border-radius:26px;
+    padding:2.5rem 1.75rem;
+    margin-top:1.5rem;
+    text-align:center;
+  }
+  .pick-hero.sig{background:var(--signal);color:#fff}
+  .pick-hero .em{
+    font-size:clamp(3rem,13vw,5rem);line-height:1;
+    margin-bottom:1rem;display:block;
+    animation:float 3s ease-in-out infinite;
+  }
+  .pick-hero h3{
+    font-size:clamp(1.5rem,6vw,2.4rem);
+    font-weight:900;text-transform:uppercase;
+    letter-spacing:-.03em;line-height:1.05;
+  }
+  .pick-hero h3 em{font-style:italic;color:var(--signal)}
+  .pick-hero.sig h3 em{color:var(--paper)}
+  .pick-hero p{
+    margin-top:1rem;font-size:15px;
+    color:rgba(235,233,228,.7);
+    max-width:34ch;margin-left:auto;margin-right:auto;
+  }
+  .pick-hero.sig p{color:rgba(255,255,255,.85)}
+
+  .product-row{
+    display:grid;grid-template-columns:repeat(2,1fr);
+    gap:10px;margin-top:1.5rem;
+  }
+  .product-pick{
+    background:var(--paper-2);
+    border-radius:22px;
+    padding:1.25rem 1rem;
+    display:flex;flex-direction:column;
+    align-items:center;gap:.5rem;
+    text-align:center;
+  }
+  .product-pick.big .em{
+    font-size:clamp(3rem,13vw,4.4rem);
+  }
+  .product-pick .em{
+    font-size:clamp(2.4rem,10vw,3.2rem);line-height:1;
+  }
+  .product-pick .name{
+    font-size:clamp(.8rem,3vw,.95rem);
+    font-weight:800;text-transform:uppercase;
+    letter-spacing:-.01em;line-height:1.1;
+  }
+  @media(min-width:640px){
+    .product-row{grid-template-columns:repeat(4,1fr)}
+  }
+
+  /* DRAW STEP LIST */
+  .draw-steps{
+    display:grid;gap:12px;margin-top:1.5rem;
+  }
+  .draw-step{
+    background:var(--paper-2);
+    border-radius:22px;
+    padding:1.5rem;
+    display:flex;align-items:center;gap:1.25rem;
+  }
+  .draw-step .n{
+    width:56px;height:56px;
+    border-radius:50%;
+    background:var(--ink);color:var(--paper);
+    display:flex;align-items:center;justify-content:center;
+    font-size:24px;font-weight:900;font-style:italic;
+    flex-shrink:0;
+  }
+  .draw-step .body{flex:1}
+  .draw-step h3{
+    font-size:clamp(1.05rem,4vw,1.35rem);
+    font-weight:900;text-transform:uppercase;
+    letter-spacing:-.02em;line-height:1.05;
+    margin-bottom:4px;
+  }
+  .draw-step p{
+    font-size:clamp(.85rem,3.2vw,1rem);
+    color:var(--muted);line-height:1.35;
+  }
+  .draw-step .em-big{
+    font-size:clamp(2rem,7vw,2.6rem);
+    line-height:1;flex-shrink:0;
+  }
+
+  /* TEMPLATE PREVIEW */
+  .templates{
+    display:grid;gap:12px;margin-top:1.5rem;
+  }
+  .template{
+    background:var(--paper-2);
+    border-radius:22px;
+    padding:1.25rem;
+    display:flex;flex-direction:column;gap:.75rem;
+  }
+  .template .head{
+    display:flex;align-items:center;gap:10px;
+    font-size:11px;font-weight:800;
+    letter-spacing:.1em;text-transform:uppercase;
+    color:var(--muted);
+  }
+  .template .head .em{font-size:22px}
+  .template .shape{
+    background:#fff;border-radius:14px;
+    border:2px solid var(--ink);
+    display:flex;flex-direction:column;
+    gap:6px;
+    padding:14px;
+    min-height:130px;
+  }
+  .template.out .shape{aspect-ratio:16/9}
+  .template.fly .shape{aspect-ratio:3/4;max-width:180px;margin:0 auto;width:100%}
+  .template.card .shape{aspect-ratio:9/5;max-width:280px;margin:0 auto;width:100%}
+  .template.vid .shape{aspect-ratio:16/9}
+  .template .line{
+    height:8px;border-radius:4px;
+    background:rgba(11,11,12,.15);
+  }
+  .template .line.t{background:var(--signal);width:60%}
+  .template .line.m{background:rgba(11,11,12,.25);width:80%}
+  .template .box{
+    flex:1;
+    background:var(--yellow);
+    border-radius:8px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:22px;
+  }
+  .template .frames{
+    flex:1;display:grid;grid-template-columns:repeat(3,1fr);
+    gap:6px;
+  }
+  .template .frames > div{
+    background:var(--yellow);
+    border-radius:8px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:20px;
+  }
+  /* ссылки «показать примеры» под шаблоном */
+  .tpl-links{
+    display:flex;gap:8px;flex-wrap:wrap;
+  }
+  .tpl-links a{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:8px 14px;border-radius:999px;
+    border:2px solid var(--ink);
+    background:#fff;
+    font-size:12px;font-weight:800;
+    transition:transform .2s var(--ease-out);
+  }
+  .tpl-links a:hover{transform:translateY(-2px)}
+  .tpl-links a.ya{background:var(--yellow)}
+  @media(min-width:768px){
+    .templates{grid-template-columns:repeat(2,1fr)}
+  }
+
+  .final{background:var(--ink);color:var(--paper)}
+  .final-label{
+    display:flex;align-items:center;gap:8px;
+    font-size:11px;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;
+    color:rgba(235,233,228,.6);margin-bottom:1.5rem;
+  }
+  .final-label svg{width:12px;height:12px;color:var(--signal)}
+  .final .display{
+    color:var(--paper);font-size:clamp(2rem,9vw,4.5rem);
+  }
+  .final .display .it{color:var(--signal)}
+  .final-rule{
+    margin-top:2rem;padding-top:1.5rem;
+    border-top:1px solid rgba(235,233,228,.15);
+  }
+  .final-rule .lbl{
+    font-size:11px;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;
+    color:rgba(235,233,228,.5);
+  }
+  .final-rule h3{
+    margin-top:.8rem;
+    font-size:clamp(1.6rem,7vw,3rem);
+    font-weight:900;text-transform:uppercase;
+    letter-spacing:-.04em;line-height:.9;
+  }
+  .final-rule h3 span{
+    display:block;color:var(--signal);font-style:italic;
+  }
+  .final-rule h3 span.mid{color:var(--paper)}
+  .final-rule h3 span.end{color:var(--paper)}
+
+  .dock{
+    position:fixed;bottom:max(14px,env(safe-area-inset-bottom));
+    left:50%;transform:translateX(-50%);z-index:60;
+    background:var(--ink);color:var(--paper);
+    border-radius:999px;padding:5px;
+    display:flex;align-items:center;gap:2px;
+    box-shadow:0 20px 50px -12px rgba(11,11,12,.5);
+    max-width:calc(100% - 20px);overflow-x:auto;
+    scrollbar-width:none;
+  }
+  .dock::-webkit-scrollbar{display:none}
+  .dock a{
+    width:34px;height:34px;display:grid;place-items:center;
+    border-radius:50%;font-size:14px;
+    color:rgba(235,233,228,.55);
+    transition:color .3s,background .3s;
+    flex-shrink:0;position:relative;
+  }
+  .dock a:hover{color:var(--paper)}
+  .dock a.active{color:var(--paper);background:rgba(255,255,255,.08)}
+  .dock a.active::before{
+    content:"";position:absolute;inset:2px;border-radius:50%;
+    border:1.5px solid var(--signal);
+  }
+
+  .hero-title span{
+    display:inline-block;transform:translateY(20%);
+    opacity:0;animation:rise .9s var(--ease-out) both;
+  }
+  .hero-title span:nth-child(1){animation-delay:.05s}
+  .hero-title span:nth-child(2){animation-delay:.12s}
+  .hero-title span:nth-child(3){animation-delay:.19s}
+  .hero-title span:nth-child(4){animation-delay:.26s}
+  .hero-title span:nth-child(5){animation-delay:.33s}
+  .hero-title span:nth-child(6){animation-delay:.4s}
+  .hero-title span:nth-child(7){animation-delay:.47s}
+  @keyframes rise{to{transform:translateY(0);opacity:1}}
+
+  .js .slide .rv{opacity:0}
+  .js .slide.in .rv{animation:revealIn .8s var(--ease-out) both}
+  @keyframes revealIn{
+    from{opacity:0;transform:translateY(26px)}
+    to{opacity:1;transform:none}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{
+      animation-duration:.01ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:.01ms !important;
+    }
+    .js .slide .rv{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="top">
+  <a class="top-brand" href="#top">Реклама<span>✦</span></a>
+  <span>Ольга</span>
+</header>
+
+<!-- HERO -->
+<section class="slide" id="top">
+  <div class="slide-content">
+    <h1 class="hero-title rv" style="font-size:clamp(2.6rem,13vw,8rem);display:flex;justify-content:space-between;line-height:.8;">
+      <span>Р</span><span>Е</span><span>К</span><span>Л</span><span>А</span><span>М</span><span>А</span>
+    </h1>
+    <h1 class="hero-title rv" style="font-size:clamp(2rem,10vw,5rem);display:flex;justify-content:space-between;line-height:.85;color:var(--signal);font-style:italic;">
+      <span>влияет</span><span>на всех</span>
+    </h1>
+    <div class="rv" style="margin-top:2rem;border-top:1px solid var(--line);padding-top:1rem;display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">смотрим <b style="color:var(--ink);">и узнаём</b></div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">↓ листай</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <div class="marquee-item">Заметил <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg></div>
+    <div class="marquee-item">Захотел <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg></div>
+    <div class="marquee-item">Купил <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg></div>
+    <div class="marquee-item">Так работает реклама <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg></div>
+    <div class="marquee-item">Заметил <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg></div>
+    <div class="marquee-item">Захотел <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg></div>
+    <div class="marquee-item">Купил <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg></div>
+    <div class="marquee-item">Так работает реклама <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg></div>
+  </div>
+</div>
+
+<!-- 01 · СМОТРИМ ЛУНТИКА -->
+<section class="slide" id="video">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Смотрим<br><span class="it">Лунтика</span></h2>
+    </div>
+    <p class="lead rv">Серия «Реклама» — про то, как она работает.</p>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         ВИДЕО: обложка + кнопки платформ.
+         • Dailymotion: код после /video/  → data-dm   (напр. x3hrniv)
+         • YouTube: код после watch?v= (11 символов)   → data-yt
+         • VK: «Скопировать код» → oid=…&id=…           → data-vk
+         • OK: число из ok.ru/videoembed/ЧИСЛО          → data-ok
+         • RuTube: ID из rutube.ru/play/embed/ID        → data-rt
+         Пока поле пустое — кнопка открывает поиск по запросу data-q.
+         ══════════════════════════════════════════════════════════════ -->
+
+    <div class="video-block rv"
+         data-title="Лунтик · серия «Реклама»"
+         data-dm="x3hrniv"
+         data-q="лунтик реклама 314 серия">
+    </div>
+  </div>
+</section>
+
+<!-- 02 · ПОЧЕМУ ТАК РАБОТАЕТ -->
+<section class="slide" id="why">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Почему мы<br><span class="it">запоминаем?</span></h2>
+    </div>
+
+    <div class="impact rv">
+      <div class="impact-card sig">
+        <span class="em">👀</span>
+        <span class="txt">Яркое — видно</span>
+      </div>
+      <div class="impact-card yel">
+        <span class="em">😂</span>
+        <span class="txt">Смешное — помним</span>
+      </div>
+      <div class="impact-card blu">
+        <span class="em">🔁</span>
+        <span class="txt">Повторяется — знакомо</span>
+      </div>
+      <div class="impact-card dark">
+        <span class="em">💛</span>
+        <span class="txt">Доброе — нравится</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 · ЗАЧЕМ -->
+<section class="slide" id="goals">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Зачем мы<br>делаем <span class="it">рекламу?</span></h2>
+    </div>
+
+    <div class="goals rv">
+      <div class="goal">
+        <span class="em">👋</span>
+        <span class="txt">чтобы узнали</span>
+      </div>
+      <div class="goal">
+        <span class="em">💭</span>
+        <span class="txt">чтобы запомнили</span>
+      </div>
+      <div class="goal">
+        <span class="em">😍</span>
+        <span class="txt">чтобы захотели</span>
+      </div>
+      <div class="goal">
+        <span class="em">🛒</span>
+        <span class="txt">чтобы купили</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 · ВИДЫ РЕКЛАМЫ -->
+<section class="slide" id="types">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Виды<br><span class="it">рекламы</span></h2>
+    </div>
+
+    <div class="ad-types rv">
+
+      <div class="ad-type out">
+        <span class="where">на улице</span>
+        <span class="big-em">🪧</span>
+        <h3>Наружная</h3>
+        <div class="desc">Большой баннер или щит — виден всем, кто идёт мимо.</div>
+      </div>
+
+      <div class="ad-type fly">
+        <span class="where">в руки</span>
+        <span class="big-em">📄</span>
+        <h3>Листовка</h3>
+        <div class="desc">Маленький листок, который дают прохожим.</div>
+      </div>
+
+      <div class="ad-type card">
+        <span class="where">в карман</span>
+        <span class="big-em">💳</span>
+        <h3>Визитка</h3>
+        <div class="desc">Совсем маленькая — для одного человека.</div>
+      </div>
+
+      <div class="ad-type vid">
+        <span class="where">в интернете</span>
+        <span class="big-em">📺</span>
+        <h3>Видео реклама</h3>
+        <div class="desc">Короткий ролик — для тех, кто смотрит телефон.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- 05 · ЧТО КОМУ ПОДХОДИТ -->
+<section class="slide" id="match">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Что кому<br><span class="it">подходит?</span></h2>
+    </div>
+
+    <div class="match rv">
+
+      <div class="match-row">
+        <div class="thing"><span class="em">🍕</span> Пиццерия</div>
+        <span class="arrow">→</span>
+        <div class="medium"><span class="em">🪧</span> Наружная</div>
+      </div>
+
+      <div class="match-row">
+        <div class="thing"><span class="em">📚</span> Книжный</div>
+        <span class="arrow">→</span>
+        <div class="medium"><span class="em">📄</span> Листовка</div>
+      </div>
+
+      <div class="match-row">
+        <div class="thing"><span class="em">🎂</span> Мастер тортов</div>
+        <span class="arrow">→</span>
+        <div class="medium"><span class="em">💳</span> Визитка</div>
+      </div>
+
+      <div class="match-row">
+        <div class="thing"><span class="em">🧸</span> Магазин игрушек</div>
+        <span class="arrow">→</span>
+        <div class="medium"><span class="em">📺</span> Видео</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- 06 · ЗАДАНИЕ -->
+<section class="slide" id="draw">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">А теперь —<br><span class="it">рисуем!</span></h2>
+    </div>
+
+    <div class="pick-hero sig rv">
+      <span class="em">🎨</span>
+      <h3>Выбери один вид рекламы</h3>
+      <p>И нарисуй его для магазина игрушек.</p>
+    </div>
+
+    <div class="product-row rv">
+      <div class="product-pick big">
+        <span class="em">🪧</span>
+        <span class="name">Наружная</span>
+      </div>
+      <div class="product-pick big">
+        <span class="em">📄</span>
+        <span class="name">Листовка</span>
+      </div>
+      <div class="product-pick big">
+        <span class="em">💳</span>
+        <span class="name">Визитка</span>
+      </div>
+      <div class="product-pick big">
+        <span class="em">📺</span>
+        <span class="name">Видео</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 · ЧТО ВНУТРИ -->
+<section class="slide" id="inside">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Что должно<br>быть <span class="it">внутри?</span></h2>
+    </div>
+
+    <div class="draw-steps rv">
+
+      <div class="draw-step">
+        <span class="n">1</span>
+        <div class="body">
+          <h3>Название</h3>
+          <p>Имя твоего магазина.</p>
+        </div>
+        <span class="em-big">🏷️</span>
+      </div>
+
+      <div class="draw-step">
+        <span class="n">2</span>
+        <div class="body">
+          <h3>Одна картинка</h3>
+          <p>Мишка, ракета, звезда — что угодно.</p>
+        </div>
+        <span class="em-big">🎨</span>
+      </div>
+
+      <div class="draw-step">
+        <span class="n">3</span>
+        <div class="body">
+          <h3>Цвет</h3>
+          <p>Один-два ярких цвета — не больше.</p>
+        </div>
+        <span class="em-big">🌈</span>
+      </div>
+
+    </div>
+
+    <div class="pick-hero rv" style="background:var(--yellow);color:var(--ink);margin-top:1.5rem">
+      <h3>Три вещи — и <em>готово!</em></h3>
+    </div>
+  </div>
+</section>
+
+<!-- 08 · КАК РАЗМЕСТИТЬ -->
+<section class="slide" id="templates">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Как <span class="it">разместить?</span></h2>
+    </div>
+
+    <div class="templates rv">
+
+      <div class="template out">
+        <div class="head"><span class="em">🪧</span> наружная</div>
+        <div class="shape">
+          <div class="line t"></div>
+          <div class="box">🖼️</div>
+          <div class="line m"></div>
+        </div>
+        <div class="tpl-links">
+          <a class="ya" href="https://yandex.ru/images/search?text=наружная+реклама+баннер+примеры" target="_blank" rel="noopener">Примеры · Яндекс ↗</a>
+          <a href="https://www.google.com/search?tbm=isch&q=наружная+реклама+баннер" target="_blank" rel="noopener">Google ↗</a>
+        </div>
+      </div>
+
+      <div class="template fly">
+        <div class="head"><span class="em">📄</span> листовка</div>
+        <div class="shape">
+          <div class="line t"></div>
+          <div class="box">🖼️</div>
+          <div class="line m"></div>
+          <div class="line"></div>
+        </div>
+        <div class="tpl-links">
+          <a class="ya" href="https://yandex.ru/images/search?text=рекламная+листовка+пример" target="_blank" rel="noopener">Примеры · Яндекс ↗</a>
+          <a href="https://www.google.com/search?tbm=isch&q=рекламная+листовка" target="_blank" rel="noopener">Google ↗</a>
+        </div>
+      </div>
+
+      <div class="template card">
+        <div class="head"><span class="em">💳</span> визитка</div>
+        <div class="shape">
+          <div class="line t"></div>
+          <div class="box">🖼️</div>
+          <div class="line m"></div>
+        </div>
+        <div class="tpl-links">
+          <a class="ya" href="https://yandex.ru/images/search?text=дизайн+визитки+пример" target="_blank" rel="noopener">Примеры · Яндекс ↗</a>
+          <a href="https://www.google.com/search?tbm=isch&q=дизайн+визитки" target="_blank" rel="noopener">Google ↗</a>
+        </div>
+      </div>
+
+      <div class="template vid">
+        <div class="head"><span class="em">📺</span> видео — три кадра</div>
+        <div class="shape">
+          <div class="frames">
+            <div>1️⃣</div>
+            <div>2️⃣</div>
+            <div>3️⃣</div>
+          </div>
+          <div class="line m"></div>
+        </div>
+        <div class="tpl-links">
+          <a class="ya" href="https://yandex.ru/images/search?text=раскадровка+рекламного+ролика" target="_blank" rel="noopener">Раскадровки · Яндекс ↗</a>
+          <a href="https://yandex.ru/video/search?text=рекламный+ролик+пример" target="_blank" rel="noopener">Ролики · Яндекс.Видео ↗</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- 09 · ФИНАЛ -->
+<section class="slide final" id="end">
+  <div class="slide-content">
+    <p class="final-label rv">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg>
+      ты нарисовал рекламу
+    </p>
+    <h2 class="display rv">
+      Название.<br>
+      Картинка.<br>
+      Цвет.<br>
+      <span class="it">Это твоя реклама.</span>
+    </h2>
+    <div class="final-rule rv">
+      <p class="lbl">Правило рекламиста</p>
+      <h3>
+        <span>Подумай — кому.</span>
+        <span class="mid">Выбери — формат.</span>
+        <span class="end">Сделай — ярко.</span>
+      </h3>
+    </div>
+  </div>
+</section>
+
+<!-- DOCK -->
+<nav class="dock" id="dock">
+  <a href="#top" class="active" title="Старт">↑</a>
+  <a href="#video" title="Лунтик">▶️</a>
+  <a href="#why" title="Почему">🧠</a>
+  <a href="#goals" title="Зачем">🎯</a>
+  <a href="#types" title="Виды">🪧</a>
+  <a href="#match" title="Что кому">🔗</a>
+  <a href="#draw" title="Задание">🎨</a>
+  <a href="#inside" title="Что внутри">1️⃣</a>
+  <a href="#templates" title="Шаблоны">📐</a>
+  <a href="#end" title="Финал">⭐</a>
+</nav>
+
+<script>
+(function(){
+  const links = [...document.querySelectorAll('.dock a')];
+  const sections = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+
+  function show(s){
+    if (s.dataset.done) return;
+    s.dataset.done = '1';
+    s.classList.add('in');
+    s.querySelectorAll('.rv').forEach((el, i) => {
+      el.style.animationDelay = (i * 0.09).toFixed(2) + 's';
+    });
+  }
+
+  if ('IntersectionObserver' in window) {
+    let current = null;
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(en => {
+        if (!en.isIntersecting) return;
+        show(en.target);
+        current = en.target.id;
+      });
+      if (current) links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + current));
+    }, { threshold: 0, rootMargin: '-12% 0px -12% 0px' });
+    sections.forEach(s => io.observe(s));
+  } else {
+    sections.forEach(show);
+  }
+
+  links.forEach(a => {
+    a.addEventListener('click', e => {
+      const id = a.getAttribute('href');
+      if (id.startsWith('#')) {
+        e.preventDefault();
+        document.querySelector(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  /* ===== ВИДЕО: обложка + кнопки платформ =====
+     Поддержка: YouTube (data-yt), Dailymotion (data-dm),
+     VK (data-vk), Одноклассники (data-ok), RuTube (data-rt).
+     Чего нет — то открывается поиском по запросу data-q. */
+  document.querySelectorAll('.video-block').forEach(block => {
+    const d = block.dataset;
+    const title = d.title || 'Видео';
+    const yt = (d.yt  || '').trim();
+    const dm = (d.dm  || '').trim();
+    const vk = (d.vk  || '').trim();
+    const ok = (d.ok  || '').trim();
+    const rt = (d.rt  || '').trim();
+    const q  = encodeURIComponent((d.q || title).trim());
+    const validYt = /^[A-Za-z0-9_-]{11}$/.test(yt);
+    const validDm = /^[A-Za-z0-9]{4,15}$/.test(dm);
+
+    const stage = document.createElement('div');
+    stage.className = 'video-stage';
+    let thumb = '';
+    if (validYt) thumb = 'https://i.ytimg.com/vi/' + yt + '/hqdefault.jpg';
+    else if (validDm) thumb = 'https://www.dailymotion.com/thumbnail/video/' + dm;
+    stage.innerHTML =
+      '<div class="video-cover" role="button" tabindex="0" aria-label="Смотреть: ' + title + '">' +
+        (thumb ? '<img class="thumb" alt="" loading="lazy" src="' + thumb + '" onerror="this.remove()">' : '') +
+        '<span class="vplay"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>' +
+        '<span class="vlabel">' + title + '</span>' +
+      '</div><div class="video-frame"></div>';
+    const cover = stage.querySelector('.video-cover');
+    const frame = stage.querySelector('.video-frame');
+
+    const btns = [];
+    /* встроенные плееры (когда известен ID) */
+    if (validYt) btns.push({ label: 'YouTube',       make: () => 'https://www.youtube-nocookie.com/embed/' + yt + '?autoplay=1&rel=0&modestbranding=1&playsinline=1' });
+    if (validDm) btns.push({ label: 'Dailymotion',   make: () => 'https://www.dailymotion.com/embed/video/' + dm + '?autoplay=1' });
+    if (vk)      btns.push({ label: 'VK Видео',      make: () => 'https://vk.com/video_ext.php?' + vk + '&autoplay=1' });
+    if (ok)      btns.push({ label: 'Одноклассники', make: () => 'https://ok.ru/videoembed/' + ok + '?autoplay=1' });
+    if (rt)      btns.push({ label: 'RuTube',        make: () => 'https://rutube.ru/play/embed/' + rt + '?autoplay=1' });
+    /* ссылки-поиски (пока ID не вписан или как запасной вариант) */
+    if (!validYt) btns.push({ label: 'YouTube ↗',          href: 'https://www.youtube.com/results?search_query=' + q });
+    if (!validDm) btns.push({ label: 'Dailymotion ↗',      href: 'https://www.dailymotion.com/search/' + q + '/videos' });
+    if (!vk)      btns.push({ label: 'VK Видео ↗',         href: 'https://vk.com/video?q=' + q });
+    if (!ok)      btns.push({ label: 'Одноклассники ↗',    href: 'https://ok.ru/search?st.query=' + q + '&st.mode=Videos' });
+    if (!rt)      btns.push({ label: 'RuTube ↗',           href: 'https://rutube.ru/search/?query=' + q });
+    btns.push({ label: 'Яндекс.Видео ↗', href: 'https://yandex.ru/video/search?text=' + q });
+
+    const row = document.createElement('div');
+    row.className = 'video-sources';
+    let primary = null;
+
+    function play(make, btn) {
+      frame.innerHTML = '<iframe src="' + make() + '" title="' + title + '" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>';
+      frame.classList.add('on');
+      cover.style.display = 'none';
+      row.querySelectorAll('.vchip').forEach(b => b.classList.toggle('playing', b === btn));
+    }
+
+    btns.forEach(s => {
+      let el;
+      if (s.make) {
+        el = document.createElement('button');
+        el.type = 'button';
+        el.addEventListener('click', () => play(s.make, el));
+        if (!primary) primary = () => play(s.make, el);
+      } else {
+        el = document.createElement('a');
+        el.href = s.href;
+        el.target = '_blank';
+        el.rel = 'noopener';
+      }
+      el.className = 'vchip';
+      el.textContent = s.label;
+      row.appendChild(el);
+    });
+
+    function activate() {
+      if (primary) { primary(); return; }
+      const a = row.querySelector('a');
+      if (a) a.click();
+    }
+    cover.addEventListener('click', activate);
+    cover.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); }
+    });
+
+    block.appendChild(stage);
+    block.appendChild(row);
+  });
+})();
+</script>
+</body>
+</html>
