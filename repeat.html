@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Повторяем бренд · Коллаж</title>
+<script>document.documentElement.classList.add('js');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#ebe9e4; --paper-2:#f3f1ec; --paper-3:#e0ddd5;
+    --ink:#0b0b0c; --ink-2:#3a3a3c; --muted:#6f6d68;
+    --signal:#ff3d3d; --blue:#3a47d5; --yellow:#ffc93c; --green:#7bd389;
+    --purple:#a06cd5; --pink:#ff8fc7;
+    --line:rgba(11,11,12,0.12);
+    --ease-out:cubic-bezier(.16,1,.3,1);
+    --radius:26px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    background:var(--paper); color:var(--ink);
+    line-height:1.4; overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none}
+  button{font-family:inherit}
+
+  /* HEADER */
+  .top{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:1rem 1.25rem;
+    padding-top:max(1rem,env(safe-area-inset-top));
+    mix-blend-mode:difference;transform:translateZ(0);
+    color:#fff;pointer-events:none;
+    font-size:11px;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;
+  }
+  .top a{pointer-events:auto}
+  .top-brand{font-weight:900;font-size:14px;letter-spacing:-.02em}
+  .top-brand span{color:#ff3d3d;mix-blend-mode:normal}
+
+  /* SLIDE */
+  .slide{
+    min-height:100vh;min-height:100svh;
+    padding:5.5rem 1.25rem 7rem;
+    display:flex;flex-direction:column;position:relative;
+    scroll-margin-top:2rem;
+  }
+  .slide-content{max-width:1100px;width:100%;margin:auto}
+  @media(min-width:768px){.slide{padding:6rem 2rem 7rem}}
+
+  /* TYPOGRAPHY */
+  .display{
+    font-weight:900;font-size:clamp(2rem,8vw,4.5rem);
+    line-height:.88;letter-spacing:-.05em;text-transform:uppercase;
+  }
+  .display .it{font-style:italic;color:var(--signal)}
+  .section-head{margin-bottom:1.5rem}
+  .kicker{
+    display:inline-block;margin-bottom:.9rem;
+    font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;
+    background:var(--blue);color:#fff;padding:6px 12px;border-radius:999px;
+  }
+
+  /* ЗАМЕТКА ДЛЯ УЧИТЕЛЯ — мелко, чтобы дети смотрели на картинки */
+  .tnote{
+    margin-top:1.25rem;
+    font-size:13px;line-height:1.45;color:var(--muted);
+    border-left:3px solid var(--line);padding:.2rem 0 .2rem .8rem;
+    max-width:62ch;
+  }
+  .tnote b{color:var(--ink-2)}
+
+  /* MARQUEE */
+  .marquee{
+    background:var(--signal);color:#fff;padding:.8rem 0;
+    transform:rotate(-1.5deg);margin:-1rem -.5rem;overflow:hidden;
+  }
+  .marquee-track{display:flex;width:max-content;animation:slide 40s linear infinite}
+  .marquee-track:hover{animation-play-state:paused}
+  .marquee-item{
+    display:flex;align-items:center;font-weight:900;
+    font-size:clamp(1rem,4vw,1.4rem);letter-spacing:-.02em;
+    text-transform:uppercase;padding:0 1rem;gap:1rem;white-space:nowrap;
+  }
+  .marquee-item svg{width:12px;height:12px;flex-shrink:0}
+  @keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* ПЛАН УРОКА */
+  .plan{display:grid;gap:10px;margin-top:1.5rem;grid-template-columns:repeat(2,1fr)}
+  .plan-step{
+    background:var(--paper-2);border-radius:22px;padding:1.25rem 1rem;
+    display:flex;flex-direction:column;align-items:center;gap:.5rem;text-align:center;
+    position:relative;
+  }
+  .plan-step .n{
+    position:absolute;top:10px;left:12px;
+    font-size:13px;font-weight:900;font-style:italic;color:var(--muted);
+  }
+  .plan-step .em{font-size:clamp(2.6rem,11vw,3.6rem);line-height:1}
+  .plan-step .t{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.02em}
+  .plan-step:nth-child(3){background:var(--yellow)}
+  @media(min-width:768px){.plan{grid-template-columns:repeat(4,1fr)}}
+
+  /* УГАДАЙ БРЕНД — карточки-перевёртыши */
+  .guess-grid{display:grid;gap:12px;margin-top:1.5rem;grid-template-columns:repeat(2,1fr)}
+  @media(min-width:768px){.guess-grid{grid-template-columns:repeat(4,1fr)}}
+  .gcard{
+    perspective:900px;aspect-ratio:3/4;
+    border:0;background:none;padding:0;cursor:pointer;
+  }
+  .gcard-in{
+    position:relative;width:100%;height:100%;
+    transition:transform .6s var(--ease-out);transform-style:preserve-3d;
+  }
+  .gcard.open .gcard-in{transform:rotateY(180deg)}
+  .gface{
+    position:absolute;inset:0;border-radius:22px;
+    backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;
+    padding:1rem;text-align:center;
+    border:3px solid var(--ink);
+  }
+  .gface.front{background:var(--paper-2)}
+  .gface.front .clue{font-size:clamp(2.4rem,10vw,3.4rem);line-height:1.1;letter-spacing:.05em}
+  .gface.front .q{
+    font-size:clamp(1.6rem,7vw,2.2rem);font-weight:900;color:var(--signal);
+  }
+  .gface.back{background:var(--ink);color:var(--paper);transform:rotateY(180deg)}
+  .gface.back .name{font-size:clamp(1.1rem,4.5vw,1.5rem);font-weight:900;text-transform:uppercase;letter-spacing:-.02em;line-height:1.05}
+  .gface.back .look{
+    margin-top:.4rem;display:inline-flex;gap:6px;align-items:center;
+    font-size:12px;font-weight:800;padding:7px 12px;border-radius:999px;
+    border:2px solid var(--paper);
+  }
+  .gface.back .look:hover{background:var(--signal);border-color:var(--signal)}
+
+  /* ТРИ ВОПРОСА (иконки) */
+  .three-q{display:grid;gap:10px;margin-top:1.5rem;grid-template-columns:repeat(3,1fr)}
+  .tq{
+    background:var(--yellow);border-radius:22px;padding:1.1rem .75rem;
+    display:flex;flex-direction:column;align-items:center;gap:.4rem;text-align:center;
+  }
+  .tq:nth-child(2){background:var(--signal);color:#fff}
+  .tq:nth-child(3){background:var(--blue);color:#fff}
+  .tq .em{font-size:clamp(2.2rem,9vw,3rem);line-height:1}
+  .tq .t{font-size:12px;font-weight:800;line-height:1.15}
+
+  /* ФОРМУЛА БРЕНДА */
+  .eq{
+    display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
+    gap:clamp(.4rem,2vw,1rem);margin-top:1.5rem;
+  }
+  .eq-item{
+    background:var(--paper-2);border-radius:24px;
+    width:clamp(84px,22vw,150px);aspect-ratio:1;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.35rem;
+    border:3px solid var(--ink);
+  }
+  .eq-item .em{font-size:clamp(2.2rem,9vw,3.6rem);line-height:1}
+  .eq-item .t{font-size:clamp(10px,2.6vw,13px);font-weight:900;text-transform:uppercase;letter-spacing:.02em}
+  .eq-item.res{background:var(--signal);color:#fff;border-color:var(--signal);transform:rotate(-3deg)}
+  .eq-op{font-size:clamp(1.8rem,7vw,3rem);font-weight:900;color:var(--muted)}
+
+  /* SLOGAN WHAT */
+  .stick{
+    background:var(--ink);color:var(--paper);
+    border-radius:26px;padding:2.25rem 1.5rem;margin-top:1.5rem;text-align:center;
+  }
+  .stick .em{font-size:clamp(3.5rem,14vw,5rem);line-height:1;display:block;margin-bottom:.8rem;animation:float 3s ease-in-out infinite}
+  .stick h3{font-size:clamp(1.5rem,6vw,2.4rem);font-weight:900;text-transform:uppercase;letter-spacing:-.03em;line-height:1}
+  .stick h3 em{font-style:italic;color:var(--signal)}
+  .stick .row{display:flex;justify-content:center;gap:12px;margin-top:1.25rem;font-size:clamp(1.6rem,7vw,2.4rem)}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+  /* ПРИМЕРЫ СЛОГАНОВ */
+  .ex-grid{display:grid;gap:12px;margin-top:1.5rem}
+  @media(min-width:640px){.ex-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(min-width:1000px){.ex-grid{grid-template-columns:repeat(4,1fr)}}
+  .ex{
+    border-radius:22px;padding:1.4rem 1.25rem;min-height:150px;
+    display:flex;flex-direction:column;gap:.6rem;
+    background:var(--paper-2);
+  }
+  .ex:nth-child(4n+1){background:var(--yellow)}
+  .ex:nth-child(4n+2){background:var(--ink);color:var(--paper)}
+  .ex:nth-child(4n+3){background:var(--green)}
+  .ex:nth-child(4n+4){background:var(--pink)}
+  .ex .em{font-size:clamp(2.4rem,9vw,3rem);line-height:1}
+  .ex .s{font-size:clamp(1.15rem,4.4vw,1.4rem);font-weight:900;line-height:1.1;letter-spacing:-.02em;margin-top:auto}
+  .ex .tag{
+    align-self:flex-start;font-size:11px;font-weight:800;
+    padding:4px 10px;border-radius:999px;background:rgba(11,11,12,.1);
+  }
+  .ex:nth-child(4n+2) .tag{background:rgba(255,255,255,.14)}
+
+  /* ПРИЁМЫ */
+  .tricks{display:grid;gap:12px;margin-top:1.5rem}
+  @media(min-width:768px){.tricks{grid-template-columns:repeat(3,1fr)}}
+  .trick{
+    background:var(--paper-2);border-radius:22px;padding:1.25rem;
+    display:flex;gap:1rem;align-items:center;
+  }
+  .trick .em{
+    font-size:34px;width:64px;height:64px;flex-shrink:0;
+    background:var(--paper);border-radius:18px;
+    display:grid;place-items:center;
+  }
+  .trick h3{font-size:clamp(1rem,3.6vw,1.2rem);font-weight:900;text-transform:uppercase;letter-spacing:-.01em;line-height:1.05}
+  .trick p{font-size:clamp(.95rem,3.4vw,1.05rem);font-weight:800;font-style:italic;color:var(--signal);margin-top:4px}
+
+  /* ПРАВИЛО ТРЁХ */
+  .rule3{
+    margin-top:1.75rem;background:var(--ink);color:var(--paper);
+    border-radius:26px;padding:1.75rem 1.25rem;
+  }
+  .rule3 .lbl{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(235,233,228,.6);text-align:center}
+  .rule3-row{display:flex;align-items:center;justify-content:center;gap:clamp(.4rem,2vw,1rem);margin-top:1rem;flex-wrap:wrap}
+  .r3{
+    background:rgba(255,255,255,.08);border-radius:20px;
+    width:clamp(74px,20vw,120px);aspect-ratio:1;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.3rem;
+  }
+  .r3 .em{font-size:clamp(2rem,8vw,3rem);line-height:1}
+  .r3 .t{font-size:clamp(9px,2.4vw,12px);font-weight:800;text-transform:uppercase;color:rgba(235,233,228,.75)}
+  .r3.star{background:var(--signal)}
+  .r3.star .t{color:#fff}
+  .r3-arrow{font-size:clamp(1.4rem,6vw,2.2rem);font-weight:900;color:var(--signal)}
+
+  /* ОБЩЕЕ ДЛЯ ИГР */
+  .game-box{
+    background:var(--paper-2);border-radius:28px;
+    padding:clamp(1.25rem,4vw,2rem);margin-top:1.5rem;
+    border:3px solid var(--ink);
+  }
+  .play-btn{
+    display:inline-flex;align-items:center;gap:8px;
+    margin-top:1.5rem;padding:14px 32px;
+    background:var(--signal);color:#fff;border-radius:999px;
+    font-weight:900;font-size:clamp(1rem,4vw,1.2rem);
+    border:3px solid var(--ink);cursor:pointer;
+    box-shadow:0 5px 0 var(--ink);
+    transition:transform .12s var(--ease-out),box-shadow .12s;
+    text-transform:uppercase;letter-spacing:.02em;
+  }
+  .play-btn:active{transform:translateY(3px);box-shadow:0 2px 0 var(--ink)}
+  .play-btn:disabled{opacity:.7}
+  .play-btn .em{font-size:1.3em}
+  .play-btn.alt{background:var(--blue)}
+  .center{text-align:center}
+  .rolling{animation:shake .3s ease-in-out}
+  @keyframes shake{
+    0%,100%{transform:translate(0)}
+    25%{transform:translate(-4px,2px) rotate(-5deg)}
+    75%{transform:translate(4px,-2px) rotate(5deg)}
+  }
+  @keyframes pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.06)}100%{transform:scale(1);opacity:1}}
+
+  /* РУЛЕТКА КТО-ЧТО-ГДЕ */
+  .reels{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .reel-col{display:flex;flex-direction:column;align-items:center;gap:8px}
+  .reel-cap{
+    font-size:clamp(1.4rem,6vw,2rem);line-height:1;
+    background:var(--paper);border-radius:999px;padding:6px 14px;
+  }
+  .reel{
+    width:100%;aspect-ratio:1;background:#fff;border-radius:22px;
+    border:3px dashed var(--ink);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  }
+  .reel .em{font-size:clamp(2.4rem,11vw,4rem);line-height:1}
+  .reel .w{font-size:clamp(10px,2.8vw,14px);font-weight:800;color:var(--muted);text-align:center;padding:0 4px}
+
+  /* КОНСТРУКТОР СЛОГАНОВ */
+  .sbuild{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:stretch}
+  .spart{
+    background:#fff;border-radius:22px;border:3px dashed var(--ink);
+    padding:1rem .75rem;min-height:130px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;
+  }
+  .spart .em{font-size:clamp(2.2rem,9vw,3.2rem);line-height:1}
+  .spart .w{font-size:clamp(1rem,4vw,1.35rem);font-weight:900;line-height:1.05}
+  .splus{align-self:center;font-size:clamp(1.6rem,6vw,2.4rem);font-weight:900;color:var(--muted)}
+  .sresult{
+    margin-top:1.25rem;background:var(--ink);color:var(--paper);
+    border-radius:22px;padding:1.4rem 1.25rem;text-align:center;
+    font-size:clamp(1.3rem,5.5vw,2rem);font-weight:900;letter-spacing:-.02em;line-height:1.1;
+  }
+  .sresult .em{display:block;font-size:1.4em;margin-bottom:.3rem}
+  .sresult.pop{animation:pop .5s var(--ease-out)}
+
+  /* СЛОВО-ДРУГ */
+  .word-tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+  .wtab{
+    font-size:clamp(1.8rem,7vw,2.4rem);line-height:1;
+    width:clamp(64px,17vw,84px);aspect-ratio:1;border-radius:20px;
+    border:3px solid var(--ink);background:#fff;cursor:pointer;
+    transition:transform .2s var(--ease-out);
+  }
+  .wtab:hover{transform:translateY(-3px)}
+  .wtab.on{background:var(--yellow);transform:rotate(-4deg)}
+  .wcenter{
+    margin:1.25rem auto 0;text-align:center;
+  }
+  .wcenter .em{font-size:clamp(3.5rem,14vw,5rem);line-height:1;display:block}
+  .wcenter .w{font-size:clamp(1.3rem,5vw,1.8rem);font-weight:900;text-transform:uppercase;letter-spacing:-.02em;margin-top:.3rem}
+  .wcloud{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:1.25rem;min-height:60px}
+  .wchip{
+    display:inline-flex;align-items:center;gap:8px;
+    background:#fff;border:2px solid var(--ink);border-radius:999px;
+    padding:10px 16px;font-size:clamp(1rem,3.8vw,1.2rem);font-weight:800;
+    animation:pop .45s var(--ease-out) both;
+  }
+  .wchip .em{font-size:1.4em;line-height:1}
+  .wchip:nth-child(3n+1){background:var(--yellow)}
+  .wchip:nth-child(3n+2){background:var(--pink)}
+
+  /* НЕВОЗМОЖНЫЙ ТОВАР */
+  .combo{display:flex;align-items:center;justify-content:center;gap:clamp(.3rem,2vw,.8rem);flex-wrap:wrap}
+  .cbox{
+    width:clamp(72px,21vw,130px);aspect-ratio:1;background:#fff;border-radius:22px;
+    border:3px dashed var(--ink);
+    display:grid;place-items:center;font-size:clamp(2.4rem,10vw,4rem);line-height:1;
+  }
+  .cop{font-size:clamp(1.4rem,6vw,2.2rem);font-weight:900;color:var(--muted)}
+  .cbox.q{background:var(--signal);color:#fff;border-style:solid;border-color:var(--signal);font-weight:900}
+
+  /* ЗАКАЗЧИК — ПИСЬМО */
+  .letter{
+    margin-top:1.5rem;background:#fff;border-radius:28px;
+    padding:clamp(1.5rem,5vw,2.5rem);border:3px solid var(--ink);
+    position:relative;overflow:hidden;
+    box-shadow:8px 8px 0 var(--ink);
+  }
+  .letter::before{
+    content:"";position:absolute;left:0;right:0;top:0;height:12px;
+    background:repeating-linear-gradient(90deg,var(--signal) 0 24px,#fff 24px 36px,var(--blue) 36px 60px,#fff 60px 72px);
+  }
+  .letter-from{display:flex;align-items:center;gap:1rem;margin-top:.5rem}
+  .letter-from .ava{
+    font-size:clamp(3rem,12vw,4.2rem);line-height:1;
+    width:clamp(80px,22vw,104px);aspect-ratio:1;border-radius:50%;
+    background:var(--pink);display:grid;place-items:center;flex-shrink:0;
+  }
+  .letter-from h3{font-size:clamp(1.2rem,4.6vw,1.6rem);font-weight:900;text-transform:uppercase;letter-spacing:-.02em;line-height:1.05}
+  .letter-from p{font-size:13px;color:var(--muted);font-weight:700;margin-top:2px}
+  .letter-goods{display:flex;gap:8px;flex-wrap:wrap;margin-top:1.25rem}
+  .letter-goods span{font-size:clamp(1.8rem,7vw,2.4rem);background:var(--paper-2);border-radius:14px;padding:8px 10px;line-height:1}
+  .letter-text{margin-top:1.25rem;font-size:clamp(1rem,3.6vw,1.15rem);line-height:1.45;max-width:56ch}
+
+  /* ЗАЧЕМ — цепочка */
+  .why{display:flex;align-items:center;justify-content:center;gap:clamp(.3rem,2vw,1rem);margin-top:1.75rem;flex-wrap:wrap}
+  .why-step{
+    background:var(--paper-2);border-radius:22px;padding:1rem .8rem;
+    min-width:clamp(84px,24vw,150px);
+    display:flex;flex-direction:column;align-items:center;gap:.35rem;text-align:center;
+  }
+  .why-step .em{font-size:clamp(2rem,8vw,3rem);line-height:1}
+  .why-step .t{font-size:clamp(10px,2.6vw,12px);font-weight:800;text-transform:uppercase}
+  .why-step.bad{background:var(--paper-3)}
+  .why-step.good{background:var(--green)}
+  .why-arrow{font-size:clamp(1.4rem,6vw,2rem);font-weight:900;color:var(--signal)}
+
+  /* ЧТО ДЕЛАЕМ */
+  .make{display:grid;gap:12px;margin-top:1.5rem;grid-template-columns:repeat(2,1fr)}
+  @media(min-width:768px){.make{grid-template-columns:repeat(4,1fr)}}
+  .mk{
+    border-radius:22px;padding:1.25rem 1rem;background:var(--paper-2);
+    display:flex;flex-direction:column;align-items:center;gap:.5rem;text-align:center;position:relative;
+  }
+  .mk .n{
+    position:absolute;top:10px;left:10px;width:28px;height:28px;border-radius:50%;
+    background:var(--ink);color:var(--paper);display:grid;place-items:center;
+    font-size:13px;font-weight:900;font-style:italic;
+  }
+  .mk .em{font-size:clamp(2.6rem,11vw,3.6rem);line-height:1;margin-top:.4rem}
+  .mk .t{font-size:clamp(.9rem,3.4vw,1.05rem);font-weight:900;text-transform:uppercase;letter-spacing:-.01em}
+  .mk:nth-child(4){background:var(--signal);color:#fff}
+  .mk:nth-child(4) .n{background:#fff;color:var(--signal)}
+
+  .tools{display:flex;gap:10px;flex-wrap:wrap;margin-top:1.5rem;justify-content:center}
+  .tool{
+    background:var(--paper-2);border:2px solid var(--ink);border-radius:20px;
+    padding:14px 18px;display:flex;flex-direction:column;align-items:center;gap:6px;min-width:84px;
+    transition:transform .3s var(--ease-out);
+  }
+  .tool:hover{transform:translateY(-4px) rotate(-3deg)}
+  .tool .em{font-size:32px;line-height:1}
+  .tool .t{font-size:11px;font-weight:800;text-transform:uppercase;color:var(--ink-2)}
+
+  /* СХЕМА ПЛАКАТА */
+  .poster-wrap{display:grid;gap:1.5rem;margin-top:1.5rem;align-items:start}
+  @media(min-width:860px){.poster-wrap{grid-template-columns:minmax(260px,380px) 1fr}}
+  .poster{
+    background:#fff;border:3px solid var(--ink);border-radius:18px;
+    aspect-ratio:3/4;padding:14px;display:grid;gap:10px;
+    grid-template-rows:auto 1fr auto;
+    box-shadow:8px 8px 0 var(--yellow);transform:rotate(-1.5deg);
+    width:100%;max-width:380px;margin:0 auto;
+  }
+  .pz{
+    border:2px dashed var(--ink);border-radius:12px;
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    padding:12px;text-align:center;
+  }
+  .pz .em{font-size:clamp(1.8rem,7vw,2.4rem);line-height:1}
+  .pz .t{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.02em}
+  .pz.z1{background:var(--paper-2)}
+  .pz.z2{flex-direction:column;background:repeating-linear-gradient(45deg,#fff 0 14px,var(--paper-2) 14px 28px)}
+  .pz.z2 .em{font-size:clamp(2.4rem,10vw,3.4rem)}
+  .pz.z3{background:var(--signal);color:#fff;border-color:var(--signal)}
+  .csteps{display:grid;gap:10px}
+  .cstep{
+    background:var(--paper-2);border-radius:20px;padding:1rem 1.1rem;
+    display:flex;align-items:center;gap:1rem;
+  }
+  .cstep .num{
+    width:40px;height:40px;border-radius:50%;flex-shrink:0;
+    background:var(--ink);color:var(--paper);display:grid;place-items:center;
+    font-weight:900;font-style:italic;
+  }
+  .cstep .em{font-size:clamp(1.8rem,7vw,2.4rem);line-height:1;flex-shrink:0}
+  .cstep .t{font-size:clamp(.95rem,3.6vw,1.1rem);font-weight:900;text-transform:uppercase;letter-spacing:-.01em}
+  .cstep.warn{background:var(--yellow)}
+
+  /* ПОДСКАЗКИ (скрыты) */
+  .idea-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:1.5rem}
+  @media(min-width:640px){.idea-grid{grid-template-columns:repeat(8,1fr)}}
+  .idea{
+    aspect-ratio:1;background:var(--paper-2);border-radius:18px;
+    display:grid;place-items:center;font-size:clamp(1.8rem,8vw,2.8rem);line-height:1;
+    transition:transform .3s var(--ease-out);
+  }
+  .idea:hover{transform:rotate(-6deg) scale(1.05)}
+  .secret{margin-top:1.5rem}
+  .secret-body{display:none;margin-top:1rem}
+  .secret.open .secret-body{display:grid;gap:10px}
+  @media(min-width:768px){.secret.open .secret-body{grid-template-columns:repeat(2,1fr)}}
+  .fname{
+    background:var(--paper-2);border-radius:18px;padding:12px 16px;
+    display:flex;align-items:center;gap:10px;
+    font-size:clamp(1rem,3.8vw,1.15rem);font-weight:800;
+    animation:pop .45s var(--ease-out) both;
+  }
+  .fname .em{font-size:1.6em;line-height:1}
+  .fname small{font-size:12px;font-weight:600;color:var(--muted);margin-left:auto;text-align:right}
+
+  /* ТАЙМЕР */
+  .timer{
+    margin-top:1.5rem;background:var(--ink);color:var(--paper);
+    border-radius:28px;padding:clamp(1.5rem,5vw,2.5rem);text-align:center;
+  }
+  .t-ring{
+    position:relative;width:clamp(200px,60vw,280px);aspect-ratio:1;margin:0 auto;
+  }
+  .t-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+  .t-ring .bg{stroke:rgba(255,255,255,.1)}
+  .t-ring .fg{stroke:var(--signal);transition:stroke-dashoffset 1s linear}
+  .t-mid{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+  .t-mid .em{font-size:clamp(2.6rem,11vw,3.4rem);line-height:1}
+  .t-mid .time{font-size:clamp(2.2rem,9vw,3rem);font-weight:900;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+  .t-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:1.5rem}
+  .t-btn{
+    padding:12px 18px;border-radius:999px;border:2px solid var(--paper);
+    background:transparent;color:var(--paper);font-weight:900;font-size:15px;cursor:pointer;
+  }
+  .t-btn:hover,.t-btn.on{background:var(--paper);color:var(--ink)}
+  .t-btn.stop{border-color:var(--signal);color:var(--signal)}
+  .t-btn.stop:hover{background:var(--signal);color:#fff}
+  .timer.done .t-mid .em{animation:shake .4s ease-in-out 4}
+
+  /* ВЫСТАВКА */
+  .show-q{display:grid;gap:12px;margin-top:1.5rem;grid-template-columns:repeat(2,1fr)}
+  @media(min-width:768px){.show-q{grid-template-columns:repeat(4,1fr)}}
+  .sq{
+    background:var(--paper-2);border-radius:22px;padding:1.25rem 1rem;
+    display:flex;flex-direction:column;align-items:center;gap:.5rem;text-align:center;
+  }
+  .sq .em{font-size:clamp(2.4rem,10vw,3.2rem);line-height:1}
+  .sq .t{font-size:13px;font-weight:800;line-height:1.15}
+  .sq:nth-child(1){background:var(--yellow)}
+  .sq:nth-child(4){background:var(--pink)}
+  .clap{
+    margin-top:1.5rem;background:var(--signal);color:#fff;border-radius:26px;
+    padding:1.75rem 1.25rem;text-align:center;
+  }
+  .clap .em{font-size:clamp(3rem,12vw,4.2rem);line-height:1;display:block;animation:float 2.6s ease-in-out infinite}
+  .clap h3{margin-top:.6rem;font-size:clamp(1.3rem,5vw,1.9rem);font-weight:900;text-transform:uppercase;letter-spacing:-.02em}
+
+  /* VIDEO — как на других страницах курса */
+  .video-block{margin-top:1.5rem}
+  .video-block + .video-block{margin-top:2.25rem}
+  .video-stage{
+    position:relative;aspect-ratio:16/9;
+    background:linear-gradient(135deg,#26262a,#0b0b0c);
+    border-radius:18px;overflow:hidden;border:2px solid var(--ink);
+  }
+  .video-stage .thumb{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .video-cover{
+    position:absolute;inset:0;z-index:2;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;
+    background:
+      radial-gradient(circle at 50% 42%, rgba(255,61,61,.22), transparent 62%),
+      linear-gradient(160deg, rgba(38,38,42,.35), rgba(11,11,12,.72));
+  }
+  .vplay{
+    width:70px;height:70px;border-radius:50%;background:var(--signal);
+    display:grid;place-items:center;color:#fff;
+    box-shadow:0 14px 34px -10px rgba(255,61,61,.8);
+    transition:transform .25s var(--ease-out);
+  }
+  .video-cover:hover .vplay,.video-cover:focus-visible .vplay{transform:scale(1.1)}
+  .vplay svg{width:26px;height:26px;margin-left:4px}
+  .vlabel{
+    position:absolute;left:12px;bottom:12px;max-width:calc(100% - 24px);
+    background:rgba(11,11,12,.78);color:#fff;padding:7px 14px;border-radius:999px;
+    font-size:12px;font-weight:700;letter-spacing:.02em;
+  }
+  .video-frame{position:absolute;inset:0;display:none;background:#000}
+  .video-frame.on{display:block}
+  .video-frame iframe{width:100%;height:100%;border:0;display:block}
+  .video-sources{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:.9rem}
+  .vchip{
+    display:inline-flex;align-items:center;gap:6px;padding:.55rem 1.05rem;border-radius:999px;
+    background:var(--paper-2);border:2px solid var(--ink);
+    font:inherit;font-size:12px;font-weight:800;color:var(--ink);cursor:pointer;
+    transition:transform .2s var(--ease-out),background .2s,color .2s;
+  }
+  .vchip:hover{transform:translateY(-2px)}
+  .vchip.playing{background:var(--ink);color:var(--paper)}
+  .video-ask{display:flex;gap:8px;margin-top:.6rem;font-size:clamp(1.4rem,5vw,1.8rem)}
+  @media(min-width:768px){.video-block{max-width:720px;margin-left:auto;margin-right:auto}}
+
+  /* FINAL */
+  .final{background:var(--ink);color:var(--paper)}
+  .final-label{
+    display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;color:rgba(235,233,228,.6);margin-bottom:1.5rem;
+  }
+  .final-label svg{width:12px;height:12px;color:var(--signal)}
+  .final .display{color:var(--paper);font-size:clamp(2rem,9vw,4.5rem)}
+  .final .display .it{color:var(--signal)}
+  .final-rule{margin-top:2rem;padding-top:1.5rem;border-top:1px solid rgba(235,233,228,.15)}
+  .final-rule .lbl{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(235,233,228,.5)}
+  .final-rule h3{margin-top:.8rem;font-size:clamp(1.6rem,7vw,3rem);font-weight:900;text-transform:uppercase;letter-spacing:-.04em;line-height:.9}
+  .final-rule h3 span{display:block;color:var(--paper)}
+  .final-rule h3 span:first-child{color:var(--signal);font-style:italic}
+  .back-home{
+    display:inline-flex;align-items:center;gap:.6rem;margin-top:2.5rem;
+    background:var(--signal);color:#fff;padding:1rem 2rem;border-radius:999px;
+    font-weight:900;text-transform:uppercase;letter-spacing:.05em;
+    transition:transform .3s var(--ease-out);
+  }
+  .back-home:hover{transform:scale(1.05)}
+
+  /* DOCK */
+  .dock{
+    position:fixed;bottom:max(14px,env(safe-area-inset-bottom));
+    left:50%;transform:translateX(-50%);z-index:60;
+    background:var(--ink);color:var(--paper);
+    border-radius:999px;padding:5px;
+    display:flex;align-items:center;gap:2px;
+    box-shadow:0 20px 50px -12px rgba(11,11,12,.5);
+    max-width:calc(100% - 20px);overflow-x:auto;scrollbar-width:none;
+  }
+  .dock::-webkit-scrollbar{display:none}
+  .dock a{
+    width:34px;height:34px;display:grid;place-items:center;
+    border-radius:50%;font-size:14px;color:rgba(235,233,228,.55);
+    transition:color .3s,background .3s;flex-shrink:0;position:relative;
+  }
+  .dock a:hover{color:var(--paper)}
+  .dock a.active{color:var(--paper);background:rgba(255,255,255,.08)}
+  .dock a.active::before{content:"";position:absolute;inset:2px;border-radius:50%;border:1.5px solid var(--signal)}
+
+  /* ANIMATIONS */
+  .hero-title span{
+    display:inline-block;transform:translateY(20%);
+    opacity:0;animation:rise .9s var(--ease-out) both;
+  }
+  .hero-title span:nth-child(1){animation-delay:.05s}
+  .hero-title span:nth-child(2){animation-delay:.12s}
+  .hero-title span:nth-child(3){animation-delay:.19s}
+  .hero-title span:nth-child(4){animation-delay:.26s}
+  .hero-title span:nth-child(5){animation-delay:.33s}
+  @keyframes rise{to{transform:translateY(0);opacity:1}}
+
+  .js .slide .rv{opacity:0}
+  .js .slide.in .rv{animation:revealIn .8s var(--ease-out) both}
+  @keyframes revealIn{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{
+      animation-duration:.01ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:.01ms !important;
+    }
+    .js .slide .rv{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="top">
+  <a class="top-brand" href="index.html">Повторяем<span>✦</span></a>
+  <span>Ольга</span>
+</header>
+
+<!-- HERO -->
+<section class="slide" id="top">
+  <div class="slide-content">
+    <h1 class="hero-title rv" style="font-size:clamp(3.5rem,18vw,11rem);display:flex;justify-content:space-between;line-height:.8;font-weight:900;letter-spacing:-.05em;">
+      <span>Б</span><span>Р</span><span>Е</span><span>Н</span><span style="color:var(--signal);font-style:italic">Д</span>
+    </h1>
+    <div class="rv" style="margin-top:2rem;border-top:1px solid var(--line);padding-top:1rem;display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">повторяем и делаем <b style="color:var(--ink);">коллаж ✂️</b></div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">↓ листай</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <div class="marquee-item">Нейм <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg></div>
+    <div class="marquee-item">Логотип <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg></div>
+    <div class="marquee-item">Слоган <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg></div>
+    <div class="marquee-item">Коллаж <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg></div>
+    <div class="marquee-item">Нейм <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg></div>
+    <div class="marquee-item">Логотип <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg></div>
+    <div class="marquee-item">Слоган <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg></div>
+    <div class="marquee-item">Коллаж <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg></div>
+  </div>
+</div>
+
+<!-- 01 · ПЛАН УРОКА -->
+<section class="slide" id="plan">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Что будет<br><span class="it">сегодня?</span></h2>
+    </div>
+    <div class="plan rv">
+      <div class="plan-step"><span class="n">1</span><span class="em">🧠</span><span class="t">Вспоминаем</span></div>
+      <div class="plan-step"><span class="n">2</span><span class="em">🎮</span><span class="t">Играем</span></div>
+      <div class="plan-step"><span class="n">3</span><span class="em">✂️</span><span class="t">Делаем коллаж</span></div>
+      <div class="plan-step"><span class="n">4</span><span class="em">🖼️</span><span class="t">Показываем</span></div>
+    </div>
+    <p class="tnote rv">🗣️ Покажи план в начале и возвращайся к нему между частями — так дети понимают, что будет дальше и когда закончится.</p>
+  </div>
+</section>
+
+<!-- 02 · УГАДАЙ БРЕНД -->
+<section class="slide" id="guess">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <span class="kicker">Игра 1</span>
+      <h2 class="display">Угадай<br><span class="it">бренд!</span></h2>
+    </div>
+    <div class="guess-grid rv" id="guessGrid">
+      <!-- data-clue: эмодзи-подсказка, data-name: ответ, data-q: поиск логотипа -->
+      <button class="gcard" type="button" data-clue="🍭" data-name="Чупа-Чупс" data-q="чупа чупс логотип"></button>
+      <button class="gcard" type="button" data-clue="🥚🎁" data-name="Киндер" data-q="киндер сюрприз логотип"></button>
+      <button class="gcard" type="button" data-clue="🧱🧱" data-name="LEGO" data-q="lego логотип"></button>
+      <button class="gcard" type="button" data-clue="🍔🍟" data-name="Вкусно — и точка" data-q="вкусно и точка логотип"></button>
+      <button class="gcard" type="button" data-clue="🧸🏬" data-name="Детский мир" data-q="детский мир магазин логотип"></button>
+      <button class="gcard" type="button" data-clue="🥛🐱" data-name="Простоквашино" data-q="простоквашино молоко логотип"></button>
+      <button class="gcard" type="button" data-clue="🍎📱" data-name="Apple" data-q="apple логотип"></button>
+      <button class="gcard" type="button" data-clue="🫧🛁" data-name="Fairy" data-q="fairy средство для посуды логотип"></button>
+    </div>
+
+    <div class="three-q rv">
+      <div class="tq"><span class="em">🏷️</span><span class="t">Как зовут?</span></div>
+      <div class="tq"><span class="em">🛍️</span><span class="t">Что продаёт?</span></div>
+      <div class="tq"><span class="em">👀</span><span class="t">Как узнаём?</span></div>
+    </div>
+    <p class="tnote rv">🗣️ Нажми на карточку — она перевернётся. На обороте кнопка «логотип» открывает картинки. После каждого бренда три вопроса: <b>как называется? что продаёт? по чему мы его узнаём?</b> Итог: у компании есть имя, то, что она предлагает, и то, по чему её узнают.</p>
+  </div>
+</section>
+
+<!-- 03 · ФОРМУЛА БРЕНДА -->
+<section class="slide" id="formula">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Из чего<br>сделан <span class="it">бренд?</span></h2>
+    </div>
+    <div class="eq rv">
+      <div class="eq-item"><span class="em">🏷️</span><span class="t">Нейм</span></div>
+      <span class="eq-op">+</span>
+      <div class="eq-item"><span class="em">🎨</span><span class="t">Логотип</span></div>
+      <span class="eq-op">+</span>
+      <div class="eq-item"><span class="em">💬</span><span class="t">Слоган</span></div>
+      <span class="eq-op">=</span>
+      <div class="eq-item res"><span class="em">✨</span><span class="t">Бренд</span></div>
+    </div>
+    <p class="tnote rv">🗣️ Нейм — это имя. Логотип — знак, по которому узнаём. Вместе они — бренд. А у бренда есть ещё и своя фраза — слоган. Спроси: «У нашей игрушечной компании что должно быть, чтобы её узнали?»</p>
+  </div>
+</section>
+
+<!-- 04 · ЧТО ТАКОЕ СЛОГАН -->
+<section class="slide" id="slogan">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Что такое<br><span class="it">слоган?</span></h2>
+    </div>
+    <div class="stick rv">
+      <span class="em">💬</span>
+      <h3>Короткая фраза,<br><em>которая прилипает</em></h3>
+      <div class="row"><span>👂</span><span>➜</span><span>🧠</span><span>➜</span><span>😊</span></div>
+    </div>
+    <p class="tnote rv">🗣️ Услышал → запомнил → улыбнулся. Слоган короткий (3–5 слов), его легко повторить. Попроси детей вспомнить слоган, который они знают наизусть.</p>
+  </div>
+</section>
+
+<!-- 05 · ПРИМЕРЫ СЛОГАНОВ -->
+<section class="slide" id="examples">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Слоганы-<br><span class="it">примеры</span></h2>
+    </div>
+    <div class="ex-grid rv">
+      <div class="ex"><span class="em">🍎</span><span class="tag">🎵 рифма</span><span class="s">Хрусти — расти!</span></div>
+      <div class="ex"><span class="em">🛴</span><span class="tag">💥 звук</span><span class="s">Вжух — и ты уже там!</span></div>
+      <div class="ex"><span class="em">🧸</span><span class="tag">🔁 повтор</span><span class="s">Играй, играй, играй!</span></div>
+      <div class="ex"><span class="em">🪥</span><span class="tag">👉 позови</span><span class="s">Улыбнись и сияй!</span></div>
+      <div class="ex"><span class="em">🍦</span><span class="tag">💥 звук</span><span class="s">Ам — и лето с нами!</span></div>
+      <div class="ex"><span class="em">🎒</span><span class="tag">💛 обещание</span><span class="s">Влезет всё — даже мечта!</span></div>
+      <div class="ex"><span class="em">🐶</span><span class="tag">😂 смешно</span><span class="s">Гав! Значит, вкусно!</span></div>
+      <div class="ex"><span class="em">🖍️</span><span class="tag">👉 позови</span><span class="s">Раскрась свой день!</span></div>
+    </div>
+    <p class="tnote rv">🗣️ Прочитай вслух, покажи на картинку и спроси: «Что продают? Почему запоминается?» Значок сверху подсказывает приём — о них дальше.</p>
+  </div>
+</section>
+
+<!-- 06 · КАК ПРИДУМАТЬ СЛОГАН -->
+<section class="slide" id="how">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Как придумать<br><span class="it">слоган?</span></h2>
+    </div>
+    <div class="tricks rv">
+      <div class="trick"><span class="em">🎵</span><div><h3>Рифма</h3><p>Хрусти — расти!</p></div></div>
+      <div class="trick"><span class="em">💥</span><div><h3>Звук</h3><p>Бум! Бам! Ура!</p></div></div>
+      <div class="trick"><span class="em">🔁</span><div><h3>Повтор</h3><p>Играй, играй, играй!</p></div></div>
+      <div class="trick"><span class="em">👉</span><div><h3>Позови</h3><p>Попробуй! Сияй!</p></div></div>
+      <div class="trick"><span class="em">💛</span><div><h3>Обещание</h3><p>С нами весело!</p></div></div>
+      <div class="trick"><span class="em">😂</span><div><h3>Шутка</h3><p>Гав! Значит, вкусно!</p></div></div>
+    </div>
+
+    <div class="rule3 rv">
+      <p class="lbl">Правило трёх идей</p>
+      <div class="rule3-row">
+        <div class="r3"><span class="em">😂</span><span class="t">смешное</span></div>
+        <div class="r3"><span class="em">🤪</span><span class="t">необычное</span></div>
+        <div class="r3"><span class="em">🏪</span><span class="t">про магазин</span></div>
+        <span class="r3-arrow">➜</span>
+        <div class="r3 star"><span class="em">⭐</span><span class="t">выбираем</span></div>
+      </div>
+    </div>
+    <p class="tnote rv">🗣️ Обязательное правило для каждого задания: прежде чем выбрать название или слоган, ребёнок придумывает <b>одно смешное, одно необычное и одно, которое рассказывает о компании</b>. И только потом выбирает лучшее.</p>
+  </div>
+</section>
+
+<!-- 07 · ИГРА: РУЛЕТКА КТО-ЧТО-ГДЕ -->
+<section class="slide" id="roulette">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <span class="kicker">Игра 2</span>
+      <h2 class="display">Кто? Что?<br><span class="it">Где?</span></h2>
+    </div>
+    <div class="game-box rv">
+      <div class="reels">
+        <div class="reel-col"><span class="reel-cap" title="Кто?">👤</span><div class="reel" id="reelWho"><span class="em">❓</span><span class="w">кто?</span></div></div>
+        <div class="reel-col"><span class="reel-cap" title="Что делает?">⚡</span><div class="reel" id="reelDo"><span class="em">❓</span><span class="w">что делает?</span></div></div>
+        <div class="reel-col"><span class="reel-cap" title="Где?">📍</span><div class="reel" id="reelWhere"><span class="em">❓</span><span class="w">где?</span></div></div>
+      </div>
+      <div class="center"><button class="play-btn" id="spinRoulette" type="button"><span class="em">🎰</span> Крутить!</button></div>
+    </div>
+    <p class="tnote rv">🗣️ Выпало, например, 🐸 + 🦘 + 🏪 — «Прыгучая лягушка», «Лягушкин бум», «Прыг-скок». А может, лягушка продаёт игрушки, которые умеют прыгать? Спроси: <b>«Что это может быть? Как назовём?»</b> Не подсказывай готовые названия — сначала пусть добудут слова сами.</p>
+  </div>
+</section>
+
+<!-- 08 · ИГРА: СЛОВО-ДРУГ -->
+<section class="slide" id="words">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <span class="kicker">Игра 3</span>
+      <h2 class="display">Слово-<br><span class="it">друг</span></h2>
+    </div>
+    <div class="game-box rv">
+      <div class="word-tabs" id="wordTabs">
+        <button class="wtab on" type="button" data-word="0" title="Украшение">💍</button>
+        <button class="wtab" type="button" data-word="1" title="Игрушка">🧸</button>
+        <button class="wtab" type="button" data-word="2" title="Магазин">🏪</button>
+      </div>
+      <div class="wcenter"><span class="em" id="wordEm">💍</span><div class="w" id="wordW">Украшение</div></div>
+      <div class="wcloud" id="wordCloud"></div>
+      <div class="center"><button class="play-btn alt" id="wordMore" type="button"><span class="em">➕</span> Ещё слово!</button></div>
+    </div>
+    <p class="tnote rv">🗣️ Называешь обычное слово — дети ищут как можно больше других. Сначала дай им самим, потом нажимай «Ещё слово» и сравнивайте. Можно спросить: «Как ещё назвать игрушку, если она твой лучший друг? А если она всё время попадает в смешные истории?»</p>
+  </div>
+</section>
+
+<!-- 09 · ИГРА: КОНСТРУКТОР СЛОГАНОВ -->
+<section class="slide" id="builder">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <span class="kicker">Игра 4</span>
+      <h2 class="display">Собери<br><span class="it">слоган</span></h2>
+    </div>
+    <div class="game-box rv">
+      <div class="sbuild">
+        <div class="spart" id="sA"><span class="em">❓</span><span class="w">…</span></div>
+        <span class="splus">+</span>
+        <div class="spart" id="sB"><span class="em">❓</span><span class="w">…</span></div>
+      </div>
+      <div class="sresult" id="sRes"><span class="em">💬</span>Нажми кнопку!</div>
+      <div class="center"><button class="play-btn" id="sSpin" type="button"><span class="em">🎲</span> Новый слоган</button></div>
+    </div>
+    <p class="tnote rv">🗣️ Прочитай получившийся слоган вслух. Спроси: «Подходит магазину украшений? Как сделать смешнее? Можно поменять одно слово?» Потом пусть придумают свою половинку.</p>
+  </div>
+</section>
+
+<!-- 10 · ИГРА: НЕВОЗМОЖНЫЙ ТОВАР -->
+<section class="slide" id="impossible">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <span class="kicker">Игра 5</span>
+      <h2 class="display">Невозможный<br><span class="it">товар</span></h2>
+    </div>
+    <div class="game-box rv">
+      <div class="combo">
+        <div class="cbox" id="c1">👟</div><span class="cop">+</span>
+        <div class="cbox" id="c2">🍍</div><span class="cop">+</span>
+        <div class="cbox" id="c3">📺</div><span class="cop">=</span>
+        <div class="cbox q">?</div>
+      </div>
+      <div class="three-q" style="margin-top:1.25rem">
+        <div class="tq"><span class="em">🤔</span><span class="t">Что это?</span></div>
+        <div class="tq"><span class="em">👤</span><span class="t">Для кого?</span></div>
+        <div class="tq"><span class="em">🏷️</span><span class="t">Как назвать?</span></div>
+      </div>
+      <div class="center"><button class="play-btn" id="cSpin" type="button"><span class="em">🎲</span> Смешать!</button></div>
+    </div>
+    <p class="tnote rv">🗣️ Разминка перед коллажем: так же мы будем соединять вырезки из журнала. Вариант «Самая бесполезная вещь»: зонт для рыб, тапочки для стула, холодильник для снеговиков — «А кому всё-таки это может пригодиться?»</p>
+  </div>
+</section>
+
+<!-- 11 · МУЛЬТИКИ -->
+<section class="slide" id="video">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Смотрим<br><span class="it">мультики</span></h2>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         КАК ВСТАВИТЬ ВИДЕО, ЧТОБЫ ОНО ИГРАЛО ПРЯМО НА СТРАНИЦЕ:
+         • YouTube: код после watch?v= (11 символов) → data-yt
+         • VK Видео: «Ещё» → «Скопировать код» → oid=…&id=… → data-vk
+         • RuTube: «Поделиться» → «Код вставки» → ID из rutube.ru/play/embed/ID → data-rt
+         • Одноклассники: число из ok.ru/videoembed/ЧИСЛО → data-ok
+         Пока поле пустое — кнопка платформы открывает поиск по названию.
+         ══════════════════════════════════════════════════════════════ -->
+
+    <div class="video-block rv"
+         data-title="Смешарики — серия про рекламу"
+         data-yt="" data-yt-search="Смешарики серия реклама"
+         data-vk="" data-ok="" data-rt="">
+    </div>
+    <div class="video-ask rv"><span>🏷️</span><span>💬</span><span>🤔</span></div>
+
+    <div class="video-block rv"
+         data-title="Фиксики — реклама"
+         data-yt="" data-yt-search="Фиксики реклама серия"
+         data-vk="" data-ok="" data-rt="">
+    </div>
+    <div class="video-ask rv"><span>🏷️</span><span>💬</span><span>🤔</span></div>
+
+    <div class="video-block rv"
+         data-title="Серебряное копытце — откуда берутся самоцветы"
+         data-yt="" data-yt-search="Серебряное копытце мультфильм"
+         data-vk="" data-ok="" data-rt="">
+    </div>
+    <div class="video-ask rv"><span>💎</span><span>✨</span><span>💍</span></div>
+
+    <p class="tnote rv">🗣️ После первых двух: «Что рекламировали? Какой был слоган? Почему запомнилось?» «Серебряное копытце» — для вдохновения перед магазином украшений: какие камни, какой блеск, какие цвета. Если найдёшь ролик — вставь его код в data-yt / data-vk / data-rt, и он будет играть прямо на странице.</p>
+  </div>
+</section>
+
+<!-- 12 · ЗАКАЗЧИК -->
+<section class="slide" id="client">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">У нас<br><span class="it">заказчик!</span></h2>
+    </div>
+    <div class="letter rv">
+      <div class="letter-from">
+        <span class="ava">👸</span>
+        <div>
+          <h3>Хозяйка магазина украшений</h3>
+          <p>📩 письмо для нашего рекламного агентства</p>
+        </div>
+      </div>
+      <div class="letter-goods"><span>💍</span><span>📿</span><span>👑</span><span>💎</span><span>🎀</span><span>✨</span></div>
+      <p class="letter-text">«Здравствуйте, рекламщики! Я открываю маленький магазин украшений: колечки, бусы, браслеты, заколки. Но у магазина <b>нет имени, нет знака и нет рекламы</b> — и никто не знает, что он есть! Помогите, пожалуйста: придумайте название, логотип, слоган и сделайте яркий плакат».</p>
+    </div>
+
+    <div class="why rv">
+      <div class="why-step bad"><span class="em">🏪😢</span><span class="t">никто не знает</span></div>
+      <span class="why-arrow">➜</span>
+      <div class="why-step"><span class="em">🖼️✨</span><span class="t">наша реклама</span></div>
+      <span class="why-arrow">➜</span>
+      <div class="why-step good"><span class="em">👨‍👩‍👧😍</span><span class="t">все приходят</span></div>
+    </div>
+    <p class="tnote rv">🗣️ Прочитай письмо как настоящее. Объясни, зачем всё это: без имени и знака магазин никто не запомнит, а наш плакат поможет людям его найти. Мы сегодня — рекламное агентство.</p>
+  </div>
+</section>
+
+<!-- 13 · ЧТО ДЕЛАЕМ -->
+<section class="slide" id="task">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Что мы<br><span class="it">делаем?</span></h2>
+    </div>
+    <div class="make rv">
+      <div class="mk"><span class="n">1</span><span class="em">🏷️</span><span class="t">Нейм</span></div>
+      <div class="mk"><span class="n">2</span><span class="em">🎨</span><span class="t">Логотип</span></div>
+      <div class="mk"><span class="n">3</span><span class="em">💬</span><span class="t">Слоган</span></div>
+      <div class="mk"><span class="n">4</span><span class="em">🖼️</span><span class="t">Плакат</span></div>
+    </div>
+    <div class="tools rv">
+      <div class="tool"><span class="em">📰</span><span class="t">Журналы</span></div>
+      <div class="tool"><span class="em">✂️</span><span class="t">Ножницы</span></div>
+      <div class="tool"><span class="em">🧴</span><span class="t">Клей</span></div>
+      <div class="tool"><span class="em">📄</span><span class="t">Лист</span></div>
+      <div class="tool"><span class="em">🖍️</span><span class="t">Фломастеры</span></div>
+    </div>
+    <p class="tnote rv">🗣️ Можно выбирать: логотип нарисовать или собрать из вырезок, буквы названия — написать или вырезать из заголовков журнала. Слоган — желательно, но не обязательно.</p>
+  </div>
+</section>
+
+<!-- 14 · КАК СОБРАТЬ ПЛАКАТ -->
+<section class="slide" id="poster">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Как собрать<br><span class="it">плакат?</span></h2>
+    </div>
+    <div class="poster-wrap rv">
+      <div class="poster" aria-label="Схема плаката">
+        <div class="pz z1"><span class="em">🎨</span><span class="t">Логотип + название</span></div>
+        <div class="pz z2"><span class="em">💍📿✨</span><span class="t">Картинки из журнала</span></div>
+        <div class="pz z3"><span class="em">💬</span><span class="t">Слоган</span></div>
+      </div>
+      <div class="csteps">
+        <div class="cstep"><span class="num">1</span><span class="em">🔍</span><span class="t">Найди картинки</span></div>
+        <div class="cstep"><span class="num">2</span><span class="em">✂️</span><span class="t">Вырежи</span></div>
+        <div class="cstep warn"><span class="num">3</span><span class="em">🧩</span><span class="t">Разложи — не клей!</span></div>
+        <div class="cstep"><span class="num">4</span><span class="em">🧴</span><span class="t">Приклей</span></div>
+        <div class="cstep"><span class="num">5</span><span class="em">🖍️</span><span class="t">Подпиши</span></div>
+      </div>
+    </div>
+    <p class="tnote rv">🗣️ Шаг 3 важный: сначала разложить вырезки на листе и посмотреть, всё ли помещается, и только потом клеить. Ищите всё, что блестит и сверкает: камни, цветы, звёзды, бабочек, красивые буквы.</p>
+  </div>
+</section>
+
+<!-- 15 · ПОДСКАЗКИ -->
+<section class="slide" id="hints">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Если<br><span class="it">застрял</span></h2>
+    </div>
+    <div class="idea-grid rv">
+      <div class="idea">💍</div><div class="idea">💎</div><div class="idea">👑</div><div class="idea">⭐</div>
+      <div class="idea">🌙</div><div class="idea">🦋</div><div class="idea">🌸</div><div class="idea">🐚</div>
+      <div class="idea">🫧</div><div class="idea">🎀</div><div class="idea">🐦</div><div class="idea">🪄</div>
+      <div class="idea">💧</div><div class="idea">🌈</div><div class="idea">🧚</div><div class="idea">🗝️</div>
+    </div>
+    <div class="secret rv" id="secret">
+      <div class="center"><button class="play-btn alt" id="secretBtn" type="button"><span class="em">🔒</span> Подсказки для учителя</button></div>
+      <div class="secret-body">
+        <div class="fname"><span class="em">🐦</span>Сорока<small>сорока любит всё блестящее</small></div>
+        <div class="fname"><span class="em">⭐</span>Звёздная шкатулка<small>звезда + шкатулка</small></div>
+        <div class="fname"><span class="em">🫧</span>Бусинка<small>маленькое и милое</small></div>
+        <div class="fname"><span class="em">✨</span>Блестяшки<small>звук и блеск</small></div>
+        <div class="fname"><span class="em">🗝️</span>Волшебный сундучок<small>тайна и клад</small></div>
+        <div class="fname"><span class="em">💧</span>Капелька<small>форма камня</small></div>
+      </div>
+    </div>
+    <p class="tnote rv">🗣️ Сначала только картинки: «Выбери одну — что она подсказывает?» Готовые названия открывай, только если ребёнок совсем застрял, и предлагай их переделать.</p>
+  </div>
+</section>
+
+<!-- 16 · ТАЙМЕР -->
+<section class="slide" id="time">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Время<br><span class="it">творить!</span></h2>
+    </div>
+    <div class="timer rv" id="timer">
+      <div class="t-ring">
+        <svg viewBox="0 0 120 120"><circle class="bg" cx="60" cy="60" r="52" fill="none" stroke-width="10"/><circle class="fg" id="tArc" cx="60" cy="60" r="52" fill="none" stroke-width="10" stroke-linecap="round"/></svg>
+        <div class="t-mid"><span class="em" id="tEm">✂️</span><span class="time" id="tTime">00:00</span></div>
+      </div>
+      <div class="t-btns">
+        <button class="t-btn" type="button" data-min="10">10 мин</button>
+        <button class="t-btn" type="button" data-min="15">15 мин</button>
+        <button class="t-btn" type="button" data-min="20">20 мин</button>
+        <button class="t-btn" type="button" data-min="25">25 мин</button>
+        <button class="t-btn stop" type="button" id="tStop">Стоп</button>
+      </div>
+    </div>
+    <p class="tnote rv">🗣️ Включи таймер на экране: дети видят, сколько осталось. За 5 минут до конца — «Пора клеить и подписывать!»</p>
+  </div>
+</section>
+
+<!-- 17 · ВЫСТАВКА -->
+<section class="slide" id="show">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Покажи<br>свой <span class="it">бренд</span></h2>
+    </div>
+    <div class="show-q rv">
+      <div class="sq"><span class="em">🏷️</span><span class="t">Как называется?</span></div>
+      <div class="sq"><span class="em">🎨</span><span class="t">Что на логотипе?</span></div>
+      <div class="sq"><span class="em">💬</span><span class="t">Какой слоган?</span></div>
+      <div class="sq"><span class="em">❤️</span><span class="t">Почему так?</span></div>
+    </div>
+    <div class="clap rv">
+      <span class="em">👏</span>
+      <h3>Хлопаем каждому!</h3>
+    </div>
+    <p class="tnote rv">🗣️ Над странными идеями не смеёмся — помогаем развить. Замечай не только красивую работу, но и ход мысли: «Здорово, что ты придумал название из звука!» Можно собрать все плакаты на доске — «витрина агентства» для заказчицы.</p>
+  </div>
+</section>
+
+<!-- 18 · ФИНАЛ -->
+<section class="slide final" id="end">
+  <div class="slide-content">
+    <p class="final-label rv">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg>
+      заказ выполнен
+    </p>
+    <h2 class="display rv">
+      Нейм.<br>
+      Логотип.<br>
+      Слоган.<br>
+      <span class="it">Плакат готов!</span>
+    </h2>
+    <div class="final-rule rv">
+      <p class="lbl">Запомни</p>
+      <h3>
+        <span>Нейм + логотип</span>
+        <span>= бренд.</span>
+        <span>Слоган — его голос.</span>
+      </h3>
+    </div>
+    <a class="back-home rv" href="index.html">← Все темы</a>
+  </div>
+</section>
+
+<!-- DOCK -->
+<nav class="dock" id="dock">
+  <a href="#top" class="active" title="Старт">↑</a>
+  <a href="#plan" title="План">🗺️</a>
+  <a href="#guess" title="Угадай бренд">❓</a>
+  <a href="#formula" title="Формула бренда">➕</a>
+  <a href="#slogan" title="Что такое слоган">💬</a>
+  <a href="#examples" title="Примеры">⭐</a>
+  <a href="#how" title="Как придумать">💡</a>
+  <a href="#roulette" title="Кто? Что? Где?">🎰</a>
+  <a href="#words" title="Слово-друг">🔤</a>
+  <a href="#builder" title="Собери слоган">🎲</a>
+  <a href="#impossible" title="Невозможный товар">🍍</a>
+  <a href="#video" title="Мультики">▶️</a>
+  <a href="#client" title="Заказчик">📩</a>
+  <a href="#task" title="Что делаем">📋</a>
+  <a href="#poster" title="Плакат">🖼️</a>
+  <a href="#hints" title="Подсказки">💍</a>
+  <a href="#time" title="Таймер">⏱️</a>
+  <a href="#show" title="Выставка">👏</a>
+  <a href="#end" title="Финал">🏁</a>
+</nav>
+
+<script>
+(function(){
+  const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+
+  /* ===== ДОК + появление слайдов ===== */
+  const links = [...document.querySelectorAll('.dock a')];
+  const sections = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+
+  function show(s){
+    if (s.dataset.done) return;
+    s.dataset.done = '1';
+    s.classList.add('in');
+    s.querySelectorAll('.rv').forEach((el, i) => {
+      el.style.animationDelay = (i * 0.09).toFixed(2) + 's';
+    });
+  }
+  if ('IntersectionObserver' in window) {
+    let current = null;
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(en => {
+        if (!en.isIntersecting) return;
+        show(en.target);
+        current = en.target.id;
+      });
+      if (current) links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + current));
+    }, { threshold: 0, rootMargin: '-12% 0px -12% 0px' });
+    sections.forEach(s => io.observe(s));
+  } else {
+    sections.forEach(show);
+  }
+  links.forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  /* ===== ИГРА 1: УГАДАЙ БРЕНД ===== */
+  document.querySelectorAll('.gcard').forEach(card => {
+    const d = card.dataset;
+    const url = 'https://yandex.ru/images/search?text=' + encodeURIComponent(d.q || d.name);
+    card.innerHTML =
+      '<div class="gcard-in">' +
+        '<div class="gface front"><span class="clue">' + d.clue + '</span><span class="q">?</span></div>' +
+        '<div class="gface back"><span class="clue" style="font-size:2rem">' + d.clue + '</span>' +
+          '<span class="name">' + d.name + '</span>' +
+          '<a class="look" href="' + url + '" target="_blank" rel="noopener">👀 логотип ↗</a></div>' +
+      '</div>';
+    card.setAttribute('aria-label', 'Угадай бренд: ' + d.clue);
+    card.addEventListener('click', e => {
+      if (e.target.closest('.look')) return;
+      card.classList.toggle('open');
+    });
+  });
+
+  /* ===== ИГРА 2: КТО? ЧТО ДЕЛАЕТ? ГДЕ? ===== */
+  const WHO = [['🐸','лягушка'],['🦄','единорог'],['🐱','котик'],['🐉','дракон'],['🧚','фея'],['🦊','лиса'],
+               ['🐝','пчёлка'],['🦋','бабочка'],['🐧','пингвин'],['🤖','робот'],['👩‍🍳','повар'],['🚀','ракета'],['🐦','сорока'],['🐻','мишка']];
+  const DO  = [['✨','сияет'],['💃','танцует'],['🦘','прыгает'],['🎵','поёт'],['🪄','колдует'],['😴','спит'],
+               ['🚀','летает'],['🎨','рисует'],['🍳','готовит'],['😂','смеётся'],['🔍','ищет клад'],['🎁','дарит']];
+  const WHERE = [['🏰','в замке'],['🌊','в море'],['🌌','в космосе'],['🌲','в лесу'],['🍭','в конфетной стране'],
+                 ['❄️','в снегу'],['🏪','в магазине'],['🌋','у вулкана'],['☁️','на облаке'],['🏝️','на острове']];
+
+  const reels = [['reelWho', WHO], ['reelDo', DO], ['reelWhere', WHERE]].map(([id, list]) => ({ el: document.getElementById(id), list }));
+  function setReel(r, item){
+    r.el.querySelector('.em').textContent = item[0];
+    r.el.querySelector('.w').textContent = item[1];
+  }
+  const rBtn = document.getElementById('spinRoulette');
+  let rBusy = false;
+  rBtn.addEventListener('click', () => {
+    if (rBusy) return;
+    rBusy = true; rBtn.disabled = true;
+    const final = reels.map(r => pick(r.list));
+    let t = 0;
+    const iv = setInterval(() => {
+      reels.forEach(r => {
+        r.el.classList.remove('rolling'); void r.el.offsetWidth; r.el.classList.add('rolling');
+        setReel(r, pick(r.list));
+      });
+      if (++t >= 9) {
+        clearInterval(iv);
+        reels.forEach((r, i) => setReel(r, final[i]));
+        rBusy = false; rBtn.disabled = false;
+      }
+    }, 110);
+  });
+
+  /* ===== ИГРА 3: СЛОВО-ДРУГ ===== */
+  const WORDS = [
+    { em:'💍', w:'Украшение', list:[['✨','блеск'],['💎','сокровище'],['⭐','звёздочка'],['💧','капелька'],['🫧','бусинка'],['🌸','цветочек'],
+                                   ['🎀','бантик'],['🪄','чудо'],['👑','корона'],['🌙','лунный свет'],['🐚','жемчужина'],['🌈','радуга'],['🔥','искорка'],['🗝️','клад']] },
+    { em:'🧸', w:'Игрушка', list:[['🤪','чудик'],['🎉','забава'],['🫶','друг'],['🐾','зверушка'],['👶','малыш'],['💭','выдумка'],
+                                 ['🤫','секрет'],['😂','хохотушка'],['🦘','прыгунок'],['🌟','чудо-чудо'],['🎈','весельчак'],['🧩','загадка']] },
+    { em:'🏪', w:'Магазин', list:[['🪵','лавка'],['📦','шкатулка'],['🗝️','сундучок'],['🔨','мастерская'],['🏠','домик'],['🎪','ярмарка'],
+                                 ['🧺','корзинка'],['🏰','замок'],['🕳️','норка'],['🛖','уголок'],['🪟','витрина'],['🎁','кладовая']] }
+  ];
+  const cloud = document.getElementById('wordCloud');
+  const tabs = [...document.querySelectorAll('.wtab')];
+  let wIdx = 0, shown = 0, order = [];
+  function shuffle(a){ a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+  function setWord(i){
+    wIdx = i; shown = 0; order = shuffle(WORDS[i].list);
+    document.getElementById('wordEm').textContent = WORDS[i].em;
+    document.getElementById('wordW').textContent = WORDS[i].w;
+    cloud.innerHTML = '';
+    tabs.forEach((t, k) => t.classList.toggle('on', k === i));
+  }
+  tabs.forEach(t => t.addEventListener('click', () => setWord(+t.dataset.word)));
+  document.getElementById('wordMore').addEventListener('click', () => {
+    if (shown >= order.length) { setWord(wIdx); return; }
+    const [em, w] = order[shown++];
+    const chip = document.createElement('span');
+    chip.className = 'wchip';
+    chip.innerHTML = '<span class="em">' + em + '</span>' + w;
+    cloud.appendChild(chip);
+  });
+  setWord(0);
+
+  /* ===== ИГРА 4: КОНСТРУКТОР СЛОГАНОВ ===== */
+  const SA = [['✨','Сияй'],['💃','Танцуй'],['😊','Улыбайся'],['🌟','Блести'],['🎉','Празднуй'],['💖','Мечтай'],['🦸','Будь смелым'],['🪄','Колдуй']];
+  const SB = [['⭐','как звезда!'],['🌈','каждый день!'],['👑','как королева!'],['🫶','вместе с нами!'],['🌙','даже ночью!'],['🚀','ярче всех!'],['🌸','как весна!'],['💎','как сокровище!']];
+  const sA = document.getElementById('sA'), sB = document.getElementById('sB'), sRes = document.getElementById('sRes');
+  const sBtn = document.getElementById('sSpin');
+  function setPart(el, item){ el.querySelector('.em').textContent = item[0]; el.querySelector('.w').textContent = item[1]; }
+  let sBusy = false;
+  sBtn.addEventListener('click', () => {
+    if (sBusy) return;
+    sBusy = true; sBtn.disabled = true;
+    const a = pick(SA), b = pick(SB);
+    let t = 0;
+    const iv = setInterval(() => {
+      [sA, sB].forEach(el => { el.classList.remove('rolling'); void el.offsetWidth; el.classList.add('rolling'); });
+      setPart(sA, pick(SA)); setPart(sB, pick(SB));
+      if (++t >= 8) {
+        clearInterval(iv);
+        setPart(sA, a); setPart(sB, b);
+        sRes.innerHTML = '<span class="em">' + a[0] + b[0] + '</span>' + a[1] + ' ' + b[1];
+        sRes.classList.remove('pop'); void sRes.offsetWidth; sRes.classList.add('pop');
+        sBusy = false; sBtn.disabled = false;
+      }
+    }, 110);
+  });
+
+  /* ===== ИГРА 5: НЕВОЗМОЖНЫЙ ТОВАР ===== */
+  const THINGS = ['👟','🍍','📺','☂️','🐟','🧦','🎸','🚲','🍕','🪑','⏰','🎈','🧲','🥕','🛁','📚','🦷','🍩','🎧','🧊','🪴','🔦','🧁','🐌','🎩','🧤','🚗','🍉'];
+  const cBoxes = ['c1','c2','c3'].map(id => document.getElementById(id));
+  const cBtn = document.getElementById('cSpin');
+  let cBusy = false;
+  cBtn.addEventListener('click', () => {
+    if (cBusy) return;
+    cBusy = true; cBtn.disabled = true;
+    const final = shuffle(THINGS).slice(0, 3);
+    let t = 0;
+    const iv = setInterval(() => {
+      cBoxes.forEach(b => { b.classList.remove('rolling'); void b.offsetWidth; b.classList.add('rolling'); b.textContent = pick(THINGS); });
+      if (++t >= 8) {
+        clearInterval(iv);
+        cBoxes.forEach((b, i) => b.textContent = final[i]);
+        cBusy = false; cBtn.disabled = false;
+      }
+    }, 110);
+  });
+
+  /* ===== ПОДСКАЗКИ ===== */
+  const secret = document.getElementById('secret');
+  const secretBtn = document.getElementById('secretBtn');
+  secretBtn.addEventListener('click', () => {
+    const open = secret.classList.toggle('open');
+    secretBtn.innerHTML = open ? '<span class="em">🔓</span> Спрятать' : '<span class="em">🔒</span> Подсказки для учителя';
+  });
+
+  /* ===== ТАЙМЕР ===== */
+  const timer = document.getElementById('timer');
+  const arc = document.getElementById('tArc');
+  const tTime = document.getElementById('tTime');
+  const tEm = document.getElementById('tEm');
+  const C = 2 * Math.PI * 52;
+  arc.style.strokeDasharray = C;
+  arc.style.strokeDashoffset = 0;
+  let total = 0, left = 0, iv = null;
+  const fmt = s => String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+  function render(){
+    tTime.textContent = fmt(left);
+    arc.style.strokeDashoffset = total ? C * (1 - left / total) : 0;
+    const p = total ? left / total : 1;
+    tEm.textContent = !total ? '✂️' : left === 0 ? '🎉' : p > .66 ? '✂️' : p > .33 ? '🧩' : p > .1 ? '🧴' : '🖍️';
+  }
+  function stop(){ clearInterval(iv); iv = null; }
+  document.querySelectorAll('.t-btn[data-min]').forEach(b => b.addEventListener('click', () => {
+    stop();
+    document.querySelectorAll('.t-btn').forEach(x => x.classList.toggle('on', x === b));
+    timer.classList.remove('done');
+    total = left = +b.dataset.min * 60;
+    render();
+    iv = setInterval(() => {
+      left--;
+      render();
+      if (left <= 0) { stop(); timer.classList.add('done'); }
+    }, 1000);
+  }));
+  document.getElementById('tStop').addEventListener('click', () => {
+    stop(); total = left = 0; timer.classList.remove('done');
+    document.querySelectorAll('.t-btn').forEach(x => x.classList.remove('on'));
+    render();
+  });
+  render();
+
+  /* ===== ВИДЕО: обложка + кнопки YouTube / VK / OK / RuTube ===== */
+  document.querySelectorAll('.video-block').forEach(block => {
+    const d = block.dataset;
+    const title = d.title || 'Мультфильм';
+    const yt = (d.yt || '').trim(), vk = (d.vk || '').trim(), ok = (d.ok || '').trim(), rt = (d.rt || '').trim();
+    const q = encodeURIComponent((d.ytSearch || title).trim());
+    const validYt = /^[A-Za-z0-9_-]{11}$/.test(yt);
+
+    const stage = document.createElement('div');
+    stage.className = 'video-stage';
+    stage.innerHTML =
+      '<div class="video-cover" role="button" tabindex="0" aria-label="Смотреть: ' + title + '">' +
+        (validYt ? '<img class="thumb" alt="" loading="lazy" src="https://i.ytimg.com/vi/' + yt + '/hqdefault.jpg" onerror="this.remove()">' : '') +
+        '<span class="vplay"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>' +
+        '<span class="vlabel">' + title + '</span>' +
+      '</div><div class="video-frame"></div>';
+    const cover = stage.querySelector('.video-cover');
+    const frame = stage.querySelector('.video-frame');
+
+    const btns = [];
+    if (validYt) btns.push({ label: 'YouTube',       make: () => 'https://www.youtube-nocookie.com/embed/' + yt + '?autoplay=1&rel=0&modestbranding=1&playsinline=1' });
+    if (vk)      btns.push({ label: 'VK Видео',      make: () => 'https://vk.com/video_ext.php?' + vk + '&autoplay=1' });
+    if (ok)      btns.push({ label: 'Одноклассники', make: () => 'https://ok.ru/videoembed/' + ok + '?autoplay=1' });
+    if (rt)      btns.push({ label: 'RuTube',        make: () => 'https://rutube.ru/play/embed/' + rt + '?autoplay=1' });
+    if (!validYt) btns.push({ label: 'Найти на YouTube ↗', href: 'https://www.youtube.com/results?search_query=' + q });
+    if (!vk)      btns.push({ label: 'VK Видео ↗',         href: 'https://vk.com/video?q=' + q });
+    if (!ok)      btns.push({ label: 'Одноклассники ↗',    href: 'https://ok.ru/search?st.query=' + q + '&st.mode=Videos' });
+    if (!rt)      btns.push({ label: 'RuTube ↗',           href: 'https://rutube.ru/search/?query=' + q });
+
+    const row = document.createElement('div');
+    row.className = 'video-sources';
+    let primary = null;
+    function play(make, btn){
+      frame.innerHTML = '<iframe src="' + make() + '" title="' + title + '" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>';
+      frame.classList.add('on');
+      cover.style.display = 'none';
+      row.querySelectorAll('.vchip').forEach(b => b.classList.toggle('playing', b === btn));
+    }
+    btns.forEach(s => {
+      let el;
+      if (s.make) {
+        el = document.createElement('button');
+        el.type = 'button';
+        el.addEventListener('click', () => play(s.make, el));
+        if (!primary) primary = () => play(s.make, el);
+      } else {
+        el = document.createElement('a');
+        el.href = s.href; el.target = '_blank'; el.rel = 'noopener';
+      }
+      el.className = 'vchip';
+      el.textContent = s.label;
+      row.appendChild(el);
+    });
+    function activate(){
+      if (primary) { primary(); return; }
+      const a = row.querySelector('a');
+      if (a) a.click();
+    }
+    cover.addEventListener('click', activate);
+    cover.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); } });
+    block.appendChild(stage);
+    block.appendChild(row);
+  });
+})();
+</script>
+</body>
+</html>
