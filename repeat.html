@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="referrer" content="no-referrer">
-<title>Повторяем бренд · Коллаж</title>
+<title>Бренд-агентство · Коллаж</title>
 <script>document.documentElement.classList.add('js');</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -175,7 +175,7 @@
   /* ТОВАР + СЛОГАН */
   .ads{display:grid;gap:14px;margin-top:1.5rem}
   @media(min-width:640px){.ads{grid-template-columns:repeat(2,1fr)}}
-  @media(min-width:1000px){.ads{grid-template-columns:repeat(3,1fr)}}
+  @media(min-width:1000px){.ads{grid-template-columns:repeat(4,1fr)}}
   .ad{background:#fff;border:3px solid var(--ink);border-radius:24px;overflow:hidden;display:flex;flex-direction:column}
   .ad .ph{aspect-ratio:4/3;border-bottom:3px solid var(--ink)}
   .ad .ph.contain img{object-fit:contain;padding:18px}
@@ -558,7 +558,7 @@
 
 <!-- HEADER -->
 <header class="top">
-  <a class="top-brand" href="index.html">Повторяем<span>✦</span></a>
+  <a class="top-brand" href="index.html">Бренд-агентство<span>✦</span></a>
   <span>Ольга</span>
 </header>
 
@@ -569,7 +569,7 @@
       <span>Б</span><span>Р</span><span>Е</span><span>Н</span><span style="color:var(--signal);font-style:italic">Д</span>
     </h1>
     <div class="rv" style="margin-top:2rem;border-top:1px solid var(--line);padding-top:1rem;display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;">
-      <div style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">повторяем и делаем <b style="color:var(--ink);">коллаж ✂️</b></div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">создаём бренд <b style="color:var(--ink);">для заказчика ✂️</b></div>
       <div style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">↓ листай</div>
     </div>
   </div>
@@ -588,21 +588,6 @@
     <div class="marquee-item">Коллаж <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg></div>
   </div>
 </div>
-
-<!-- 01 · ПЛАН -->
-<section class="slide" id="plan">
-  <div class="slide-content">
-    <div class="section-head rv">
-      <h2 class="display">Что будет<br><span class="it">сегодня?</span></h2>
-    </div>
-    <div class="plan rv">
-      <div class="plan-step"><span class="n">1</span><span class="em">🧠</span><span class="t">Вспоминаем</span></div>
-      <div class="plan-step"><span class="n">2</span><span class="em">🎮</span><span class="t">Играем</span></div>
-      <div class="plan-step"><span class="n">3</span><span class="em">✂️</span><span class="t">Делаем коллаж</span></div>
-      <div class="plan-step"><span class="n">4</span><span class="em">🖼️</span><span class="t">Показываем</span></div>
-    </div>
-  </div>
-</section>
 
 <!-- 02 · ИГРА 1: ЧТО ЗА БРЕНД (нажатие: размыто → чётче → видно + имя) -->
 <section class="slide" id="guess">
@@ -670,11 +655,11 @@
     </div>
     <div class="ads rv">
       <div class="ad">
-        <div class="ph"><img loading="lazy" alt="Сникерс" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/9/94/Snickers_opened.jpg/500px-Snickers_opened.jpg"><span class="fb">🍫</span></div>
+        <div class="ph contain"><img loading="lazy" alt="Сникерс" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/2/27/2019-01-28_19_55_14_A_Snickers_bar_with_the_wrapper_still_intact_in_the_Dulles_section_of_Sterling%2C_Loudoun_County%2C_Virginia.jpg/500px-2019-01-28_19_55_14_A_Snickers_bar_with_the_wrapper_still_intact_in_the_Dulles_section_of_Sterling%2C_Loudoun_County%2C_Virginia.jpg"><span class="fb">🍫</span></div>
         <div class="ad-body"><div class="ad-brand">Snickers <span class="trick" title="новое слово">🆕</span></div><div class="bubble">Не тормози — сникерсни!</div></div>
       </div>
       <div class="ad">
-        <div class="ph"><img loading="lazy" alt="Твикс" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/b/ba/Twix_opened.jpg/500px-Twix_opened.jpg"><span class="fb">🍫</span></div>
+        <div class="ph contain"><img loading="lazy" alt="Твикс" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/7/76/Twix_bar_package.jpg/500px-Twix_bar_package.jpg"><span class="fb">🍫</span></div>
         <div class="ad-body"><div class="ad-brand">Twix <span class="trick" title="позови">👉</span></div><div class="bubble">Сделай паузу — скушай Twix</div></div>
       </div>
       <div class="ad">
@@ -685,11 +670,7 @@
         <div class="ph"><img loading="lazy" alt="Скитлс" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/a/aa/A_Rainbow_of_Fruity_Flavor.jpg/500px-A_Rainbow_of_Fruity_Flavor.jpg"><span class="fb">🌈</span></div>
         <div class="ad-body"><div class="ad-brand">Skittles <span class="trick" title="позови">👉</span></div><div class="bubble">Попробуй радугу!</div></div>
       </div>
-      <div class="ad">
-        <div class="ph contain"><img loading="lazy" alt="Вкусно — и точка" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ca/Vkusno_I_Tochka_symbol.svg/500px-Vkusno_I_Tochka_symbol.svg.png"><span class="fb">🍔</span></div>
-        <div class="ad-body"><div class="ad-brand">Ресторан <span class="trick" title="имя и слоган сразу">🏷️</span></div><div class="bubble">Вкусно — и точка!</div></div>
-      </div>
-    </div>
+          </div>
   </div>
 </section>
 
@@ -867,7 +848,7 @@
     <div class="stuff rv">
       <div class="st"><div class="ph"><img loading="lazy" alt="Журналы" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/1/16/Gfp-stack-of-magazines-and-books.jpg/500px-Gfp-stack-of-magazines-and-books.jpg"><span class="fb">📰</span></div><span class="t">Журналы</span></div>
       <div class="st"><div class="ph contain"><img loading="lazy" alt="Ножницы" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/9/97/Standard_household_scissors.jpg/500px-Standard_household_scissors.jpg"><span class="fb">✂️</span></div><span class="t">Ножницы</span></div>
-      <div class="st"><div class="ph contain"><img loading="lazy" alt="Клей" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/7/74/FABER-CASTELL_glue_stick.jpg/500px-FABER-CASTELL_glue_stick.jpg"><span class="fb">🧴</span></div><span class="t">Клей</span></div>
+      <div class="st"><div class="ph contain"><img loading="lazy" alt="Клей" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/8/85/Pritt_Sticks.JPG/500px-Pritt_Sticks.JPG"><span class="fb">🧴</span></div><span class="t">Клей</span></div>
       <div class="st"><div class="emb">📄</div><span class="t">Лист</span></div>
       <div class="st"><div class="emb">🖍️</div><span class="t">Фломастеры</span></div>
     </div>
@@ -902,40 +883,6 @@
   </div>
 </section>
 
-<!-- 14 · КАРТИНКИ-ПОДСКАЗКИ -->
-<section class="slide" id="hints">
-  <div class="slide-content">
-    <div class="section-head rv">
-      <h2 class="display">Выбери<br><span class="it">картинку</span></h2>
-    </div>
-    <div class="pics rv">
-      <div class="ph"><img loading="lazy" alt="Сорока" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f6/Eurasian_magpie_2022_05_03.jpg/500px-Eurasian_magpie_2022_05_03.jpg"><span class="fb">🐦</span></div>
-      <div class="ph"><img loading="lazy" alt="Жемчуг" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fc/Pearls.jpg/500px-Pearls.jpg"><span class="fb">🫧</span></div>
-      <div class="ph"><img loading="lazy" alt="Шкатулка" src="https://upload.wikimedia.org/wikipedia/commons/a/a3/Coffret_de_valeurs.JPG"><span class="fb">📦</span></div>
-      <div class="ph"><img loading="lazy" alt="Блёстки" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2a/Glitter_close_up.jpg/500px-Glitter_close_up.jpg"><span class="fb">✨</span></div>
-      <div class="ph"><img loading="lazy" alt="Аметист" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b5/Amatista_Laye_2.jpg/500px-Amatista_Laye_2.jpg"><span class="fb">💜</span></div>
-      <div class="ph"><img loading="lazy" alt="Рубин" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0d/Ruby_cristal.jpg/500px-Ruby_cristal.jpg"><span class="fb">❤️</span></div>
-      <div class="ph"><img loading="lazy" alt="Изумруд" src="https://upload.wikimedia.org/wikipedia/commons/6/6a/Emerald.png"><span class="fb">💚</span></div>
-      <div class="ph"><img loading="lazy" alt="Ожерелье" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/3/34/Blue_Sapphire_%26_Diamond_Necklace.jpg/500px-Blue_Sapphire_%26_Diamond_Necklace.jpg"><span class="fb">💎</span></div>
-      <div class="ph"><img loading="lazy" alt="Бусы" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1e/2012_Rock_Gem_n_Bead_Show_17.JPG/500px-2012_Rock_Gem_n_Bead_Show_17.JPG"><span class="fb">📿</span></div>
-      <div class="ph"><img loading="lazy" alt="Заколки-бабочки" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d3/Butterfly_hair_clips.jpg/500px-Butterfly_hair_clips.jpg"><span class="fb">🦋</span></div>
-      <div class="ph"><img loading="lazy" alt="Кольцо" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c0/Gold_Ring.jpg/500px-Gold_Ring.jpg"><span class="fb">💍</span></div>
-      <div class="ph"><img loading="lazy" alt="Браслет" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d9/Hand_jewelry_with_magnetic_balls_created_by_a_kid.jpg/500px-Hand_jewelry_with_magnetic_balls_created_by_a_kid.jpg"><span class="fb">🌈</span></div>
-    </div>
-    <div class="secret rv" id="secret">
-      <div class="center"><button class="play-btn alt" id="secretBtn" type="button"><span class="em">🔒</span> Если совсем застряли</button></div>
-      <div class="secret-body">
-        <div class="fname"><span class="em">🐦</span>Сорока</div>
-        <div class="fname"><span class="em">⭐</span>Звёздная шкатулка</div>
-        <div class="fname"><span class="em">🫧</span>Бусинка</div>
-        <div class="fname"><span class="em">✨</span>Блестяшки</div>
-        <div class="fname"><span class="em">🗝️</span>Волшебный сундучок</div>
-        <div class="fname"><span class="em">💧</span>Капелька</div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- 15 · ТАЙМЕР -->
 <section class="slide" id="time">
   <div class="slide-content">
@@ -954,25 +901,6 @@
         <button class="t-btn" type="button" data-min="25">25 мин</button>
         <button class="t-btn stop" type="button" id="tStop">Стоп</button>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- 16 · ВЫСТАВКА -->
-<section class="slide" id="show">
-  <div class="slide-content">
-    <div class="section-head rv">
-      <h2 class="display">Покажи<br>свой <span class="it">бренд</span></h2>
-    </div>
-    <div class="show-q rv">
-      <div class="sq"><span class="em">🏷️</span><span class="t">Как называется?</span></div>
-      <div class="sq"><span class="em">🎨</span><span class="t">Что на логотипе?</span></div>
-      <div class="sq"><span class="em">💬</span><span class="t">Какой слоган?</span></div>
-      <div class="sq"><span class="em">❤️</span><span class="t">Почему так?</span></div>
-    </div>
-    <div class="clap rv">
-      <span class="em">👏</span>
-      <h3>Хлопаем каждому!</h3>
     </div>
   </div>
 </section>
@@ -1005,7 +933,6 @@
 <!-- DOCK -->
 <nav class="dock" id="dock">
   <a href="#top" class="active" title="Старт">↑</a>
-  <a href="#plan" title="План">🗺️</a>
   <a href="#guess" title="Что за бренд?">❓</a>
   <a href="#formula" title="Формула бренда">➕</a>
   <a href="#slogan" title="Что такое слоган">💬</a>
@@ -1018,9 +945,7 @@
   <a href="#client" title="Заказчик">👸</a>
   <a href="#task" title="Что делаем">📋</a>
   <a href="#poster" title="Плакат">🖼️</a>
-  <a href="#hints" title="Картинки">💍</a>
   <a href="#time" title="Таймер">⏱️</a>
-  <a href="#show" title="Выставка">👏</a>
   <a href="#end" title="Финал">🏁</a>
 </nav>
 
@@ -1137,14 +1062,6 @@
       cBoxes.forEach(b => { b.classList.remove('rolling'); void b.offsetWidth; b.classList.add('rolling'); b.textContent = pick(THINGS); });
       if (++t >= 8) { clearInterval(iv); cBoxes.forEach((b, i) => b.textContent = final[i]); cBusy = false; cBtn.disabled = false; }
     }, 110);
-  });
-
-  /* ===== ПОДСКАЗКИ ===== */
-  const secret = document.getElementById('secret');
-  const secretBtn = document.getElementById('secretBtn');
-  secretBtn.addEventListener('click', () => {
-    const open = secret.classList.toggle('open');
-    secretBtn.innerHTML = open ? '<span class="em">🔓</span> Спрятать' : '<span class="em">🔒</span> Если совсем застряли';
   });
 
   /* ===== ТАЙМЕР ===== */
