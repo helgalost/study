@@ -516,6 +516,146 @@
   }
   .back-home:hover{transform:scale(1.05)}
 
+
+  /* РАЗБОР БРЕНДА «ТРИ КОТА» */
+  .anat{
+    position:relative;margin-top:2rem;background:#fff;
+    border:4px solid var(--signal);border-radius:28px;
+    padding:2.4rem clamp(1rem,4vw,1.75rem) 1.5rem;
+    display:grid;gap:1.4rem;
+  }
+  @media(min-width:860px){.anat{grid-template-columns:1fr 1.3fr 1fr;align-items:center}}
+  .anat-brand{
+    position:absolute;top:-20px;left:50%;transform:translateX(-50%) rotate(-2deg);
+    background:var(--signal);color:#fff;border-radius:999px;
+    padding:8px 22px;font-size:clamp(1.1rem,4.5vw,1.5rem);font-weight:900;text-transform:uppercase;white-space:nowrap;
+  }
+  .anat-part{position:relative;border:3px dashed var(--ink);border-radius:20px;padding:1.6rem 1rem 1rem;text-align:center}
+  .anat-tag{
+    position:absolute;top:-16px;left:14px;
+    border-radius:999px;padding:5px 14px;border:2px solid var(--ink);
+    font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:.02em;
+  }
+  .anat-tag.t1{background:var(--yellow)}
+  .anat-tag.t2{background:var(--pink)}
+  .anat-tag.t3{background:var(--green)}
+  .anat-name{font-size:clamp(2rem,9vw,3rem);font-weight:900;text-transform:uppercase;letter-spacing:-.04em;line-height:1}
+  .anat-logo{aspect-ratio:16/10;background:#fff}
+  .anat-logo img{object-fit:contain}
+  .anat-slogan{
+    position:relative;display:inline-block;background:var(--ink);color:var(--paper);
+    border-radius:18px;padding:.8rem 1rem;
+    font-size:clamp(1.1rem,4.4vw,1.35rem);font-weight:900;line-height:1.1;
+  }
+
+  /* ЗАЧЕМ СЛОГАН */
+  .apples{display:flex;align-items:stretch;justify-content:center;gap:clamp(.5rem,3vw,1.5rem);margin-top:1.5rem}
+  .apple{
+    flex:1;max-width:280px;background:var(--paper-2);border:3px solid var(--ink);border-radius:24px;
+    padding:1.25rem .75rem;display:flex;flex-direction:column;align-items:center;gap:.5rem;text-align:center;
+  }
+  .apple .big{font-size:clamp(3.5rem,16vw,5.5rem);line-height:1}
+  .apple .lbl{font-size:13px;font-weight:900;text-transform:uppercase;color:var(--muted)}
+  .apple .say{
+    background:var(--yellow);border-radius:14px;padding:.55rem .8rem;
+    font-size:clamp(1rem,4vw,1.25rem);font-weight:900;line-height:1.1;
+  }
+  .apple.win{background:#fff;box-shadow:6px 6px 0 var(--yellow)}
+  .vs{align-self:center;font-size:clamp(1rem,4vw,1.3rem);font-weight:900;color:var(--muted);text-transform:uppercase}
+  .ask-big{margin-top:1.25rem;text-align:center;font-size:clamp(1.4rem,6vw,2.2rem);font-weight:900;text-transform:uppercase;letter-spacing:-.03em}
+  .reasons{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:1.5rem}
+  .reason{background:var(--ink);color:var(--paper);border-radius:22px;padding:1.1rem .6rem;display:flex;flex-direction:column;align-items:center;gap:.45rem;text-align:center}
+  .reason .em{font-size:clamp(2.2rem,9vw,3rem);line-height:1}
+  .reason .t{font-size:12px;font-weight:800;line-height:1.15}
+
+  /* МАРШРУТ ДЛЯ ЗАКАЗЧИКА */
+  .route{display:flex;align-items:center;justify-content:center;gap:clamp(.25rem,1.5vw,.8rem);flex-wrap:wrap;margin-top:1.5rem}
+  .rstep{
+    position:relative;background:var(--paper-2);border-radius:22px;
+    width:clamp(120px,38vw,170px);padding:1.4rem .6rem 1rem;
+    display:flex;flex-direction:column;align-items:center;gap:.4rem;text-align:center;
+  }
+  .rstep .n{position:absolute;top:8px;left:10px;width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-size:12px;font-weight:900;font-style:italic}
+  .rstep .em{font-size:clamp(2.4rem,10vw,3.2rem);line-height:1}
+  .rstep .t{font-size:12px;font-weight:900;text-transform:uppercase;line-height:1.1}
+  .rstep .out{font-size:1.4rem;background:#fff;border-radius:999px;padding:2px 10px}
+  .rstep.hot{background:var(--signal);color:#fff}
+  .rarrow{font-size:clamp(1.3rem,5vw,1.8rem);font-weight:900;color:var(--signal)}
+  .rule-big{
+    margin-top:1.5rem;background:var(--yellow);border-radius:22px;padding:1.1rem 1.25rem;
+    display:flex;align-items:center;gap:.8rem;
+    font-size:clamp(1.1rem,4.4vw,1.5rem);font-weight:900;line-height:1.15;
+  }
+  .rule-big .em{font-size:1.8em;line-height:1;flex-shrink:0}
+  .rule-big em{font-style:italic;color:var(--signal)}
+
+  /* ЦЕЛЬ И «КАК ЭТО РАБОТАЕТ» */
+  .goal{
+    display:flex;align-items:center;gap:.7rem;
+    background:var(--ink);color:var(--paper);border-radius:20px;padding:.9rem 1.1rem;
+    font-size:clamp(1rem,4vw,1.2rem);font-weight:700;line-height:1.25;
+  }
+  .goal .em{font-size:1.8em;line-height:1;flex-shrink:0}
+  .goal b{color:var(--yellow)}
+  .goal .tx,.rule-big .tx{flex:1;min-width:0}
+  .howto{
+    margin-top:1rem;border:3px dashed var(--muted);border-radius:22px;padding:.9rem 1rem 1rem;
+    display:flex;flex-direction:column;align-items:center;gap:.5rem;background:rgba(255,255,255,.4);
+  }
+  .howto-lbl{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .howto-sub{font-size:12px;font-weight:700;color:var(--muted)}
+  .howto-row{display:flex;align-items:center;justify-content:center;gap:clamp(.25rem,1.5vw,.6rem);flex-wrap:wrap}
+  .hx{font-size:clamp(1.8rem,8vw,2.6rem);line-height:1;background:#fff;border-radius:14px;padding:6px 8px}
+  .hop{font-size:1.4rem;font-weight:900;color:var(--muted)}
+  .harr{font-size:clamp(1.3rem,5vw,1.8rem);font-weight:900;color:var(--signal)}
+  .hres{
+    display:inline-flex;align-items:center;gap:6px;background:var(--green);border-radius:14px;padding:8px 12px;
+    font-size:clamp(1rem,4vw,1.3rem);font-weight:900;
+  }
+  .hlogo{font-size:1.5em;line-height:1}
+
+  /* ТВОЙ РЕЗУЛЬТАТ В РУЛЕТКЕ */
+  .mine{margin-top:1.25rem;display:grid;gap:8px}
+  .mine-row{display:flex;align-items:center;gap:10px;background:#fff;border-radius:16px;padding:.6rem .9rem;border:2px solid var(--ink)}
+  .mine-tag{font-size:12px;font-weight:900;text-transform:uppercase;white-space:nowrap}
+  .mine-val{font-size:clamp(1rem,4vw,1.2rem);font-weight:800;color:var(--muted)}
+  #rLogo{font-size:clamp(2rem,8vw,2.6rem);line-height:1;color:var(--ink)}
+  #rLogo.pop{animation:pop .5s var(--ease-out)}
+
+  /* ТРИ ШАГА */
+  .steps3{display:flex;align-items:center;justify-content:center;gap:clamp(.3rem,2vw,.8rem);margin-top:1.5rem;flex-wrap:wrap}
+  .s3{background:var(--paper-2);border-radius:20px;padding:.9rem .7rem;width:clamp(92px,26vw,150px);display:flex;flex-direction:column;align-items:center;gap:.35rem;text-align:center}
+  .s3 .em{font-size:clamp(2rem,8vw,2.6rem);line-height:1}
+  .s3 .t{font-size:11px;font-weight:900;text-transform:uppercase;line-height:1.15}
+  .s3a{font-size:1.4rem;font-weight:900;color:var(--signal)}
+  .cbox.jewel{background:var(--pink);border-style:solid}
+
+  /* ОТКУДА БЕРЁМ */
+  .mk .from{font-size:1.3rem;background:#fff;border-radius:999px;padding:2px 10px;line-height:1.3}
+
+  /* ЧЕК-ЛИСТ */
+  .checks{display:grid;gap:10px;margin-top:1.5rem}
+  @media(min-width:768px){.checks{grid-template-columns:repeat(5,1fr)}}
+  .ck{
+    display:flex;align-items:center;gap:.8rem;cursor:pointer;text-align:left;
+    background:var(--paper-2);border:3px solid var(--ink);border-radius:20px;padding:.9rem 1rem;
+    font:inherit;color:inherit;transition:background .2s,transform .2s var(--ease-out);
+  }
+  @media(min-width:768px){.ck{flex-direction:column;text-align:center}}
+  .ck .box{width:34px;height:34px;border-radius:10px;border:3px solid var(--ink);background:#fff;flex-shrink:0;display:grid;place-items:center;font-weight:900;font-size:20px}
+  .ck .em{font-size:clamp(1.8rem,7vw,2.4rem);line-height:1}
+  .ck .t{font-size:clamp(.95rem,3.6vw,1.05rem);font-weight:900;line-height:1.15}
+  .ck.on{background:var(--green)}
+  .ck.on .box::after{content:"✓"}
+  .ck:active{transform:scale(.97)}
+  .ck-done{
+    display:none;margin-top:1.25rem;background:var(--signal);color:#fff;border-radius:22px;padding:1.2rem;
+    text-align:center;font-size:clamp(1.3rem,5vw,1.9rem);font-weight:900;text-transform:uppercase;
+    align-items:center;justify-content:center;gap:.6rem;
+  }
+  .ck-done.on{display:flex;animation:pop .5s var(--ease-out)}
+  .ck-done .em{font-size:1.5em}
+
   /* DOCK */
   .dock{
     position:fixed;bottom:max(14px,env(safe-area-inset-bottom));
@@ -615,7 +755,7 @@
   </div>
 </section>
 
-<!-- 03 · ФОРМУЛА -->
+<!-- 03 · ИЗ ЧЕГО СДЕЛАН БРЕНД — разбор на примере «Три кота» -->
 <section class="slide" id="formula">
   <div class="slide-content">
     <div class="section-head rv">
@@ -630,6 +770,35 @@
       <span class="eq-op">=</span>
       <div class="eq-item res"><span class="em">✨</span><span class="t">Бренд</span></div>
     </div>
+
+    <!-- Пример: «Три кота» -->
+    <div class="anat rv">
+      <span class="anat-brand">✨ Бренд</span>
+      <div class="anat-part">
+        <span class="anat-tag t1">🏷️ Нейм</span>
+        <div class="anat-name">Три кота</div>
+      </div>
+      <div class="anat-part">
+        <span class="anat-tag t2">🎨 Логотип</span>
+        <div class="anat-logo ph"><img loading="lazy" alt="Логотип «Три кота»" src="https://thumb.wikimedia.org/wikipedia/ru/thumb/a/a0/%D0%9C%D1%83%D0%BB%D1%8C%D1%82%D1%81%D0%B5%D1%80%D0%B8%D0%B0%D0%BB_%D0%A2%D1%80%D0%B8_%D0%BA%D0%BE%D1%82%D0%B0.png/500px-%D0%9C%D1%83%D0%BB%D1%8C%D1%82%D1%81%D0%B5%D1%80%D0%B8%D0%B0%D0%BB_%D0%A2%D1%80%D0%B8_%D0%BA%D0%BE%D1%82%D0%B0.png"><span class="fb">🐱🐱🐱</span></div>
+      </div>
+      <div class="anat-part">
+        <span class="anat-tag t3">💬 Слоган</span>
+        <div class="anat-slogan">Два кота и одна кошечка!</div>
+      </div>
+    </div>
+
+    <!-- Лунтик, 1 сезон, 5 серия «Имя» (официальный канал «Лунтик»):
+         у всех есть имя, а у Лунтика нет — без имени тебя как будто нет. Друзья придумывают ему имя. -->
+    <div class="ep rv">
+      <div class="ep-idea"><span class="chip y"><span class="em">🏷️</span>Зачем нужно имя?</span></div>
+      <div class="video-block"
+           data-title="Лунтик — «Имя»"
+           data-yt="eNYcVWNigus"
+           data-yt-search="Лунтик 5 серия Имя"
+           data-vk="" data-ok="" data-rt="">
+      </div>
+    </div>
   </div>
 </section>
 
@@ -643,6 +812,46 @@
       <span class="em">💬</span>
       <h3>Короткая фраза,<br><em>которая прилипает</em></h3>
       <div class="row"><span>👂</span><span>➜</span><span>🧠</span><span>➜</span><span>😊</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 · ЗАЧЕМ СЛОГАН -->
+<section class="slide" id="why">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Зачем<br>нужен <span class="it">слоган?</span></h2>
+    </div>
+    <div class="apples rv">
+      <div class="apple">
+        <span class="big">🍎</span>
+        <span class="lbl">Яблоко</span>
+      </div>
+      <span class="vs">или</span>
+      <div class="apple win">
+        <span class="big">🍎</span>
+        <span class="lbl">Яблоко</span>
+        <span class="say">Сладкое, как мёд!</span>
+      </div>
+    </div>
+    <div class="ask-big rv">Какое купишь? 👆</div>
+    <div class="reasons rv">
+      <div class="reason"><span class="em">🧠</span><span class="t">Запомнят</span></div>
+      <div class="reason"><span class="em">⭐</span><span class="t">Узнают, чем особенный</span></div>
+      <div class="reason"><span class="em">🛍️</span><span class="t">Захотят купить</span></div>
+    </div>
+
+    <!-- Смешарики 2D. Азбука финансовой грамотности, «Золотое яблоко»:
+         Мышарик расхваливает яблоки «сладкие, как мёд», и Нюша покупает дорогое яблоко. -->
+    <div class="ep rv">
+      <div class="ep-idea"><span class="chip"><span class="em">💬</span>Красивые слова — и хочется купить!</span></div>
+      <div class="video-block"
+           data-title="Смешарики — «Золотое яблоко»"
+           data-yt="_nShANCaJgU"
+           data-yt-search="Смешарики Золотое яблоко азбука финансовой грамотности"
+           data-vk="" data-ok=""
+           data-rt="f10a0ca913fadc76648bfedaf29bb6a0">
+      </div>
     </div>
   </div>
 </section>
@@ -700,103 +909,6 @@
   </div>
 </section>
 
-<!-- 07 · ИГРА 2: КТО? ЧТО? ГДЕ? -->
-<section class="slide" id="roulette">
-  <div class="slide-content">
-    <div class="section-head rv">
-      <span class="kicker">Игра 2</span>
-      <h2 class="display">Кто? Что?<br><span class="it">Где?</span></h2>
-    </div>
-    <div class="game-box rv">
-      <div class="reels">
-        <div class="reel-col"><span class="reel-cap" title="Кто?">👤</span><div class="reel" id="reelWho"><span class="em">❓</span><span class="w">кто?</span></div></div>
-        <div class="reel-col"><span class="reel-cap" title="Что делает?">⚡</span><div class="reel" id="reelDo"><span class="em">❓</span><span class="w">что делает?</span></div></div>
-        <div class="reel-col"><span class="reel-cap" title="Где?">📍</span><div class="reel" id="reelWhere"><span class="em">❓</span><span class="w">где?</span></div></div>
-      </div>
-      <div class="center"><button class="play-btn" id="spinRoulette" type="button"><span class="em">🎰</span> Крутить!</button></div>
-    </div>
-  </div>
-</section>
-
-<!-- 08 · ИГРА 3: СОБЕРИ СЛОГАН -->
-<section class="slide" id="builder">
-  <div class="slide-content">
-    <div class="section-head rv">
-      <span class="kicker">Игра 3</span>
-      <h2 class="display">Собери<br><span class="it">слоган</span></h2>
-    </div>
-    <div class="game-box rv">
-      <div class="sbuild">
-        <div class="spart" id="sA"><span class="em">❓</span><span class="w">…</span></div>
-        <span class="splus">+</span>
-        <div class="spart" id="sB"><span class="em">❓</span><span class="w">…</span></div>
-      </div>
-      <div class="sresult" id="sRes"><span class="em">💬</span>Нажми кнопку!</div>
-      <div class="center"><button class="play-btn" id="sSpin" type="button"><span class="em">🎲</span> Новый слоган</button></div>
-    </div>
-  </div>
-</section>
-
-<!-- 09 · ИГРА 4: НЕВОЗМОЖНЫЙ ТОВАР -->
-<section class="slide" id="impossible">
-  <div class="slide-content">
-    <div class="section-head rv">
-      <span class="kicker">Игра 4</span>
-      <h2 class="display">Невозможный<br><span class="it">товар</span></h2>
-    </div>
-    <div class="game-box rv">
-      <div class="combo">
-        <div class="cbox" id="c1">👟</div><span class="cop">+</span>
-        <div class="cbox" id="c2">🍍</div><span class="cop">+</span>
-        <div class="cbox" id="c3">📺</div><span class="cop">=</span>
-        <div class="cbox q">?</div>
-      </div>
-      <div class="three-q" style="margin-top:1.25rem">
-        <div class="tq"><span class="em">🤔</span><span class="t">Что это?</span></div>
-        <div class="tq"><span class="em">👤</span><span class="t">Для кого?</span></div>
-        <div class="tq"><span class="em">🏷️</span><span class="t">Как назвать?</span></div>
-      </div>
-      <div class="center"><button class="play-btn" id="cSpin" type="button"><span class="em">🎲</span> Смешать!</button></div>
-    </div>
-  </div>
-</section>
-
-<!-- 10 · МУЛЬТИКИ -->
-<section class="slide" id="video">
-  <div class="slide-content">
-    <div class="section-head rv">
-      <h2 class="display">Смотрим<br><span class="it">мультики</span></h2>
-    </div>
-
-    <!-- Лунтик, 1 сезон, 5 серия «Имя» (официальный канал «Лунтик»):
-         у всех есть имя, а у Лунтика нет — без имени тебя как будто нет. Друзья придумывают ему имя. -->
-    <div class="ep rv">
-      <div class="ep-idea"><span class="chip y"><span class="em">🏷️</span>Зачем нужно имя?</span></div>
-      <div class="video-block"
-           data-title="Лунтик — «Имя»"
-           data-yt="eNYcVWNigus"
-           data-yt-search="Лунтик 5 серия Имя"
-           data-vk="" data-ok="" data-rt="">
-      </div>
-      <div class="ep-ask"><span>🐝❓</span><span>➜</span><span>🏷️🌙</span><span>➜</span><span>😊</span></div>
-    </div>
-
-    <!-- Смешарики 2D. Азбука финансовой грамотности, «Золотое яблоко»:
-         Мышарик расхваливает яблоки «сладкие, как мёд», и Нюша покупает дорогое яблоко. -->
-    <div class="ep rv">
-      <div class="ep-idea"><span class="chip"><span class="em">💬</span>Красивые слова — и хочется купить!</span></div>
-      <div class="video-block"
-           data-title="Смешарики — «Золотое яблоко»"
-           data-yt="_nShANCaJgU"
-           data-yt-search="Смешарики Золотое яблоко азбука финансовой грамотности"
-           data-vk="" data-ok=""
-           data-rt="f10a0ca913fadc76648bfedaf29bb6a0">
-      </div>
-      <div class="ep-ask"><span>🍎</span><span>💬✨</span><span>➜</span><span>🐷💰</span></div>
-    </div>
-  </div>
-</section>
-
 <!-- 11 · ЗАКАЗЧИК -->
 <section class="slide" id="client">
   <div class="slide-content">
@@ -833,6 +945,125 @@
   </div>
 </section>
 
+<!-- ПЛАН ДЛЯ ЗАКАЗЧИКА -->
+<section class="slide" id="plan">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Как мы<br><span class="it">поможем?</span></h2>
+    </div>
+    <div class="route rv">
+      <div class="rstep"><span class="n">1</span><span class="em">🎰</span><span class="t">Герой и имя</span><span class="out">🎨 🏷️</span></div>
+      <span class="rarrow">➜</span>
+      <div class="rstep"><span class="n">2</span><span class="em">🎲</span><span class="t">Слоган</span><span class="out">💬</span></div>
+      <span class="rarrow">➜</span>
+      <div class="rstep"><span class="n">3</span><span class="em">💍</span><span class="t">Чудо-украшение</span><span class="out">🖼️</span></div>
+      <span class="rarrow">➜</span>
+      <div class="rstep hot"><span class="n">4</span><span class="em">✂️</span><span class="t">Коллаж-плакат</span><span class="out">👸</span></div>
+    </div>
+    <div class="rule-big rv"><span class="em">🎯</span><span class="tx">Всё, что придумаем в играх, — <em>пойдёт на плакат!</em></span></div>
+  </div>
+</section>
+
+<!-- ИГРА 2: ГЕРОЙ И ИМЯ МАГАЗИНА -->
+<section class="slide" id="roulette">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <span class="kicker">Шаг 1 · Игра</span>
+      <h2 class="display">Герой<br><span class="it">и имя</span></h2>
+    </div>
+    <div class="goal rv"><span class="em">🎯</span><span class="tx">Придумываем <b>логотип</b> и <b>имя</b> для магазина украшений</span></div>
+
+    <!-- Как это работает — на примере ДРУГОГО магазина, чтобы не копировали -->
+    <div class="howto rv">
+      <span class="howto-lbl">Смотри, как это работает</span>
+      <div class="howto-row">
+        <span class="hx">🐸</span><span class="hx">🦘</span><span class="hx">🏪</span>
+        <span class="harr">➜</span>
+        <span class="hres"><span class="hlogo">🐸</span>«Прыг-скок»</span>
+      </div>
+      <span class="howto-sub">магазин игрушек</span>
+    </div>
+
+    <div class="game-box rv">
+      <div class="reels">
+        <div class="reel-col"><span class="reel-cap" title="Кто?">👤</span><div class="reel" id="reelWho"><span class="em">❓</span><span class="w">кто?</span></div></div>
+        <div class="reel-col"><span class="reel-cap" title="Что делает?">⚡</span><div class="reel" id="reelDo"><span class="em">❓</span><span class="w">что делает?</span></div></div>
+        <div class="reel-col"><span class="reel-cap" title="Где?">📍</span><div class="reel" id="reelWhere"><span class="em">❓</span><span class="w">где?</span></div></div>
+      </div>
+      <div class="center"><button class="play-btn" id="spinRoulette" type="button"><span class="em">🎰</span> Крутить!</button></div>
+      <div class="mine" id="rMine">
+        <div class="mine-row"><span class="mine-tag">🎨 Логотип</span><span class="mine-val" id="rLogo">❓</span></div>
+        <div class="mine-row"><span class="mine-tag">🏷️ Имя</span><span class="mine-val">из того, что выпало ✍️</span></div>
+      </div>
+    </div>
+    <div class="rule-big rv"><span class="em">🎯</span><span class="tx">Что выпало — <em>то и берём!</em></span></div>
+  </div>
+</section>
+
+<!-- ИГРА 3: СЛОГАН -->
+<section class="slide" id="builder">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <span class="kicker">Шаг 2 · Игра</span>
+      <h2 class="display">Собери<br><span class="it">слоган</span></h2>
+    </div>
+    <div class="goal rv"><span class="em">🎯</span><span class="tx">Придумываем <b>слоган</b> для магазина украшений</span></div>
+    <div class="game-box rv">
+      <div class="sbuild">
+        <div class="spart" id="sA"><span class="em">❓</span><span class="w">…</span></div>
+        <span class="splus">+</span>
+        <div class="spart" id="sB"><span class="em">❓</span><span class="w">…</span></div>
+      </div>
+      <div class="sresult" id="sRes"><span class="em">💬</span>Нажми кнопку!</div>
+      <div class="center"><button class="play-btn" id="sSpin" type="button"><span class="em">🎲</span> Новый слоган</button></div>
+    </div>
+    <div class="steps3 rv">
+      <div class="s3"><span class="em">🎲</span><span class="t">Собери</span></div>
+      <span class="s3a">➜</span>
+      <div class="s3"><span class="em">🗣️</span><span class="t">Скажи вслух</span></div>
+      <span class="s3a">➜</span>
+      <div class="s3"><span class="em">✏️</span><span class="t">Поменяй слово — будет твой!</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ИГРА 4: ЧУДО-УКРАШЕНИЕ -->
+<section class="slide" id="impossible">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <span class="kicker">Шаг 3 · Игра</span>
+      <h2 class="display">Чудо-<br><span class="it">украшение</span></h2>
+    </div>
+    <div class="goal rv"><span class="em">🎯</span><span class="tx">Придумываем украшение, <b>которого нет ни в одном магазине</b> — его и соберём из вырезок!</span></div>
+
+    <div class="howto rv">
+      <span class="howto-lbl">Смотри, как это работает</span>
+      <div class="howto-row">
+        <span class="hx">👟</span><span class="hop">+</span><span class="hx">🚀</span>
+        <span class="harr">➜</span>
+        <span class="hres">Кроссовки-ракеты</span>
+      </div>
+      <span class="howto-sub">обувной магазин</span>
+    </div>
+
+    <div class="game-box rv">
+      <div class="combo">
+        <div class="cbox jewel" id="c1">💍</div><span class="cop">+</span>
+        <div class="cbox" id="c2">🍉</div><span class="cop">+</span>
+        <div class="cbox" id="c3">🚀</div><span class="cop">=</span>
+        <div class="cbox q">?</div>
+      </div>
+      <div class="center"><button class="play-btn" id="cSpin" type="button"><span class="em">🎲</span> Смешать!</button></div>
+      <div class="three-q" style="margin-top:1.5rem">
+        <div class="tq"><span class="em">🤔</span><span class="t">Что это?</span></div>
+        <div class="tq"><span class="em">👤</span><span class="t">Для кого?</span></div>
+        <div class="tq"><span class="em">🏷️</span><span class="t">Как назвать?</span></div>
+      </div>
+    </div>
+    <div class="rule-big rv"><span class="em">✂️</span><span class="tx">В коллаже так же: <em>разные кусочки → одно новое!</em></span></div>
+  </div>
+</section>
+
 <!-- 12 · ЧТО ДЕЛАЕМ -->
 <section class="slide" id="task">
   <div class="slide-content">
@@ -840,10 +1071,10 @@
       <h2 class="display">Что мы<br><span class="it">делаем?</span></h2>
     </div>
     <div class="make rv">
-      <div class="mk"><span class="n">1</span><span class="em">🏷️</span><span class="t">Нейм</span></div>
-      <div class="mk"><span class="n">2</span><span class="em">🎨</span><span class="t">Логотип</span></div>
-      <div class="mk"><span class="n">3</span><span class="em">💬</span><span class="t">Слоган</span></div>
-      <div class="mk"><span class="n">4</span><span class="em">🖼️</span><span class="t">Плакат</span></div>
+      <div class="mk"><span class="n">1</span><span class="em">🏷️</span><span class="t">Нейм</span><span class="from">🎰</span></div>
+      <div class="mk"><span class="n">2</span><span class="em">🎨</span><span class="t">Логотип</span><span class="from">🎰</span></div>
+      <div class="mk"><span class="n">3</span><span class="em">💬</span><span class="t">Слоган</span><span class="from">🎲</span></div>
+      <div class="mk"><span class="n">4</span><span class="em">🖼️</span><span class="t">Плакат</span><span class="from">💍✂️</span></div>
     </div>
     <div class="stuff rv">
       <div class="st"><div class="ph"><img loading="lazy" alt="Журналы" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/1/16/Gfp-stack-of-magazines-and-books.jpg/500px-Gfp-stack-of-magazines-and-books.jpg"><span class="fb">📰</span></div><span class="t">Журналы</span></div>
@@ -880,6 +1111,23 @@
         <div class="cstep"><span class="num">5</span><span class="em">🖍️</span><span class="t">Подпиши</span></div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ПРОВЕРЬ ПЛАКАТ -->
+<section class="slide" id="check">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Проверь<br><span class="it">плакат</span></h2>
+    </div>
+    <div class="checks rv">
+      <button class="ck" type="button"><span class="box"></span><span class="em">🏷️</span><span class="t">Есть имя?</span></button>
+      <button class="ck" type="button"><span class="box"></span><span class="em">🎨</span><span class="t">Есть логотип?</span></button>
+      <button class="ck" type="button"><span class="box"></span><span class="em">💬</span><span class="t">Есть слоган?</span></button>
+      <button class="ck" type="button"><span class="box"></span><span class="em">💍</span><span class="t">Видно, что это украшения?</span></button>
+      <button class="ck" type="button"><span class="box"></span><span class="em">👀</span><span class="t">Видно издалека?</span></button>
+    </div>
+    <div class="ck-done" id="ckDone"><span class="em">🎉</span>Готово для заказчика!</div>
   </div>
 </section>
 
@@ -934,17 +1182,19 @@
 <nav class="dock" id="dock">
   <a href="#top" class="active" title="Старт">↑</a>
   <a href="#guess" title="Что за бренд?">❓</a>
-  <a href="#formula" title="Формула бренда">➕</a>
+  <a href="#formula" title="Из чего сделан бренд">🐱</a>
   <a href="#slogan" title="Что такое слоган">💬</a>
+  <a href="#why" title="Зачем слоган">🍎</a>
   <a href="#examples" title="Товар и слоган">🍫</a>
   <a href="#how" title="Как придумать">💡</a>
-  <a href="#roulette" title="Кто? Что? Где?">🎰</a>
-  <a href="#builder" title="Собери слоган">🎲</a>
-  <a href="#impossible" title="Невозможный товар">🍍</a>
-  <a href="#video" title="Мультики">▶️</a>
   <a href="#client" title="Заказчик">👸</a>
+  <a href="#plan" title="Как поможем">🗺️</a>
+  <a href="#roulette" title="Герой и имя">🎰</a>
+  <a href="#builder" title="Слоган">🎲</a>
+  <a href="#impossible" title="Чудо-украшение">💍</a>
   <a href="#task" title="Что делаем">📋</a>
   <a href="#poster" title="Плакат">🖼️</a>
+  <a href="#check" title="Проверь">✅</a>
   <a href="#time" title="Таймер">⏱️</a>
   <a href="#end" title="Финал">🏁</a>
 </nav>
@@ -1019,7 +1269,10 @@
     let t = 0;
     const iv = setInterval(() => {
       reels.forEach(r => { r.el.classList.remove('rolling'); void r.el.offsetWidth; r.el.classList.add('rolling'); setReel(r, pick(r.list)); });
-      if (++t >= 9) { clearInterval(iv); reels.forEach((r, i) => setReel(r, final[i])); rBusy = false; rBtn.disabled = false; }
+      if (++t >= 9) {
+        clearInterval(iv); reels.forEach((r, i) => setReel(r, final[i])); rBusy = false; rBtn.disabled = false;
+        const lg = document.getElementById('rLogo'); lg.textContent = final[0][0]; lg.classList.remove('pop'); void lg.offsetWidth; lg.classList.add('pop');
+      }
     }, 110);
   });
 
@@ -1048,21 +1301,31 @@
     }, 110);
   });
 
-  /* ===== ИГРА 4: НЕВОЗМОЖНЫЙ ТОВАР ===== */
-  const THINGS = ['👟','🍍','📺','☂️','🐟','🧦','🎸','🚲','🍕','🪑','⏰','🎈','🧲','🥕','🛁','📚','🦷','🍩','🎧','🧊','🪴','🔦','🧁','🐌','🎩','🧤','🚗','🍉'];
+  /* ===== ИГРА 4: ЧУДО-УКРАШЕНИЕ (украшение + две случайные вещи) ===== */
+  const JEWELS = ['💍','📿','👑','🎀','💎','⌚'];
+  const THINGS = ['🍉','🚀','🐟','🍕','🎈','🧁','🐌','🌵','🍓','🦄','🌙','🐝','🍦','🎸','⚡','🌈','🐸','🍩','⭐','🦋','🔔','🍭','☂️','🐙'];
   const cBoxes = ['c1','c2','c3'].map(id => document.getElementById(id));
   const cBtn = document.getElementById('cSpin');
   let cBusy = false;
   cBtn.addEventListener('click', () => {
     if (cBusy) return;
     cBusy = true; cBtn.disabled = true;
-    const final = shuffle(THINGS).slice(0, 3);
+    const two = shuffle(THINGS).slice(0, 2);
+    const final = [pick(JEWELS), two[0], two[1]];
     let t = 0;
     const iv = setInterval(() => {
-      cBoxes.forEach(b => { b.classList.remove('rolling'); void b.offsetWidth; b.classList.add('rolling'); b.textContent = pick(THINGS); });
+      cBoxes.forEach((b, i) => { b.classList.remove('rolling'); void b.offsetWidth; b.classList.add('rolling'); b.textContent = i === 0 ? pick(JEWELS) : pick(THINGS); });
       if (++t >= 8) { clearInterval(iv); cBoxes.forEach((b, i) => b.textContent = final[i]); cBusy = false; cBtn.disabled = false; }
     }, 110);
   });
+
+  /* ===== ЧЕК-ЛИСТ ===== */
+  const cks = [...document.querySelectorAll('.ck')];
+  const ckDone = document.getElementById('ckDone');
+  cks.forEach(c => c.addEventListener('click', () => {
+    c.classList.toggle('on');
+    ckDone.classList.toggle('on', cks.every(x => x.classList.contains('on')));
+  }));
 
   /* ===== ТАЙМЕР ===== */
   const timer = document.getElementById('timer');
