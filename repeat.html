@@ -656,6 +656,47 @@
   .ck-done.on{display:flex;animation:pop .5s var(--ease-out)}
   .ck-done .em{font-size:1.5em}
 
+
+  /* ИГРА «ЧЕЙ ЭТО СЛОГАН?» */
+  .sg-count{text-align:center;font-size:13px;font-weight:900;letter-spacing:.14em;color:var(--muted)}
+  .sg-slogan{
+    position:relative;margin:.8rem auto 0;max-width:640px;
+    background:var(--ink);color:var(--paper);border-radius:24px;
+    padding:1.4rem 1.25rem;text-align:center;
+    font-size:clamp(1.5rem,6.5vw,2.4rem);font-weight:900;line-height:1.1;letter-spacing:-.02em;
+  }
+  .sg-slogan::after{
+    content:"";position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);
+    border:12px solid transparent;border-bottom:0;border-top-color:var(--ink);
+  }
+  .sg-slogan mark{background:transparent;color:inherit;border-radius:8px;padding:0 4px;transition:background .3s,color .3s}
+  .sg-slogan.solved mark{background:var(--yellow);color:var(--ink)}
+  .sg-opts{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:1.75rem}
+  @media(min-width:768px){.sg-opts{grid-template-columns:repeat(4,1fr)}}
+  .sg-opt{
+    background:#fff;border:3px solid var(--ink);border-radius:22px;cursor:pointer;
+    padding:1rem .5rem .8rem;display:flex;flex-direction:column;align-items:center;gap:.4rem;
+    font:inherit;color:inherit;transition:transform .2s var(--ease-out),background .2s,opacity .2s;
+  }
+  .sg-opt:hover{transform:translateY(-3px)}
+  .sg-opt .em{font-size:clamp(3.2rem,15vw,4.6rem);line-height:1}
+  .sg-opt .t{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase}
+  .sg-opt.no{opacity:.35;animation:shake .35s ease-in-out}
+  .sg-opt.yes{background:var(--green);transform:scale(1.05) rotate(-2deg);box-shadow:5px 5px 0 var(--ink)}
+  .sg-opt.yes .t{color:var(--ink)}
+
+
+  .client-say{
+    position:relative;margin-top:1.25rem;background:var(--paper-2);border-radius:20px;
+    padding:1rem 1.2rem;font-size:clamp(1.05rem,4vw,1.25rem);font-weight:600;line-height:1.45;
+  }
+  .client-say::before{
+    content:"";position:absolute;top:-12px;left:36px;
+    border:12px solid transparent;border-top:0;border-bottom-color:var(--paper-2);
+  }
+  .client-say b{font-weight:900;color:var(--signal)}
+  .sg-slogan mark{padding:0 .12em}
+
   /* DOCK */
   .dock{
     position:fixed;bottom:max(14px,env(safe-area-inset-bottom));
@@ -856,30 +897,19 @@
   </div>
 </section>
 
-<!-- 05 · ТОВАР + СЛОГАН -->
+<!-- 05 · ИГРА: ЧЕЙ ЭТО СЛОГАН? (учитель читает слоган, дети выбирают картинку) -->
 <section class="slide" id="examples">
   <div class="slide-content">
     <div class="section-head rv">
-      <h2 class="display">Товар —<br><span class="it">и его слоган</span></h2>
+      <span class="kicker">Игра</span>
+      <h2 class="display">Чей это<br><span class="it">слоган?</span></h2>
     </div>
-    <div class="ads rv">
-      <div class="ad">
-        <div class="ph contain"><img loading="lazy" alt="Сникерс" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/2/27/2019-01-28_19_55_14_A_Snickers_bar_with_the_wrapper_still_intact_in_the_Dulles_section_of_Sterling%2C_Loudoun_County%2C_Virginia.jpg/500px-2019-01-28_19_55_14_A_Snickers_bar_with_the_wrapper_still_intact_in_the_Dulles_section_of_Sterling%2C_Loudoun_County%2C_Virginia.jpg"><span class="fb">🍫</span></div>
-        <div class="ad-body"><div class="ad-brand">Snickers <span class="trick" title="новое слово">🆕</span></div><div class="bubble">Не тормози — сникерсни!</div></div>
-      </div>
-      <div class="ad">
-        <div class="ph contain"><img loading="lazy" alt="Твикс" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/7/76/Twix_bar_package.jpg/500px-Twix_bar_package.jpg"><span class="fb">🍫</span></div>
-        <div class="ad-body"><div class="ad-brand">Twix <span class="trick" title="позови">👉</span></div><div class="bubble">Сделай паузу — скушай Twix</div></div>
-      </div>
-      <div class="ad">
-        <div class="ph"><img loading="lazy" alt="Эм-энд-эмс" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e5/Plain-M%26Ms-Pile.jpg/500px-Plain-M%26Ms-Pile.jpg"><span class="fb">🍬</span></div>
-        <div class="ad-body"><div class="ad-brand">M&amp;M’s <span class="trick" title="обещание">💛</span></div><div class="bubble">Тает во рту, а не в руках</div></div>
-      </div>
-      <div class="ad">
-        <div class="ph"><img loading="lazy" alt="Скитлс" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/a/aa/A_Rainbow_of_Fruity_Flavor.jpg/500px-A_Rainbow_of_Fruity_Flavor.jpg"><span class="fb">🌈</span></div>
-        <div class="ad-body"><div class="ad-brand">Skittles <span class="trick" title="позови">👉</span></div><div class="bubble">Попробуй радугу!</div></div>
-      </div>
-          </div>
+    <div class="game-box rv">
+      <div class="sg-count" id="sgCount"></div>
+      <div class="sg-slogan" id="sgText"></div>
+      <div class="sg-opts" id="sgOpts"></div>
+      <div class="center"><button class="play-btn" id="sgNext" type="button">Дальше ➜</button></div>
+    </div>
   </div>
 </section>
 
@@ -919,6 +949,11 @@
       <div class="client-head">
         <span class="ava">👸</span>
         <h3>Магазин<br>украшений</h3>
+      </div>
+      <div class="client-say">
+        «Здравствуйте, ребята! Я открыла маленький магазин украшений: колечки, бусы, заколки.
+        Но у моего магазина <b>нет имени, нет знака и нет слогана</b> — и никто про него не знает. 😢
+        Помогите мне, пожалуйста! Придумайте моему магазину бренд и сделайте яркий плакат, чтобы все захотели ко мне прийти!»
       </div>
       <div class="jewels">
         <div class="ph"><img loading="lazy" alt="Кольца" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/0/08/Two_engagement_rings_1.jpg/500px-Two_engagement_rings_1.jpg"><span class="fb">💍</span></div>
@@ -1185,7 +1220,7 @@
   <a href="#formula" title="Из чего сделан бренд">🐱</a>
   <a href="#slogan" title="Что такое слоган">💬</a>
   <a href="#why" title="Зачем слоган">🍎</a>
-  <a href="#examples" title="Товар и слоган">🍫</a>
+  <a href="#examples" title="Чей это слоган?">🍦</a>
   <a href="#how" title="Как придумать">💡</a>
   <a href="#client" title="Заказчик">👸</a>
   <a href="#plan" title="Как поможем">🗺️</a>
@@ -1250,6 +1285,43 @@
     e.preventDefault();
     document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }));
+
+  /* ===== ИГРА: ЧЕЙ ЭТО СЛОГАН? ===== */
+  const SG = [
+    { s:'<mark>Холодок</mark> в жаркий денёк!',        a:['🍦','мороженое'], o:[['🧸','мишка'],['🚲','велосипед'],['🎒','рюкзак']] },
+    { s:'<mark>Зубки</mark> белые — улыбки смелые!',   a:['🪥','зубная щётка'], o:[['🍦','мороженое'],['🐶','щенок'],['🎈','шарик']] },
+    { s:'<mark>Гав!</mark> Значит, вкусно!',           a:['🦴','корм для собак'], o:[['🍕','пицца'],['🧦','носки'],['🚗','машинка']] },
+    { s:'Крути <mark>педали</mark> — догони ветер!',   a:['🚲','велосипед'], o:[['🛁','ванна'],['🍎','яблоко'],['📚','книги']] },
+    { s:'Тёплые лапки в любой <mark>мороз</mark>!',    a:['🧤','варежки'], o:[['🕶️','очки'],['🍉','арбуз'],['⚽','мяч']] },
+    { s:'<mark>Блести</mark>, как звёздочка!',         a:['💍','колечко'], o:[['🥕','морковка'],['🔨','молоток'],['🧽','губка']] }
+  ];
+  const sgText = document.getElementById('sgText'), sgOpts = document.getElementById('sgOpts');
+  const sgCount = document.getElementById('sgCount'), sgNext = document.getElementById('sgNext');
+  let sgI = 0;
+  function sgRender(){
+    const r = SG[sgI];
+    sgCount.textContent = (sgI + 1) + ' / ' + SG.length;
+    sgText.className = 'sg-slogan';
+    sgText.innerHTML = '«' + r.s + '»';
+    sgOpts.innerHTML = '';
+    shuffle([r.a, ...r.o]).forEach(opt => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'sg-opt';
+      b.innerHTML = '<span class="em">' + opt[0] + '</span><span class="t">' + opt[1] + '</span>';
+      b.addEventListener('click', () => {
+        if (opt === r.a) {
+          b.classList.add('yes'); sgText.classList.add('solved');
+          sgOpts.querySelectorAll('.sg-opt').forEach(x => { if (x !== b) x.classList.add('no'); });
+        } else {
+          b.classList.remove('no'); void b.offsetWidth; b.classList.add('no');
+        }
+      });
+      sgOpts.appendChild(b);
+    });
+    sgNext.textContent = sgI === SG.length - 1 ? 'Сначала ↺' : 'Дальше ➜';
+  }
+  sgNext.addEventListener('click', () => { sgI = (sgI + 1) % SG.length; sgRender(); });
+  sgRender();
 
   /* ===== ИГРА 2: КТО? ЧТО ДЕЛАЕТ? ГДЕ? ===== */
   const WHO = [['🐸','лягушка'],['🦄','единорог'],['🐱','котик'],['🐉','дракон'],['🧚','фея'],['🦊','лиса'],
