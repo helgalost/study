@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="referrer" content="no-referrer">
+<title>Упаковка</title>
+<script>document.documentElement.classList.add('js');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="lesson.css">
+<style>
+  /* Две конфеты */
+  .candies{display:grid;grid-template-columns:1fr 1fr;gap:clamp(.6rem,3vw,1.25rem);margin-top:1.5rem}
+  .candy{
+    border:3px solid var(--ink);border-radius:24px;background:#fff;cursor:pointer;font:inherit;color:inherit;
+    padding:1.6rem .5rem 1.1rem;display:flex;flex-direction:column;align-items:center;gap:.8rem;
+    transition:transform .2s var(--ease-out);
+  }
+  .candy:hover{transform:translateY(-4px)}
+  .candy.on{box-shadow:6px 6px 0 var(--ink);transform:rotate(-2deg) scale(1.03)}
+  .wrap{position:relative;width:min(100%,220px);height:clamp(60px,18vw,86px);display:flex;align-items:center;justify-content:center}
+  .wrap .body{
+    width:58%;height:100%;border-radius:22px;border:3px solid var(--ink);position:relative;z-index:2;
+    display:grid;place-items:center;font-weight:900;font-size:clamp(.62rem,2.8vw,1.05rem);text-transform:uppercase;white-space:nowrap;overflow:hidden;
+  }
+  .wrap .end{position:absolute;top:50%;width:26%;height:72%;border:3px solid var(--ink);transform:translateY(-50%);z-index:1}
+  .wrap .end.l{left:0;clip-path:polygon(0 0,100% 30%,100% 70%,0 100%,18% 50%);border-radius:6px}
+  .wrap .end.r{right:0;clip-path:polygon(100% 0,0 30%,0 70%,100% 100%,82% 50%);border-radius:6px}
+  .grey .body,.grey .end{background:#b9b6ae;color:#6f6d68}
+  .shiny .body,.shiny .end{background:linear-gradient(120deg,#ff5d8f 0%,#ffc93c 45%,#fff3b0 52%,#ff8a2b 60%,#a06cd5 100%);background-size:200% 100%;animation:shine 2.4s linear infinite}
+  .shiny .body{color:#fff;text-shadow:1px 1px 0 #b3001b}
+  @keyframes shine{from{background-position:0 0}to{background-position:-200% 0}}
+  .spark{position:absolute;font-size:22px;z-index:3;animation:twinkle 1.6s ease-in-out infinite}
+  @keyframes twinkle{0%,100%{opacity:.2;transform:scale(.7)}50%{opacity:1;transform:scale(1.15)}}
+  .reveal{
+    display:none;margin-top:1.25rem;background:var(--ink);color:var(--paper);border-radius:24px;padding:1.3rem;
+    text-align:center;font-size:clamp(1.2rem,5vw,1.8rem);font-weight:900;line-height:1.2;
+  }
+  .reveal.on{display:block;animation:pop .5s var(--ease-out)}
+  .reveal .eq{font-size:clamp(2.4rem,11vw,3.6rem);margin:0 0 .5rem}
+  .reveal em{color:var(--yellow);font-style:italic}
+
+  /* Разбор коробки */
+  .box-anat{display:grid;gap:1.25rem;margin-top:1.5rem;align-items:center}
+  @media(min-width:860px){.box-anat{grid-template-columns:minmax(260px,380px) 1fr}}
+  .pbox{
+    position:relative;width:100%;max-width:340px;margin:0 auto;aspect-ratio:3/4;border:4px solid var(--ink);border-radius:18px;
+    background:linear-gradient(170deg,#ffd23c,#ff8a2b);box-shadow:12px 12px 0 #c95d10;
+    display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:1.2rem .8rem 1rem;
+  }
+  .pbox .logo{width:64px;height:64px;border-radius:50%;background:#fff;border:3px solid var(--ink);display:grid;place-items:center;font-size:34px}
+  .pbox .name{font-weight:900;font-size:clamp(1.8rem,8vw,2.6rem);color:#fff;text-shadow:3px 3px 0 #b33a00;letter-spacing:-.03em;text-transform:uppercase}
+  .pbox .pic{font-size:clamp(4rem,18vw,5.6rem);line-height:1}
+  .pbox .slog{background:#fff;border:3px solid var(--ink);border-radius:14px;padding:.35rem .8rem;font-weight:900;font-size:clamp(.9rem,3.8vw,1.1rem)}
+  .pbox .n{
+    position:absolute;width:30px;height:30px;border-radius:50%;background:var(--ink);color:#fff;font-weight:900;font-style:italic;
+    display:grid;place-items:center;font-size:14px;border:2px solid #fff;
+  }
+  .legend{display:grid;gap:10px}
+  .lg{display:flex;align-items:center;gap:.8rem;background:var(--paper-2);border-radius:18px;padding:.8rem 1rem}
+  .lg .n{width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;font-weight:900;font-style:italic;display:grid;place-items:center;flex-shrink:0}
+  .lg .em{font-size:clamp(1.6rem,7vw,2.2rem);line-height:1}
+  .lg .t{font-size:clamp(.95rem,3.8vw,1.1rem);font-weight:900;text-transform:uppercase}
+
+  /* Конструктор упаковки */
+  .maker{display:grid;gap:1.25rem;margin-top:1.5rem;align-items:start}
+  @media(min-width:860px){.maker{grid-template-columns:minmax(260px,360px) 1fr}}
+  .mbox{
+    position:relative;width:100%;max-width:300px;margin:0 auto;aspect-ratio:3/4;border:4px solid var(--ink);border-radius:18px;overflow:hidden;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;transition:background .3s;
+    box-shadow:10px 10px 0 rgba(11,11,12,.25);
+  }
+  .mbox .pat{position:absolute;inset:0;pointer-events:none}
+  .mbox .pat.dots{background-image:radial-gradient(rgba(255,255,255,.55) 18%,transparent 20%);background-size:28px 28px}
+  .mbox .pat.stripes{background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.35) 0 12px,transparent 12px 26px)}
+  .mbox .pat.stars{background-image:radial-gradient(circle at 20% 20%,rgba(255,255,255,.8) 0 3px,transparent 4px),radial-gradient(circle at 70% 60%,rgba(255,255,255,.8) 0 3px,transparent 4px),radial-gradient(circle at 40% 85%,rgba(255,255,255,.8) 0 2px,transparent 3px);background-size:70px 70px}
+  .mbox .gloss{position:absolute;inset:0;pointer-events:none;opacity:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.75) 45%,transparent 60%);background-size:250% 100%}
+  .mbox.shine .gloss{opacity:1;animation:shine 2.2s linear infinite}
+  .mbox .hero{font-size:clamp(4rem,18vw,5.4rem);line-height:1;position:relative;z-index:2;filter:drop-shadow(3px 3px 0 rgba(0,0,0,.25))}
+  .mbox .prod{position:relative;z-index:2;background:#fff;border:3px solid var(--ink);border-radius:16px;padding:.3rem .9rem;font-size:clamp(2rem,9vw,2.6rem);line-height:1.1}
+  .mbox .sparks{position:absolute;inset:0;pointer-events:none;opacity:0}
+  .mbox.shine .sparks{opacity:1}
+  .mbox .sparks span{position:absolute;font-size:22px;animation:twinkle 1.6s ease-in-out infinite}
+  .opt-row{margin-bottom:1rem}
+  .opt-row .lbl{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.45rem;display:flex;gap:.4rem;align-items:center}
+  .opt-row .lbl .em{font-size:1.4rem}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chipb{
+    min-width:52px;height:52px;border-radius:16px;border:3px solid var(--ink);background:#fff;cursor:pointer;font:inherit;
+    font-size:1.6rem;line-height:1;display:grid;place-items:center;padding:0 .5rem;transition:transform .15s;
+  }
+  .chipb.on{transform:scale(1.1);box-shadow:0 0 0 3px #fff,0 0 0 6px var(--ink)}
+  .chipb.col{border-radius:50%;width:52px;padding:0}
+
+  /* Печатный шаблон обёртки */
+  #printSheet{display:none}
+  @page{size:A4 portrait;margin:10mm}
+  @media print{
+    body > *:not(#printSheet){display:none!important}
+    #printSheet{display:block!important}
+    #printSheet .pg{font:900 18pt Inter,sans-serif;text-align:center;margin:4mm 0}
+    #printSheet svg{width:100%;height:auto;display:block;margin-bottom:8mm}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="top-brand" href="index.html">Упаковка<span>✦</span></a>
+  <span>Ольга</span>
+</header>
+
+<!-- HERO -->
+<section class="slide" id="top">
+  <div class="slide-content">
+    <h1 class="hero-title rv" style="font-size:clamp(2.6rem,13vw,9rem);display:flex;justify-content:space-between;line-height:.8;font-weight:900;letter-spacing:-.05em;">
+      <span>У</span><span>П</span><span>А</span><span>К</span><span>О</span><span>В</span><span>К</span><span style="color:var(--signal);font-style:italic">А</span>
+    </h1>
+    <div class="rv" style="margin-top:2rem;border-top:1px solid var(--line);padding-top:1rem;display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">зачем <b style="color:var(--ink);">красивая коробка 🎁</b></div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">↓ листай</div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <div class="marquee-item">Коробка 📦</div><div class="marquee-item">Обёртка 🍬</div><div class="marquee-item">Блеск ✨</div><div class="marquee-item">Хочу! 😍</div>
+    <div class="marquee-item">Коробка 📦</div><div class="marquee-item">Обёртка 🍬</div><div class="marquee-item">Блеск ✨</div><div class="marquee-item">Хочу! 😍</div>
+  </div>
+</div>
+
+<!-- 01 · КАКУЮ ВЫБЕРЕШЬ? -->
+<section class="slide" id="candy">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Какую<br><span class="it">выберешь?</span></h2>
+    </div>
+    <div class="candies rv">
+      <button class="candy" type="button" data-c="grey">
+        <div class="wrap grey"><span class="end l"></span><span class="body">конфета</span><span class="end r"></span></div>
+      </button>
+      <button class="candy" type="button" data-c="shiny">
+        <div class="wrap shiny">
+          <span class="end l"></span><span class="body">Ням-ням</span><span class="end r"></span>
+          <span class="spark" style="top:-14px;left:22%">✨</span><span class="spark" style="bottom:-12px;right:24%;animation-delay:.6s">⭐</span><span class="spark" style="top:-6px;right:8%;animation-delay:1.1s">✨</span>
+        </div>
+      </button>
+    </div>
+    <div class="reveal" id="reveal">
+      <div class="eq">🍬 = 🍬</div>
+      Внутри — <em>одинаковые конфеты!</em><br>А выбираем — красивую ✨
+    </div>
+  </div>
+</section>
+
+<!-- 02 · ЗАЧЕМ УПАКОВКА -->
+<section class="slide" id="why">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Зачем<br><span class="it">упаковка?</span></h2>
+    </div>
+    <div class="icons rv">
+      <div class="ic b"><span class="em">🛡️</span><span class="t">Бережёт</span></div>
+      <div class="ic y"><span class="em">👀</span><span class="t">Видно издалека</span></div>
+      <div class="ic g"><span class="em">💬</span><span class="t">Рассказывает, что внутри</span></div>
+      <div class="ic r"><span class="em">😍</span><span class="t">Хочется купить</span></div>
+    </div>
+    <div class="rule-big rv"><span class="em">🎁</span><span class="tx">Упаковка — <em>первая реклама</em> товара. Её видят раньше, чем пробуют!</span></div>
+  </div>
+</section>
+
+<!-- 03 · ЧТО ЕСТЬ НА КОРОБКЕ -->
+<section class="slide" id="parts">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Что есть<br><span class="it">на коробке?</span></h2>
+    </div>
+    <div class="box-anat rv">
+      <div class="pbox">
+        <div class="logo">🐻</div>
+        <div class="name">Хрустик</div>
+        <div class="pic">🍪</div>
+        <div class="slog">Хрусть — и радость!</div>
+        <span class="n" style="top:22px;left:calc(50% + 30px)">1</span>
+        <span class="n" style="top:96px;left:10px">2</span>
+        <span class="n" style="top:46%;right:12px">3</span>
+        <span class="n" style="bottom:56px;left:10px">4</span>
+        <span class="n" style="bottom:-14px;right:-14px;background:var(--signal)">5</span>
+      </div>
+      <div class="legend">
+        <div class="lg"><span class="n">1</span><span class="em">🎨</span><span class="t">Логотип</span></div>
+        <div class="lg"><span class="n">2</span><span class="em">🏷️</span><span class="t">Название</span></div>
+        <div class="lg"><span class="n">3</span><span class="em">🍪</span><span class="t">Что внутри</span></div>
+        <div class="lg"><span class="n">4</span><span class="em">💬</span><span class="t">Слоган</span></div>
+        <div class="lg"><span class="n" style="background:var(--signal)">5</span><span class="em">🌈</span><span class="t">Цвет — настроение</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 · СОБЕРИ УПАКОВКУ -->
+<section class="slide" id="maker">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <span class="kicker">Игра</span>
+      <h2 class="display">Собери<br><span class="it">упаковку</span></h2>
+    </div>
+    <div class="maker rv">
+      <div class="mbox" id="mbox">
+        <div class="pat" id="mpat"></div>
+        <div class="gloss"></div>
+        <div class="sparks"><span style="top:8%;left:12%">✨</span><span style="top:20%;right:10%;animation-delay:.5s">⭐</span><span style="bottom:12%;left:18%;animation-delay:1s">✨</span></div>
+        <div class="hero" id="mhero">🐻</div>
+        <div class="prod" id="mprod">🍪</div>
+      </div>
+      <div>
+        <div class="opt-row"><div class="lbl"><span class="em">📦</span>Что внутри?</div><div class="chips" data-k="prod"></div></div>
+        <div class="opt-row"><div class="lbl"><span class="em">🎨</span>Цвет</div><div class="chips" data-k="color"></div></div>
+        <div class="opt-row"><div class="lbl"><span class="em">🦸</span>Герой</div><div class="chips" data-k="hero"></div></div>
+        <div class="opt-row"><div class="lbl"><span class="em">🔲</span>Узор</div><div class="chips" data-k="pat"></div></div>
+        <div class="opt-row"><div class="lbl"><span class="em">✨</span>Блеск</div><div class="chips" data-k="shine"></div></div>
+        <button class="play-btn" id="mRand" type="button" style="margin-top:.25rem"><span class="em">🎲</span> Случайно</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 · ЗАДАНИЕ -->
+<section class="slide" id="task">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <span class="kicker">Задание</span>
+      <h2 class="display">Обёртка<br><span class="it">для конфеты</span></h2>
+    </div>
+    <div class="goal rv"><span class="em">🎯</span><span class="tx">Придумай конфету и нарисуй ей <b>обёртку</b>, которую <b>захочется купить</b>.</span></div>
+    <div class="checks rv" style="margin-top:1.25rem">
+      <button class="ck" type="button"><span class="box"></span><span class="em">🍬</span><span class="t">Какой вкус?</span></button>
+      <button class="ck" type="button"><span class="box"></span><span class="em">🏷️</span><span class="t">Название</span></button>
+      <button class="ck" type="button"><span class="box"></span><span class="em">🦸</span><span class="t">Герой или картинка</span></button>
+      <button class="ck" type="button"><span class="box"></span><span class="em">🌈</span><span class="t">Цвета под настроение</span></button>
+      <button class="ck" type="button"><span class="box"></span><span class="em">✨</span><span class="t">Ярко и заметно</span></button>
+    </div>
+    <div class="ck-done" id="ckDone"><span class="em">🎉</span>Обёртка готова!</div>
+    <div class="center rv"><button class="print-btn" type="button" id="printBtn">🖨️ Распечатать шаблон обёртки</button></div>
+  </div>
+</section>
+
+<!-- 06 · ТАЙМЕР -->
+<section class="slide" id="time">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Время<br><span class="it">рисовать!</span></h2>
+    </div>
+    <div class="timer rv" id="timer" data-icons="✏️,🎨,✨">
+      <div class="t-ring">
+        <svg viewBox="0 0 120 120"><circle class="bg" cx="60" cy="60" r="52" fill="none" stroke-width="10"/><circle class="fg" id="tArc" cx="60" cy="60" r="52" fill="none" stroke-width="10" stroke-linecap="round"/></svg>
+        <div class="t-mid"><span class="em" id="tEm">✏️</span><span class="time" id="tTime">00:00</span></div>
+      </div>
+      <div class="t-btns">
+        <button class="t-btn" type="button" data-min="10">10 мин</button>
+        <button class="t-btn" type="button" data-min="15">15 мин</button>
+        <button class="t-btn" type="button" data-min="20">20 мин</button>
+        <button class="t-btn stop" type="button" id="tStop">Стоп</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 · ФИНАЛ -->
+<section class="slide final" id="end">
+  <div class="slide-content">
+    <p class="final-label rv">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg>
+      запомни
+    </p>
+    <h2 class="display rv">
+      Упаковка —<br>
+      <span class="it">первая</span><br>
+      реклама.
+    </h2>
+    <div class="final-rule rv">
+      <p class="lbl">Правило</p>
+      <h3>
+        <span>Сначала глаза,</span>
+        <span>потом —</span>
+        <span>вкус.</span>
+      </h3>
+    </div>
+  </div>
+</section>
+
+<nav class="dock" id="dock">
+  <a href="#top" class="active" title="Старт">↑</a>
+  <a href="#candy" title="Какую выберешь">🍬</a>
+  <a href="#why" title="Зачем упаковка">🎁</a>
+  <a href="#parts" title="Что на коробке">📦</a>
+  <a href="#maker" title="Собери упаковку">🎮</a>
+  <a href="#task" title="Задание">✏️</a>
+  <a href="#time" title="Таймер">⏱️</a>
+  <a href="#end" title="Финал">🏁</a>
+</nav>
+
+<!-- Печать: два шаблона обёртки -->
+<div id="printSheet">
+  <div class="pg">🍬 Моя обёртка</div><div class="pw"></div>
+  <div class="pg">🍬 Моя обёртка</div><div class="pw"></div>
+</div>
+
+<script src="lesson.js"></script>
+<script>
+(function(){
+  /* ===== Две конфеты ===== */
+  const reveal = document.getElementById('reveal');
+  document.querySelectorAll('.candy').forEach(c => c.addEventListener('click', () => {
+    document.querySelectorAll('.candy').forEach(x => x.classList.toggle('on', x === c));
+    reveal.classList.remove('on'); void reveal.offsetWidth; reveal.classList.add('on');
+  }));
+
+  /* ===== Конструктор упаковки ===== */
+  const O = {
+    prod:  ['🍪','🍬','🧃','🍫','🧸','🍭'],
+    color: ['#ff3d3d','#ffc93c','#ff8a2b','#3fb55a','#7cc8f0','#ff9cc8','#8b5cd6','#ffffff','#2b2b2b'],
+    hero:  ['🐻','🦊','🐰','🦄','🤖','🐱','🐸','🦁'],
+    pat:   [['','✖️'],['dots','⚪'],['stripes','〰️'],['stars','⭐']],
+    shine: [[false,'🚫'],[true,'✨']]
+  };
+  const st = { prod:'🍪', color:'#ffc93c', hero:'🐻', pat:'dots', shine:true };
+  const mbox = document.getElementById('mbox');
+  function draw(){
+    mbox.style.background = st.color;
+    document.getElementById('mprod').textContent = st.prod;
+    document.getElementById('mhero').textContent = st.hero;
+    document.getElementById('mpat').className = 'pat ' + st.pat;
+    mbox.classList.toggle('shine', st.shine);
+    document.querySelectorAll('.chips').forEach(row => row.querySelectorAll('.chipb').forEach(b => b.classList.toggle('on', String(st[row.dataset.k]) === b.dataset.v)));
+  }
+  document.querySelectorAll('.chips').forEach(row => {
+    const k = row.dataset.k;
+    O[k].forEach(v => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'chipb';
+      if (k === 'color') { b.classList.add('col'); b.style.background = v; b.dataset.v = v; b.setAttribute('aria-label','цвет'); }
+      else if (Array.isArray(v)) { b.textContent = v[1]; b.dataset.v = String(v[0]); }
+      else { b.textContent = v; b.dataset.v = v; }
+      b.addEventListener('click', () => { st[k] = Array.isArray(v) ? v[0] : v; draw(); });
+      row.appendChild(b);
+    });
+  });
+  document.getElementById('mRand').addEventListener('click', () => {
+    let t = 0;
+    const iv = setInterval(() => {
+      st.prod = L.pick(O.prod); st.color = L.pick(O.color); st.hero = L.pick(O.hero);
+      st.pat = L.pick(O.pat)[0]; st.shine = L.pick(O.shine)[0]; draw();
+      mbox.classList.remove('rolling'); void mbox.offsetWidth; mbox.classList.add('rolling');
+      if (++t >= 6) clearInterval(iv);
+    }, 140);
+  });
+  draw();
+
+  /* ===== Шаблон обёртки для печати ===== */
+  const WRAP = '<svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#0b0b0c" stroke-width="4" stroke-linejoin="round">' +
+    '<path d="M10 70 L110 120 L110 180 L10 230 L40 150 Z"/>' +
+    '<path d="M590 70 L490 120 L490 180 L590 230 L560 150 Z"/>' +
+    '<rect x="110" y="40" width="380" height="220" rx="40"/>' +
+    '<rect x="140" y="60" width="140" height="44" rx="10" stroke-dasharray="8 8"/>' +
+    '<text x="210" y="88" text-anchor="middle" font-family="Inter,sans-serif" font-size="16" font-weight="800" fill="#9a9690" stroke="none">НАЗВАНИЕ</text>' +
+    '<circle cx="420" cy="100" r="40" stroke-dasharray="8 8"/>' +
+    '<text x="420" y="105" text-anchor="middle" font-family="Inter,sans-serif" font-size="14" font-weight="800" fill="#9a9690" stroke="none">ЛОГО</text>' +
+    '<rect x="140" y="200" width="320" height="40" rx="10" stroke-dasharray="8 8"/>' +
+    '<text x="300" y="226" text-anchor="middle" font-family="Inter,sans-serif" font-size="16" font-weight="800" fill="#9a9690" stroke="none">СЛОГАН</text>' +
+    '</svg>';
+  document.querySelectorAll('#printSheet .pw').forEach(p => p.innerHTML = WRAP);
+  document.getElementById('printBtn').addEventListener('click', () => window.print());
+})();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

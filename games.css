@@ -1,0 +1,73 @@
+/* Общий стиль игр (как game3 / game4) */
+:root{
+  --bg:#fff2d9; --bg2:#ffd1a8; --ink:#2b1a0f;
+  --pink:#ff5d8f; --yellow:#ffc93c; --blue:#5bc0eb; --green:#7bd389; --purple:#a06cd5; --white:#fffaf0;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100%}
+body{
+  font-family:'Fredoka',system-ui,sans-serif;
+  background:radial-gradient(circle at 50% 0%, var(--bg) 0%, var(--bg2) 100%) fixed;
+  color:var(--ink);user-select:none;
+  padding:max(14px,env(safe-area-inset-top)) 16px max(24px,env(safe-area-inset-bottom));
+}
+.home{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--white);border:3px solid var(--ink);border-radius:999px;
+  padding:6px 14px;font-weight:700;font-size:15px;color:var(--ink);text-decoration:none;box-shadow:0 3px 0 var(--ink);
+}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
+.title{font-size:clamp(2rem,9vw,3.6rem);font-weight:900;line-height:1;letter-spacing:-.02em;margin-top:8px}
+.title .a{color:var(--pink)}
+
+.progress{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.dot{width:14px;height:14px;border-radius:50%;background:rgba(43,26,15,.15);transition:all .3s cubic-bezier(.34,1.56,.64,1)}
+.dot.active{background:var(--pink);transform:scale(1.4)}
+.dot.done{background:var(--green)}
+
+.q{
+  width:100%;background:var(--white);border:4px solid var(--ink);border-radius:28px;box-shadow:0 6px 0 var(--ink);
+  padding:18px 14px;display:flex;flex-direction:column;align-items:center;gap:8px;min-height:120px;justify-content:center;
+}
+.q .big{font-size:clamp(4rem,20vw,7rem);line-height:1}
+.q .cap{font-size:clamp(1.2rem,5vw,1.7rem);font-weight:700;display:flex;align-items:center;gap:8px;justify-content:center;flex-wrap:wrap}
+.q .cap .e{font-size:1.5em}
+
+.opts{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(10px,3vw,16px);width:100%}
+.opts.c3{grid-template-columns:repeat(3,1fr)}
+@media(min-width:720px){.opts.c4{grid-template-columns:repeat(4,1fr)}}
+.opt{
+  background:var(--white);border:4px solid var(--ink);border-radius:26px;box-shadow:0 6px 0 var(--ink);
+  padding:16px 8px 12px;cursor:pointer;font:inherit;color:inherit;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:clamp(120px,32vw,170px);
+  transition:transform .15s,background .2s,opacity .2s;
+}
+.opt:active{transform:translateY(4px);box-shadow:0 2px 0 var(--ink)}
+.opt .em{font-size:clamp(3.4rem,15vw,5rem);line-height:1}
+.opt .t{font-size:clamp(.9rem,3.6vw,1.15rem);font-weight:700;opacity:.75}
+.opt.yes{background:var(--green);animation:jump .6s cubic-bezier(.34,1.56,.64,1)}
+.opt.no{animation:shake .4s ease-in-out;opacity:.45}
+.opt.dim{opacity:.35}
+@keyframes jump{0%{transform:scale(1)}40%{transform:scale(1.15) rotate(-6deg)}100%{transform:scale(1.05) rotate(-2deg)}}
+@keyframes shake{0%,100%{transform:translate(0)}25%{transform:translate(-6px,2px) rotate(-5deg)}75%{transform:translate(6px,-2px) rotate(5deg)}}
+@keyframes pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+
+.fb{min-height:2.6rem;font-size:clamp(1.3rem,5.5vw,1.8rem);font-weight:700}
+.fb span{display:inline-block;animation:pop .45s cubic-bezier(.34,1.56,.64,1) both}
+
+.btn{
+  display:inline-flex;align-items:center;gap:10px;background:var(--pink);color:#fff;border:4px solid var(--ink);border-radius:999px;
+  padding:12px 34px;font:inherit;font-size:clamp(1.2rem,5vw,1.6rem);font-weight:900;box-shadow:0 6px 0 var(--ink);cursor:pointer;
+}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 var(--ink)}
+.btn.hide{visibility:hidden}
+
+.final{display:none;flex-direction:column;align-items:center;gap:14px;padding:20px 0}
+.final.on{display:flex;animation:pop .5s cubic-bezier(.34,1.56,.64,1)}
+.final .big{font-size:clamp(5rem,26vw,8rem);line-height:1}
+.final .h{font-size:clamp(2rem,9vw,3rem);font-weight:900}
+.final .stars{font-size:clamp(2rem,9vw,3rem);letter-spacing:.1em}
+
+.confetti{position:fixed;top:-40px;pointer-events:none;z-index:9;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:.9}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important}}

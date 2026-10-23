@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Кому это?</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="games.css">
+</head>
+<body>
+<a class="home" href="index.html">← Все темы</a>
+<div class="wrap">
+  <h1 class="title">Кому <span class="a">это?</span></h1>
+  <div class="wrap" id="game" style="gap:16px;width:100%"></div>
+</div>
+<script src="games.js"></script>
+<script>
+const W = [['👶','малышу'],['🧒','школьнику'],['👩','взрослому']];
+G.run({
+  cols: 3, keepOrder: true,
+  rounds: [
+    { e:'🍼', w:0 }, { e:'🧸', w:0 }, { e:'🥣', w:0 },
+    { e:'🎒', w:1 }, { e:'✏️', w:1 }, { e:'🛴', w:1 }, { e:'🎮', w:1 },
+    { e:'☕', w:2 }, { e:'🚗', w:2 }, { e:'💼', w:2 }, { e:'💄', w:2 }
+  ],
+  question: r => '<span class="big">' + r.e + '</span><span class="cap">Кому это нужно?</span>',
+  options: r => W.map((w, k) => ({ html:'<span class="em">' + w[0] + '</span><span class="t">' + w[1] + '</span>', right: k === r.w })),
+  praise: r => '👏 ' + r.e + ' — ' + W[r.w][0] + ' ' + W[r.w][1] + '!'
+});
+</script>
+</body>
+</html>

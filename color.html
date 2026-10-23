@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="referrer" content="no-referrer">
+<title>Цвет и настроение</title>
+<script>document.documentElement.classList.add('js');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="lesson.css">
+<style>
+  /* Цвета и настроение */
+  .swatches{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:1.5rem}
+  @media(min-width:640px){.swatches{grid-template-columns:repeat(4,1fr)}}
+  .sw{
+    border:3px solid var(--ink);border-radius:22px;padding:1rem .6rem;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;gap:.4rem;font:inherit;color:inherit;background:#fff;
+    transition:transform .2s var(--ease-out);
+  }
+  .sw:hover{transform:translateY(-3px)}
+  .sw .dot{width:clamp(56px,16vw,72px);aspect-ratio:1;border-radius:50%;border:3px solid var(--ink);display:grid;place-items:center;font-size:clamp(1.6rem,7vw,2.2rem)}
+  .sw .t{font-size:12px;font-weight:900;text-transform:uppercase;line-height:1.1;text-align:center}
+  .sw.on{transform:scale(1.06) rotate(-2deg);box-shadow:5px 5px 0 var(--ink)}
+  .mood{
+    margin-top:1.25rem;border-radius:26px;border:3px solid var(--ink);min-height:120px;
+    display:flex;align-items:center;justify-content:center;gap:1rem;padding:1rem;
+    font-size:clamp(1.3rem,5.5vw,2rem);font-weight:900;text-transform:uppercase;transition:background .4s,color .4s;
+  }
+  .mood .em{font-size:2em;line-height:1}
+
+  /* Игрушки / йогурт */
+  .m-toys{background:linear-gradient(160deg,#ffd23c 0%,#ff3d3d 100%);color:#fff}
+  .m-toys .h{text-shadow:2px 2px 0 #b3001b;font-size:clamp(1.3rem,5.5vw,2rem)}
+  .m-yog{background:#fff;color:#2f7a3f;border-bottom:1px solid #e3efe5}
+  .m-yog .h{color:#2f9e4b}
+  .m-yog .leaf{color:#2f9e4b}
+
+  /* Раскраска */
+  .paint-wrap{display:grid;gap:1.25rem;margin-top:1.5rem;align-items:start}
+  @media(min-width:860px){.paint-wrap{grid-template-columns:minmax(260px,400px) 1fr}}
+  .canvas{background:#fff;border:3px solid var(--ink);border-radius:22px;padding:10px;max-width:400px;width:100%;margin:0 auto}
+  .canvas svg{width:100%;height:auto;display:block}
+  .canvas .fill{cursor:pointer;transition:fill .25s}
+  .canvas svg :not(.fill){pointer-events:none}
+  .canvas .fill:hover{opacity:.85}
+  .modes{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .mode{
+    border:3px solid var(--ink);border-radius:20px;padding:.9rem .6rem;cursor:pointer;font:inherit;color:inherit;
+    display:flex;flex-direction:column;align-items:center;gap:.3rem;background:#fff;
+  }
+  .mode .em{font-size:clamp(2.4rem,10vw,3rem);line-height:1}
+  .mode .t{font-size:13px;font-weight:900;text-transform:uppercase}
+  .mode.on.yum{background:#ffd9b8;box-shadow:4px 4px 0 var(--ink)}
+  .mode.on.cold{background:#cfeeff;box-shadow:4px 4px 0 var(--ink)}
+  .palette{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:1rem}
+  .pc{aspect-ratio:1;border-radius:50%;border:3px solid var(--ink);cursor:pointer;position:relative;transition:transform .15s}
+  .pc.hint::after{content:"★";position:absolute;top:-10px;right:-6px;font-size:16px;color:var(--ink);background:var(--yellow);border-radius:50%;width:20px;height:20px;display:grid;place-items:center;border:2px solid var(--ink)}
+  .pc.on{transform:scale(1.18);box-shadow:0 0 0 3px #fff,0 0 0 6px var(--ink)}
+  .paint-tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:1rem}
+
+  /* Печать раскраски */
+  #printSheet{display:none}
+  @page{size:A4 landscape;margin:8mm}
+  @media print{
+    body > *:not(#printSheet){display:none!important}
+    #printSheet{display:grid!important;grid-template-columns:1fr 1fr;gap:10mm;padding:5mm}
+    #printSheet .pg{text-align:center;font:900 22pt Inter,sans-serif}
+    #printSheet svg{width:100%;height:auto}
+    #printSheet .fill{fill:#fff!important}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="top-brand" href="index.html">Цвет и настроение<span>✦</span></a>
+  <span>Ольга</span>
+</header>
+
+<!-- HERO -->
+<section class="slide" id="top">
+  <div class="slide-content">
+    <h1 class="hero-title rv" style="font-size:clamp(3.5rem,20vw,12rem);display:flex;justify-content:space-between;line-height:.8;font-weight:900;letter-spacing:-.05em;">
+      <span style="color:#ff3d3d">Ц</span><span style="color:#ffb300">В</span><span style="color:#2f9e4b">Е</span><span style="color:#3a47d5">Т</span>
+    </h1>
+    <div class="rv" style="margin-top:2rem;border-top:1px solid var(--line);padding-top:1rem;display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">и <b style="color:var(--ink);">настроение</b></div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">↓ листай</div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <div class="marquee-item">Красный ⚡</div><div class="marquee-item">Жёлтый 😄</div><div class="marquee-item">Зелёный 🌿</div><div class="marquee-item">Голубой ❄️</div>
+    <div class="marquee-item">Красный ⚡</div><div class="marquee-item">Жёлтый 😄</div><div class="marquee-item">Зелёный 🌿</div><div class="marquee-item">Голубой ❄️</div>
+  </div>
+</div>
+
+<!-- 01 · У ЦВЕТА ЕСТЬ НАСТРОЕНИЕ -->
+<section class="slide" id="colors">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">У цвета есть<br><span class="it">настроение</span></h2>
+    </div>
+    <div class="swatches rv" id="swatches"></div>
+    <div class="mood rv" id="mood"><span class="em">👆</span>Нажми на цвет</div>
+  </div>
+</section>
+
+<!-- 02 · ПОЧЕМУ ИГРУШКИ КРАСНЫЕ, А ЙОГУРТ БЕЛЫЙ -->
+<section class="slide" id="why">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Игрушки —<br><span class="it">йогурт</span></h2>
+    </div>
+    <div class="duo rv">
+      <div class="duo-card">
+        <div class="mock m-toys">
+          <span class="big">🧸🎉</span>
+          <span class="h">Игрушки!</span>
+        </div>
+        <div class="duo-body"><div class="duo-tags"><span>🔴 ⚡ энергия</span><span>🟡 😄 веселье</span></div></div>
+      </div>
+      <div class="duo-card">
+        <div class="mock m-yog">
+          <span class="big">🥛<span class="leaf">🌿</span></span>
+          <span class="h">Йогурт</span>
+        </div>
+        <div class="duo-body"><div class="duo-tags"><span>⚪ 🧼 чистота</span><span>🟢 🌿 польза</span></div></div>
+      </div>
+    </div>
+    <div class="rule-big rv"><span class="em">🎯</span><span class="tx">Цвет сразу говорит, <em>какой товар</em> — ещё до того, как прочитали слова!</span></div>
+  </div>
+</section>
+
+<!-- 03 · ИГРА: КАКОГО ЦВЕТА РЕКЛАМА? -->
+<section class="slide" id="game">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <span class="kicker">Игра</span>
+      <h2 class="display">Какого цвета<br><span class="it">реклама?</span></h2>
+    </div>
+    <div class="game-box rv" id="quiz"></div>
+  </div>
+</section>
+
+<!-- 04 · РАСКРАСЬ МОРОЖЕНОЕ -->
+<section class="slide" id="paint">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <span class="kicker">Практика</span>
+      <h2 class="display">Раскрась<br><span class="it">мороженое</span></h2>
+    </div>
+    <div class="paint-wrap rv">
+      <div class="canvas" id="canvas"></div>
+      <div>
+        <div class="modes">
+          <button class="mode yum on" type="button" data-mode="yum"><span class="em">😋</span><span class="t">Вкусно</span></button>
+          <button class="mode cold" type="button" data-mode="cold"><span class="em">🥶</span><span class="t">Холодно</span></button>
+        </div>
+        <div class="palette" id="palette"></div>
+        <div class="paint-tools">
+          <button class="print-btn" type="button" id="clearBtn">↺ Очистить</button>
+          <button class="print-btn" type="button" id="printBtn">🖨️ Распечатать раскраску</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 · ЗАДАНИЕ НА БУМАГЕ -->
+<section class="slide" id="task">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <span class="kicker">Задание</span>
+      <h2 class="display">Два<br><span class="it">мороженых</span></h2>
+    </div>
+    <div class="steps3 rv">
+      <div class="s3"><span class="em">🖨️</span><span class="t">Возьми раскраску</span></div>
+      <span class="s3a">➜</span>
+      <div class="s3" style="background:#ffd9b8"><span class="em">😋</span><span class="t">Одно — вкусно</span></div>
+      <span class="s3a">➜</span>
+      <div class="s3" style="background:#cfeeff"><span class="em">🥶</span><span class="t">Другое — холодно</span></div>
+      <span class="s3a">➜</span>
+      <div class="s3"><span class="em">👀</span><span class="t">Сравни!</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 · ТАЙМЕР -->
+<section class="slide" id="time">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Время<br><span class="it">раскрашивать!</span></h2>
+    </div>
+    <div class="timer rv" id="timer" data-icons="🖍️,🎨,✨">
+      <div class="t-ring">
+        <svg viewBox="0 0 120 120"><circle class="bg" cx="60" cy="60" r="52" fill="none" stroke-width="10"/><circle class="fg" id="tArc" cx="60" cy="60" r="52" fill="none" stroke-width="10" stroke-linecap="round"/></svg>
+        <div class="t-mid"><span class="em" id="tEm">🖍️</span><span class="time" id="tTime">00:00</span></div>
+      </div>
+      <div class="t-btns">
+        <button class="t-btn" type="button" data-min="10">10 мин</button>
+        <button class="t-btn" type="button" data-min="15">15 мин</button>
+        <button class="t-btn" type="button" data-min="20">20 мин</button>
+        <button class="t-btn stop" type="button" id="tStop">Стоп</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 · ФИНАЛ -->
+<section class="slide final" id="end">
+  <div class="slide-content">
+    <p class="final-label rv">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg>
+      запомни
+    </p>
+    <h2 class="display rv">
+      Цвет —<br>
+      это <span class="it">настроение</span><br>
+      рекламы.
+    </h2>
+    <div class="final-rule rv">
+      <p class="lbl">Правило</p>
+      <h3>
+        <span>Тепло — вкусно.</span>
+        <span>Голубое — холодно.</span>
+        <span>Зелёное — полезно.</span>
+      </h3>
+    </div>
+  </div>
+</section>
+
+<nav class="dock" id="dock">
+  <a href="#top" class="active" title="Старт">↑</a>
+  <a href="#colors" title="Цвета">🎨</a>
+  <a href="#why" title="Игрушки и йогурт">🧸</a>
+  <a href="#game" title="Игра">🎮</a>
+  <a href="#paint" title="Раскраска">🍦</a>
+  <a href="#task" title="Задание">✏️</a>
+  <a href="#time" title="Таймер">⏱️</a>
+  <a href="#end" title="Финал">🏁</a>
+</nav>
+
+<!-- Лист для печати: две пустые раскраски -->
+<div id="printSheet">
+  <div><div class="pg">😋 Вкусно</div><div class="ps"></div></div>
+  <div><div class="pg">🥶 Холодно</div><div class="ps"></div></div>
+</div>
+
+<script src="lesson.js"></script>
+<script>
+(function(){
+  /* ===== Цвета и настроение ===== */
+  const SW = [
+    ['#ff3d3d','⚡','красный','энергия!', '#fff'],
+    ['#ffc93c','😄','жёлтый','веселье!', '#2b1a0f'],
+    ['#ff8a2b','🔥','оранжевый','тепло, вкусно', '#2b1a0f'],
+    ['#3fb55a','🌿','зелёный','польза', '#fff'],
+    ['#ffffff','🧼','белый','чистота', '#2b1a0f'],
+    ['#7cc8f0','❄️','голубой','холод', '#0b2a40'],
+    ['#ff9cc8','💕','розовый','нежность', '#2b1a0f'],
+    ['#8b5cd6','🪄','фиолетовый','волшебство', '#fff']
+  ];
+  const swEl = document.getElementById('swatches'), mood = document.getElementById('mood');
+  SW.forEach(c => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'sw';
+    b.innerHTML = '<span class="dot" style="background:' + c[0] + '">' + c[1] + '</span><span class="t">' + c[2] + '</span>';
+    b.addEventListener('click', () => {
+      swEl.querySelectorAll('.sw').forEach(x => x.classList.toggle('on', x === b));
+      mood.style.background = c[0]; mood.style.color = c[4];
+      mood.innerHTML = '<span class="em">' + c[1] + '</span>' + c[3];
+    });
+    swEl.appendChild(b);
+  });
+
+  /* ===== Игра: какого цвета реклама? ===== */
+  L.quiz(document.getElementById('quiz'), [
+    { q: '<div style="font-size:clamp(4rem,18vw,6rem)">🧸</div>', a: ['🟥🟨','ярко'], o: [['⬜🟩','чисто'],['🟦⬜','холодно'],['⬛🟪','строго']], why: '🧸 = ⚡ + 😄' },
+    { q: '<div style="font-size:clamp(4rem,18vw,6rem)">🥛</div>', a: ['⬜🟩','чисто'], o: [['🟥🟨','ярко'],['⬛🟧','тёмно'],['🟪🟥','волшебно']], why: '🥛 = 🧼 + 🌿' },
+    { q: '<div style="font-size:clamp(4rem,18vw,6rem)">🧊🍋</div>', a: ['🟦⬜','холодно'], o: [['🟥🟧','жарко'],['🟫🟧','шоколад'],['🟪⬛','ночь']], why: '🧊 = ❄️' },
+    { q: '<div style="font-size:clamp(4rem,18vw,6rem)">🪄🧚</div>', a: ['🟪🩷','волшебно'], o: [['🟩🟫','лес'],['⬜🟦','больница'],['🟧🟫','осень']], why: '🪄 = 🟣 + 💕' },
+    { q: '<div style="font-size:clamp(4rem,18vw,6rem)">🥦🥕</div>', a: ['🟩🟧','полезно'], o: [['🟪🩷','волшебно'],['⬛🟥','страшно'],['🟦⬜','холодно']], why: '🥦 = 🌿 польза' },
+    { q: '<div style="font-size:clamp(4rem,18vw,6rem)">🍫</div>', a: ['🟫🟧','вкусно'], o: [['🟦⬜','холодно'],['🟩⬜','аптека'],['🟪🟦','космос']], why: '🍫 = 🔥 тепло, вкусно' }
+  ]);
+
+  /* ===== Раскраска мороженого ===== */
+  const SVG = '<svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" stroke="#0b0b0c" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">' +
+    '<rect class="fill" data-part="bg" x="4" y="4" width="292" height="392" rx="22" fill="#fff"/>' +
+    '<path class="fill" data-part="banner" d="M40 26 H260 L248 50 L260 74 H40 L52 50 Z" fill="#fff"/>' +
+    '<text x="150" y="58" text-anchor="middle" font-family="Inter,sans-serif" font-weight="900" font-size="24" stroke="none" fill="#0b0b0c">МОРОЖЕНОЕ</text>' +
+    '<path class="fill" data-part="cone" d="M92 222 L208 222 L150 372 Z" fill="#fff"/>' +
+    '<clipPath id="coneClip"><path d="M92 222 L208 222 L150 372 Z"/></clipPath>' +
+    '<path clip-path="url(#coneClip)" d="M100 236 L180 340 M120 222 L204 330 M160 222 L104 300 M200 228 L128 350" fill="none" stroke-width="3"/>' +
+    '<path class="fill" data-part="s1" d="M82 226 C70 196 96 168 124 176 C132 150 170 148 182 172 C210 162 236 194 218 226 C208 236 196 222 186 234 C176 244 166 226 150 236 C134 246 126 228 114 236 C102 244 92 236 82 226 Z" fill="#fff"/>' +
+    '<path class="fill" data-part="s2" d="M104 176 C94 146 118 118 146 124 C160 100 200 110 200 140 C214 150 206 176 192 180 C180 186 172 172 160 182 C148 192 140 176 128 184 C118 190 108 186 104 176 Z" fill="#fff"/>' +
+    '<circle class="fill" data-part="cherry" cx="160" cy="104" r="16" fill="#fff"/>' +
+    '<path d="M164 90 C168 76 180 70 190 70" fill="none" stroke-width="4"/>' +
+    '<circle class="fill" data-part="star1" cx="56" cy="130" r="12" fill="#fff"/>' +
+    '<circle class="fill" data-part="star2" cx="248" cy="300" r="14" fill="#fff"/>' +
+    '<circle class="fill" data-part="star3" cx="244" cy="120" r="9" fill="#fff"/>' +
+    '</svg>';
+  const canvas = document.getElementById('canvas');
+  canvas.innerHTML = SVG;
+  document.querySelectorAll('#printSheet .ps').forEach(p => p.innerHTML = SVG);
+
+  const COLORS = ['#ff3d3d','#ff8a2b','#ffc93c','#8b4a2b','#ff9cc8','#f6e3c1',
+                  '#7cc8f0','#3a7bd5','#bdeee0','#ffffff','#c9b8ff','#0b0b0c'];
+  const HINTS = { yum: ['#ff3d3d','#ff8a2b','#ffc93c','#8b4a2b','#ff9cc8','#f6e3c1'], cold: ['#7cc8f0','#3a7bd5','#bdeee0','#ffffff','#c9b8ff'] };
+  let cur = COLORS[0], mode = 'yum';
+  const pal = document.getElementById('palette');
+  COLORS.forEach(c => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'pc'; b.style.background = c; b.dataset.c = c; b.setAttribute('aria-label', 'цвет');
+    b.addEventListener('click', () => { cur = c; pal.querySelectorAll('.pc').forEach(x => x.classList.toggle('on', x === b)); });
+    pal.appendChild(b);
+  });
+  function setMode(m){
+    mode = m;
+    document.querySelectorAll('.mode').forEach(x => x.classList.toggle('on', x.dataset.mode === m));
+    pal.querySelectorAll('.pc').forEach(x => x.classList.toggle('hint', HINTS[m].includes(x.dataset.c)));
+  }
+  document.querySelectorAll('.mode').forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
+  setMode('yum');
+  pal.querySelector('.pc').classList.add('on');
+  canvas.addEventListener('click', e => { const f = e.target.closest('.fill'); if (f) f.setAttribute('fill', cur); });
+  document.getElementById('clearBtn').addEventListener('click', () => canvas.querySelectorAll('.fill').forEach(f => f.setAttribute('fill', '#fff')));
+  document.getElementById('printBtn').addEventListener('click', () => window.print());
+})();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

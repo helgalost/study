@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="referrer" content="no-referrer">
+<title>Кому это надо?</title>
+<script>document.documentElement.classList.add('js');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="lesson.css">
+<style>
+  /* Реклама для детей / для взрослых */
+  .m-kids{background:linear-gradient(160deg,#ffd23c 0%,#ff6b3d 100%);color:#2b0d00}
+  .m-kids .h{font-size:clamp(1.3rem,5.5vw,2rem);transform:rotate(-3deg);text-shadow:2px 2px 0 #fff}
+  .m-kids .s{font-size:clamp(1.4rem,6vw,2rem)}
+  .m-adult{background:#f7f9fb;color:#1f3550;border-bottom:1px solid #d6dee8}
+  .m-adult .h{font-size:clamp(2rem,9vw,3rem);color:#1f6fb2;letter-spacing:-.03em}
+  .m-adult .s{color:#5b6b7d}
+  .m-adult .s b{color:#1f3550}
+
+  /* Игрушки: малыши / школьники */
+  .toyrow{display:grid;grid-template-columns:1fr;gap:8px}
+  .toy{background:var(--paper-2);border-radius:16px;padding:.6rem .7rem;display:flex;align-items:center;gap:.6rem}
+  @media(min-width:640px){
+    .toyrow{grid-template-columns:repeat(3,1fr)}
+    .toy{flex-direction:column;text-align:center;padding:.7rem .3rem;gap:.3rem}
+  }
+  .toy .em{font-size:clamp(1.8rem,8vw,2.6rem);line-height:1}
+  .toy .t{font-size:11px;font-weight:900;text-transform:uppercase;line-height:1.1}
+
+  /* Мини-реклама в игре */
+  .qz-ad{display:inline-flex;flex-direction:column;align-items:center;gap:.4rem;border-radius:22px;padding:1.1rem 1.6rem;border:3px solid var(--ink);min-width:220px}
+  .qz-ad .big{font-size:clamp(3.2rem,15vw,4.6rem);line-height:1}
+  .qz-ad .h{font-weight:900;font-size:clamp(1.1rem,4.6vw,1.5rem);text-transform:uppercase;line-height:1.05}
+  .qz-ad.kid{background:linear-gradient(160deg,#ffe066,#ff8a5b)}
+  .qz-ad.baby{background:linear-gradient(160deg,#ffd6ec,#cfe9ff)}
+  .qz-ad.adult{background:#f7f9fb;color:#1f3550}
+  .qz-ad.adult .h{color:#1f6fb2}
+
+  /* Задание: два плаката */
+  .two-posters{display:grid;grid-template-columns:1fr 1fr;gap:clamp(.6rem,3vw,1.25rem);margin-top:1.5rem}
+  .tp{border:3px dashed var(--ink);border-radius:22px;background:#fff;padding:1rem .7rem;display:flex;flex-direction:column;align-items:center;gap:.6rem;text-align:center}
+  .tp .who{font-size:clamp(2.6rem,12vw,3.6rem);line-height:1}
+  .tp .prod{font-size:clamp(2.6rem,12vw,3.6rem);line-height:1;min-height:1em}
+  .tp .hints{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+  .tp .hints span{background:var(--paper-2);border-radius:999px;padding:5px 10px;font-size:12px;font-weight:900}
+  .tp.k{background:linear-gradient(160deg,#fff7d1,#ffe0cc)}
+  .tp.a{background:#f4f7fa}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="top-brand" href="index.html">Кому это надо?<span>✦</span></a>
+  <span>Ольга</span>
+</header>
+
+<!-- HERO -->
+<section class="slide" id="top">
+  <div class="slide-content">
+    <h1 class="hero-title rv" style="font-size:clamp(3.5rem,18vw,11rem);display:flex;justify-content:space-between;line-height:.8;font-weight:900;letter-spacing:-.05em;">
+      <span>К</span><span>О</span><span>М</span><span>У</span><span style="color:var(--signal);font-style:italic">?</span>
+    </h1>
+    <div class="rv" style="margin-top:2rem;border-top:1px solid var(--line);padding-top:1rem;display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">для кого <b style="color:var(--ink);">эта реклама</b></div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">↓ листай</div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <div class="marquee-item">Малыши 👶</div><div class="marquee-item">Школьники 🧒</div><div class="marquee-item">Взрослые 👩</div><div class="marquee-item">Кому реклама? 🤔</div>
+    <div class="marquee-item">Малыши 👶</div><div class="marquee-item">Школьники 🧒</div><div class="marquee-item">Взрослые 👩</div><div class="marquee-item">Кому реклама? 🤔</div>
+  </div>
+</div>
+
+<!-- 01 · КОМУ ГОВОРИТ РЕКЛАМА -->
+<section class="slide" id="who">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Реклама<br>говорит <span class="it">с кем-то</span></h2>
+    </div>
+    <div class="icons rv">
+      <div class="ic p"><span class="em">👶</span><span class="t">Малыш</span></div>
+      <div class="ic y"><span class="em">🧒</span><span class="t">Школьник</span></div>
+      <div class="ic b"><span class="em">👩</span><span class="t">Мама, папа</span></div>
+      <div class="ic g"><span class="em">👵</span><span class="t">Бабушка</span></div>
+    </div>
+    <div class="rule-big rv"><span class="em">🎯</span><span class="tx">Сначала думаем: <em>кому?</em> А потом рисуем рекламу.</span></div>
+  </div>
+</section>
+
+<!-- 02 · ДЛЯ ДЕТЕЙ И ДЛЯ ВЗРОСЛЫХ -->
+<section class="slide" id="kids-adults">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Для детей —<br><span class="it">для взрослых</span></h2>
+    </div>
+    <div class="duo rv">
+      <div class="duo-card">
+        <div class="duo-top">🧒</div>
+        <div class="mock m-kids">
+          <span class="big">🦸🚀</span>
+          <span class="h">Вжух! Супер-ракета!</span>
+          <span class="s">🎉⭐🎉</span>
+        </div>
+        <div class="duo-body"><div class="duo-tags"><span>🌈 ярко</span><span>🦸 герой</span><span>😂 весело</span></div></div>
+      </div>
+      <div class="duo-card">
+        <div class="duo-top">👩</div>
+        <div class="mock m-adult">
+          <span class="big">🧺</span>
+          <span class="h">−30%</span>
+          <span class="s"><b>2 года</b> гарантии</span>
+        </div>
+        <div class="duo-body"><div class="duo-tags"><span>😌 спокойно</span><span>🔢 цифры</span><span>👍 польза</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 · ИГРУШКИ ДЛЯ МАЛЫШЕЙ И ШКОЛЬНИКОВ -->
+<section class="slide" id="toys">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Игрушки<br><span class="it">тоже разные</span></h2>
+    </div>
+    <div class="duo rv">
+      <div class="duo-card">
+        <div class="duo-top">👶</div>
+        <div class="duo-body">
+          <div class="toyrow">
+            <div class="toy"><span class="em">🧸</span><span class="t">мягкие</span></div>
+            <div class="toy"><span class="em">🔔</span><span class="t">звенят</span></div>
+            <div class="toy"><span class="em">🟦</span><span class="t">большие</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="duo-card">
+        <div class="duo-top">🧒</div>
+        <div class="duo-body">
+          <div class="toyrow">
+            <div class="toy"><span class="em">🧩</span><span class="t">сложные</span></div>
+            <div class="toy"><span class="em">🤖</span><span class="t">роботы</span></div>
+            <div class="toy"><span class="em">🏆</span><span class="t">кто быстрее</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="rule-big rv"><span class="em">💡</span><span class="tx">Малышу — <em>мягко и громко.</em> Школьнику — <em>сложно и интересно.</em></span></div>
+  </div>
+</section>
+
+<!-- 04 · ИГРА: КОМУ ЭТА РЕКЛАМА? -->
+<section class="slide" id="game">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <span class="kicker">Игра</span>
+      <h2 class="display">Кому эта<br><span class="it">реклама?</span></h2>
+    </div>
+    <div class="game-box rv" id="quiz"></div>
+  </div>
+</section>
+
+<!-- 05 · ЗАДАНИЕ -->
+<section class="slide" id="task">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <span class="kicker">Задание</span>
+      <h2 class="display">Одна вещь —<br><span class="it">две рекламы</span></h2>
+    </div>
+    <div class="goal rv"><span class="em">🎯</span><span class="tx">Нарисуй рекламу <b>одной и той же вещи</b>: для <b>малыша</b> и для <b>мамы</b>.</span></div>
+    <div class="center rv"><button class="play-btn alt" id="prodBtn" type="button"><span class="em">🎲</span> Выбрать вещь</button></div>
+    <div class="two-posters rv">
+      <div class="tp k">
+        <span class="who">👶</span>
+        <span class="prod" id="prod1">❓</span>
+        <div class="hints"><span>🌈 ярко</span><span>🦸 герой</span><span>😂 весело</span></div>
+      </div>
+      <div class="tp a">
+        <span class="who">👩</span>
+        <span class="prod" id="prod2">❓</span>
+        <div class="hints"><span>😌 спокойно</span><span>🔢 цифры</span><span>👍 польза</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 · ТАЙМЕР -->
+<section class="slide" id="time">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Время<br><span class="it">рисовать!</span></h2>
+    </div>
+    <div class="timer rv" id="timer" data-icons="✏️,🎨,🖍️">
+      <div class="t-ring">
+        <svg viewBox="0 0 120 120"><circle class="bg" cx="60" cy="60" r="52" fill="none" stroke-width="10"/><circle class="fg" id="tArc" cx="60" cy="60" r="52" fill="none" stroke-width="10" stroke-linecap="round"/></svg>
+        <div class="t-mid"><span class="em" id="tEm">✏️</span><span class="time" id="tTime">00:00</span></div>
+      </div>
+      <div class="t-btns">
+        <button class="t-btn" type="button" data-min="10">10 мин</button>
+        <button class="t-btn" type="button" data-min="15">15 мин</button>
+        <button class="t-btn" type="button" data-min="20">20 мин</button>
+        <button class="t-btn stop" type="button" id="tStop">Стоп</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 · ФИНАЛ -->
+<section class="slide final" id="end">
+  <div class="slide-content">
+    <p class="final-label rv">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg>
+      запомни
+    </p>
+    <h2 class="display rv">
+      Сначала —<br>
+      <span class="it">кому?</span><br>
+      Потом —<br>
+      как.
+    </h2>
+    <div class="final-rule rv">
+      <p class="lbl">Правило</p>
+      <h3>
+        <span>Детям — ярко.</span>
+        <span>Взрослым —</span>
+        <span>понятно.</span>
+      </h3>
+    </div>
+  </div>
+</section>
+
+<nav class="dock" id="dock">
+  <a href="#top" class="active" title="Старт">↑</a>
+  <a href="#who" title="С кем говорит реклама">👥</a>
+  <a href="#kids-adults" title="Детям и взрослым">🦸</a>
+  <a href="#toys" title="Игрушки">🧸</a>
+  <a href="#game" title="Игра">🎮</a>
+  <a href="#task" title="Задание">✏️</a>
+  <a href="#time" title="Таймер">⏱️</a>
+  <a href="#end" title="Финал">🏁</a>
+</nav>
+
+<script src="lesson.js"></script>
+<script>
+(function(){
+  const W = [['👶','малыш'],['🧒','школьник'],['👩','взрослый']];
+  const ad = (cls, big, h) => '<div class="qz-ad ' + cls + '"><span class="big">' + big + '</span><span class="h">' + h + '</span></div>';
+  L.quiz(document.getElementById('quiz'), [
+    { q: ad('baby', '🧸🔔', 'Мягкий звоночек'),          opts: W, ans: 0, why: '🧸 мягко + 🔔 звенит = 👶' },
+    { q: ad('kid', '🤖⚡', 'Робот-трансформер!'),          opts: W, ans: 1, why: '🤖 сложно и интересно = 🧒' },
+    { q: ad('adult', '☕', '−20% на кофеварку'),          opts: W, ans: 2, why: '🔢 цифры, спокойно = 👩' },
+    { q: ad('kid', '🛴💨', 'Самокат-молния!'),            opts: W, ans: 1, why: '💨 быстро, круто = 🧒' },
+    { q: ad('baby', '🟦🟨🟥', 'Большие кубики'),          opts: W, ans: 0, why: '🟦 большие, яркие = 👶' },
+    { q: ad('adult', '🧺', 'Чисто за 30 минут'),          opts: W, ans: 2, why: '⏱️ польза, цифры = 👩' },
+    { q: ad('kid', '🎒🦸', 'Рюкзак супергероя'),          opts: W, ans: 1, why: '🎒 в школу = 🧒' },
+    { q: ad('adult', '🚗', 'Экономит бензин'),           opts: W, ans: 2, why: '🚗 водит взрослый = 👩' }
+  ]);
+
+  const PRODS = ['🧃','🍦','🥣','🪥','🧦','🍪','🎒','🧴'];
+  document.getElementById('prodBtn').addEventListener('click', () => {
+    let t = 0;
+    const iv = setInterval(() => {
+      const p = L.pick(PRODS);
+      ['prod1','prod2'].forEach(id => { const el = document.getElementById(id); el.textContent = p; el.classList.remove('rolling'); void el.offsetWidth; el.classList.add('rolling'); });
+      if (++t >= 8) clearInterval(iv);
+    }, 110);
+  });
+})();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

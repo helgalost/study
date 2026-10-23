@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Какого цвета реклама?</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="games.css">
+<style>
+  .pal{display:flex;width:80%;height:clamp(64px,18vw,90px);border:3px solid var(--ink);border-radius:18px;overflow:hidden}
+  .pal i{flex:1}
+</style>
+</head>
+<body>
+<a class="home" href="index.html">← Все темы</a>
+<div class="wrap">
+  <h1 class="title">Какого <span class="a">цвета?</span></h1>
+  <div class="wrap" id="game" style="gap:16px;width:100%"></div>
+</div>
+<script src="games.js"></script>
+<script>
+const PAL = {
+  bright: ['#ff3d3d','#ffc93c'], clean: ['#ffffff','#3fb55a'], cold: ['#7cc8f0','#ffffff'], magic: ['#8b5cd6','#ff9cc8'],
+  veg: ['#3fb55a','#ff8a2b'], choco: ['#7a3e1d','#ff8a2b'], night: ['#ff8a2b','#1b1b1b'], xmas: ['#2f9e4b','#e0262b']
+};
+const bar = k => '<span class="pal">' + PAL[k].map(c => '<i style="background:' + c + '"></i>').join('') + '</span>';
+G.run({
+  cols: 2,
+  rounds: [
+    { e:'🧸', name:'Игрушки',        k:'bright', why:'⚡ ярко и весело!' },
+    { e:'🥛', name:'Йогурт',         k:'clean',  why:'🧼 чисто и полезно!' },
+    { e:'🧊🍋', name:'Холодный лимонад', k:'cold', why:'❄️ сразу холодно!' },
+    { e:'🪄', name:'Волшебная палочка', k:'magic', why:'✨ волшебно!' },
+    { e:'🥦🥕', name:'Овощи',        k:'veg',    why:'🌿 полезно и свежо!' },
+    { e:'🍫', name:'Шоколад',        k:'choco',  why:'😋 тепло и вкусно!' },
+    { e:'🎃', name:'Праздник тыкв',  k:'night',  why:'👻 страшно-весело!' },
+    { e:'🎄', name:'Новый год',      k:'xmas',   why:'🎅 празднично!' }
+  ],
+  question: r => '<span class="big">' + r.e + '</span><span class="cap">' + r.name + '</span>',
+  options: r => [r.k, ...G.shuffle(Object.keys(PAL).filter(k => k !== r.k)).slice(0, 3)].map(k => ({ html: bar(k), right: k === r.k })),
+  praise: r => '👏 ' + r.why
+});
+</script>
+</body>
+</html>

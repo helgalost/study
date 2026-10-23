@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="referrer" content="no-referrer">
+<title>Как рекламировать</title>
+<script>document.documentElement.classList.add('js');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="lesson.css">
+<style>
+  /* Где живёт реклама */
+  .places{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:1.5rem}
+  @media(min-width:640px){.places{grid-template-columns:repeat(4,1fr)}}
+  .pl{
+    background:#fff;border:3px solid var(--ink);border-radius:22px;padding:1rem .5rem;cursor:pointer;font:inherit;color:inherit;
+    display:flex;flex-direction:column;align-items:center;gap:.4rem;transition:transform .2s var(--ease-out),background .2s;
+  }
+  .pl:hover{transform:translateY(-3px)}
+  .pl .em{font-size:clamp(2.6rem,11vw,3.4rem);line-height:1}
+  .pl .t{font-size:12px;font-weight:900;text-transform:uppercase;line-height:1.1;text-align:center}
+  .pl.on{background:var(--yellow);box-shadow:5px 5px 0 var(--ink);transform:rotate(-2deg)}
+  .pl-info{
+    margin-top:1.25rem;background:var(--ink);color:var(--paper);border-radius:24px;padding:1.2rem;min-height:140px;
+    display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:stretch;
+  }
+  .pl-info .cell{background:rgba(255,255,255,.08);border-radius:18px;padding:.8rem .5rem;display:flex;flex-direction:column;align-items:center;gap:.35rem;text-align:center}
+  .pl-info .cell .lbl{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(235,233,228,.6)}
+  .pl-info .cell .v{font-size:clamp(1.8rem,8vw,2.6rem);line-height:1.15}
+  .pl-info .cell .w{font-size:12px;font-weight:800}
+  .pl-info.empty{display:flex;align-items:center;justify-content:center;font-size:clamp(1.1rem,4.5vw,1.5rem);font-weight:900;text-transform:uppercase}
+  .pl-info .cell.on{animation:pop .45s var(--ease-out) both}
+
+  /* Как делают рекламу */
+  .chain{display:grid;gap:10px;margin-top:1.5rem;grid-template-columns:repeat(2,1fr)}
+  @media(min-width:768px){.chain{grid-template-columns:repeat(6,1fr)}}
+  .ch{position:relative;background:var(--paper-2);border-radius:22px;padding:1.5rem .5rem 1rem;display:flex;flex-direction:column;align-items:center;gap:.4rem;text-align:center}
+  .ch .n{position:absolute;top:8px;left:10px;width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-size:12px;font-weight:900;font-style:italic}
+  .ch .em{font-size:clamp(2.4rem,10vw,3rem);line-height:1}
+  .ch .t{font-size:12px;font-weight:900;text-transform:uppercase;line-height:1.1}
+  .ch.last{background:var(--signal);color:#fff}
+
+  /* Карта города */
+  .city{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:1rem}
+  .spot{
+    aspect-ratio:1;border:3px solid var(--ink);border-radius:20px;background:#fff;cursor:pointer;font:inherit;color:inherit;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.3rem;position:relative;transition:transform .2s;
+  }
+  .spot .em{font-size:clamp(2rem,9vw,2.8rem);line-height:1}
+  .spot .t{font-size:clamp(9px,2.4vw,11px);font-weight:900;text-transform:uppercase;line-height:1.05;text-align:center}
+  .spot .mark{position:absolute;top:-10px;right:-8px;font-size:22px;display:none}
+  .spot.good{background:var(--green)} .spot.good .mark{display:block}
+  .spot.meh{background:var(--paper-3);opacity:.7} .spot.meh .mark{display:block}
+  .city-say{margin-top:1rem;min-height:3rem;text-align:center;font-size:clamp(1.1rem,4.5vw,1.5rem);font-weight:900}
+  .city-say span{display:inline-block;animation:pop .45s var(--ease-out) both}
+  .target{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:1rem}
+  .target span{background:var(--pink);border:2px solid var(--ink);border-radius:999px;padding:6px 14px;font-weight:900;font-size:clamp(1rem,4vw,1.2rem)}
+
+  /* Печать: автобус */
+  #printSheet{display:none}
+  @page{size:A4 landscape;margin:8mm}
+  @media print{
+    body > *:not(#printSheet){display:none!important}
+    #printSheet{display:block!important}
+    #printSheet .pg{font:900 20pt Inter,sans-serif;text-align:center;margin-bottom:4mm}
+    #printSheet svg{width:100%;height:auto}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="top-brand" href="index.html">Как рекламировать<span>✦</span></a>
+  <span>Ольга</span>
+</header>
+
+<!-- HERO -->
+<section class="slide" id="top">
+  <div class="slide-content">
+    <h1 class="hero-title rv" style="font-size:clamp(3.5rem,20vw,12rem);display:flex;justify-content:space-between;line-height:.8;font-weight:900;letter-spacing:-.05em;">
+      <span>Г</span><span>Д</span><span>Е</span><span style="color:var(--signal);font-style:italic">?</span>
+    </h1>
+    <div class="rv" style="margin-top:2rem;border-top:1px solid var(--line);padding-top:1rem;display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">как, где и <b style="color:var(--ink);">почему реклама</b></div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">↓ листай</div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <div class="marquee-item">Телевизор 📺</div><div class="marquee-item">Телефон 📱</div><div class="marquee-item">Улица 🏙️</div><div class="marquee-item">Автобус 🚌</div>
+    <div class="marquee-item">Телевизор 📺</div><div class="marquee-item">Телефон 📱</div><div class="marquee-item">Улица 🏙️</div><div class="marquee-item">Автобус 🚌</div>
+  </div>
+</div>
+
+<!-- 01 · ГДЕ ЖИВЁТ РЕКЛАМА -->
+<section class="slide" id="where">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Где живёт<br><span class="it">реклама?</span></h2>
+    </div>
+    <div class="places rv" id="places"></div>
+    <div class="pl-info empty rv" id="plInfo">👆 Нажми на место</div>
+  </div>
+</section>
+
+<!-- 02 · КАК ДЕЛАЮТ РЕКЛАМУ -->
+<section class="slide" id="how">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Как делают<br><span class="it">рекламу?</span></h2>
+    </div>
+    <div class="chain rv">
+      <div class="ch"><span class="n">1</span><span class="em">🎯</span><span class="t">Кому?</span></div>
+      <div class="ch"><span class="n">2</span><span class="em">💡</span><span class="t">Идея</span></div>
+      <div class="ch"><span class="n">3</span><span class="em">🏷️</span><span class="t">Имя и слоган</span></div>
+      <div class="ch"><span class="n">4</span><span class="em">🎨</span><span class="t">Рисуем или снимаем</span></div>
+      <div class="ch"><span class="n">5</span><span class="em">📍</span><span class="t">Где показать?</span></div>
+      <div class="ch last"><span class="n">6</span><span class="em">🛍️</span><span class="t">Люди увидели — купили!</span></div>
+    </div>
+    <div class="rule-big rv"><span class="em">🎯</span><span class="tx">Реклама должна быть там, <em>где её увидят те, кому она нужна.</em></span></div>
+  </div>
+</section>
+
+<!-- 03 · ИГРА: ГДЕ ЛУЧШЕ РЕКЛАМИРОВАТЬ? -->
+<section class="slide" id="game">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <span class="kicker">Игра</span>
+      <h2 class="display">Где лучше<br><span class="it">показать?</span></h2>
+    </div>
+    <div class="game-box rv" id="quiz"></div>
+  </div>
+</section>
+
+<!-- 04 · НАШ ПЛАКАТ В ГОРОДЕ -->
+<section class="slide" id="city">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <span class="kicker">Практика</span>
+      <h2 class="display">Куда повесим<br><span class="it">наш плакат?</span></h2>
+    </div>
+    <div class="goal rv"><span class="em">💍</span><span class="tx">Плакат <b>магазина украшений</b>. Кто его должен увидеть?</span></div>
+    <div class="target rv"><span>👧 девочки</span><span>👩 мамы</span><span>👵 бабушки</span><span>🎁 кто ищет подарок</span></div>
+    <div class="game-box rv">
+      <div class="city" id="cityGrid"></div>
+      <div class="city-say" id="citySay"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 · ЗАДАНИЕ -->
+<section class="slide" id="task">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <span class="kicker">Задание</span>
+      <h2 class="display">Реклама<br><span class="it">на автобусе</span></h2>
+    </div>
+    <div class="goal rv"><span class="em">🚌</span><span class="tx">Автобус ездит по всему городу — <b>его видят все!</b> Нарисуй на нём рекламу.</span></div>
+    <div class="checks rv" style="margin-top:1.25rem">
+      <button class="ck" type="button"><span class="box"></span><span class="em">🎯</span><span class="t">Для кого?</span></button>
+      <button class="ck" type="button"><span class="box"></span><span class="em">🏷️</span><span class="t">Имя крупно</span></button>
+      <button class="ck" type="button"><span class="box"></span><span class="em">💬</span><span class="t">Короткий слоган</span></button>
+      <button class="ck" type="button"><span class="box"></span><span class="em">🖼️</span><span class="t">Большая картинка</span></button>
+      <button class="ck" type="button"><span class="box"></span><span class="em">👀</span><span class="t">Видно, пока едет</span></button>
+    </div>
+    <div class="ck-done" id="ckDone"><span class="em">🎉</span>Автобус поехал!</div>
+    <div class="center rv"><button class="print-btn" type="button" id="printBtn">🖨️ Распечатать автобус</button></div>
+  </div>
+</section>
+
+<!-- 06 · ТАЙМЕР -->
+<section class="slide" id="time">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Время<br><span class="it">рисовать!</span></h2>
+    </div>
+    <div class="timer rv" id="timer" data-icons="✏️,🎨,🚌">
+      <div class="t-ring">
+        <svg viewBox="0 0 120 120"><circle class="bg" cx="60" cy="60" r="52" fill="none" stroke-width="10"/><circle class="fg" id="tArc" cx="60" cy="60" r="52" fill="none" stroke-width="10" stroke-linecap="round"/></svg>
+        <div class="t-mid"><span class="em" id="tEm">✏️</span><span class="time" id="tTime">00:00</span></div>
+      </div>
+      <div class="t-btns">
+        <button class="t-btn" type="button" data-min="10">10 мин</button>
+        <button class="t-btn" type="button" data-min="15">15 мин</button>
+        <button class="t-btn" type="button" data-min="20">20 мин</button>
+        <button class="t-btn stop" type="button" id="tStop">Стоп</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 · ФИНАЛ -->
+<section class="slide final" id="end">
+  <div class="slide-content">
+    <p class="final-label rv">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg>
+      запомни
+    </p>
+    <h2 class="display rv">
+      Кому?<br>
+      Что?<br>
+      <span class="it">Где?</span>
+    </h2>
+    <div class="final-rule rv">
+      <p class="lbl">Правило</p>
+      <h3>
+        <span>Реклама там,</span>
+        <span>где её</span>
+        <span>увидят нужные люди.</span>
+      </h3>
+    </div>
+  </div>
+</section>
+
+<nav class="dock" id="dock">
+  <a href="#top" class="active" title="Старт">↑</a>
+  <a href="#where" title="Где живёт реклама">📺</a>
+  <a href="#how" title="Как делают">💡</a>
+  <a href="#game" title="Игра">🎮</a>
+  <a href="#city" title="Наш плакат">🏙️</a>
+  <a href="#task" title="Задание">🚌</a>
+  <a href="#time" title="Таймер">⏱️</a>
+  <a href="#end" title="Финал">🏁</a>
+</nav>
+
+<!-- Печать: автобус -->
+<div id="printSheet">
+  <div class="pg">🚌 Реклама на автобусе</div>
+  <svg viewBox="0 0 900 420" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#0b0b0c" stroke-width="6" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M40 330 V90 Q40 50 80 50 H780 Q850 50 860 120 L870 330 Z"/>
+    <path d="M760 70 H835 Q848 72 852 120 L856 200 H760 Z"/>
+    <rect x="70" y="78" width="660" height="200" rx="18" stroke-dasharray="14 12" stroke-width="4"/>
+    <text x="400" y="188" text-anchor="middle" font-family="Inter,sans-serif" font-size="30" font-weight="800" fill="#b5b1aa" stroke="none">МЕСТО ДЛЯ РЕКЛАМЫ</text>
+    <circle cx="190" cy="340" r="48" fill="#fff"/><circle cx="190" cy="340" r="18"/>
+    <circle cx="720" cy="340" r="48" fill="#fff"/><circle cx="720" cy="340" r="18"/>
+    <rect x="770" y="230" width="60" height="90" rx="6"/>
+  </svg>
+</div>
+
+<script src="lesson.js"></script>
+<script>
+(function(){
+  /* ===== Где живёт реклама: кто видит и как действует ===== */
+  const P = [
+    ['📺','телевизор', '👨‍👩‍👧','вся семья дома', '👀👂🎬','видно, слышно, двигается'],
+    ['📱','телефон',   '🧒👩','все и везде',       '👀👂🎬','видно, слышно, двигается'],
+    ['🏙️','плакат на улице','🚗🚶','водители, прохожие','👀','видно издалека'],
+    ['🚌','автобус',   '🏙️','весь город',          '👀🚌','едет по городу'],
+    ['📻','радио',     '🚗','кто в машине',         '👂','только слышно!'],
+    ['📰','журнал',    '👩','кто читает',           '👀📖','можно рассмотреть'],
+    ['🏪','витрина',   '🛍️','кто идёт мимо',        '👀🚪','зайди прямо сейчас'],
+    ['🎁','упаковка',  '🛒','кто в магазине',       '👀✋','можно взять в руки']
+  ];
+  const places = document.getElementById('places'), info = document.getElementById('plInfo');
+  P.forEach(p => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'pl';
+    b.innerHTML = '<span class="em">' + p[0] + '</span><span class="t">' + p[1] + '</span>';
+    b.addEventListener('click', () => {
+      places.querySelectorAll('.pl').forEach(x => x.classList.toggle('on', x === b));
+      info.classList.remove('empty');
+      info.innerHTML =
+        '<div class="cell on"><span class="lbl">Кто видит</span><span class="v">' + p[2] + '</span><span class="w">' + p[3] + '</span></div>' +
+        '<div class="cell on" style="animation-delay:.08s"><span class="lbl">Как</span><span class="v">' + p[4] + '</span><span class="w">' + p[5] + '</span></div>';
+    });
+    places.appendChild(b);
+  });
+
+  /* ===== Игра: где лучше показать? ===== */
+  const big = (e, who) => '<div style="font-size:clamp(3.6rem,16vw,5rem);line-height:1">' + e + '</div>' +
+                          '<div style="margin-top:.5rem;font-size:clamp(1.6rem,7vw,2.2rem)">для ' + who + '</div>';
+  L.quiz(document.getElementById('quiz'), [
+    { q: big('🧸','👶👩'), a: ['📺','в мультиках'],   o: [['📻','радио'],['📰','газета'],['🏭','у завода']], why: '📺 мультики смотрят 👶 с мамой' },
+    { q: big('🚿🚗','🚗'), a: ['🏙️','у дороги'],      o: [['🏫','в школе'],['📖','в книжке'],['🎪','в цирке']], why: '🏙️ у дороги видят водители 🚗' },
+    { q: big('🦴','🐕'),   a: ['🌳','в парке'],        o: [['🏊','в бассейне'],['🎭','в театре'],['🏥','в больнице']], why: '🌳 в парке гуляют с собаками 🐕' },
+    { q: big('🎒','🧒'),   a: ['🏫','у школы'],        o: [['🏖️','на пляже'],['🚗','у дороги'],['🏢','в офисе']], why: '🏫 у школы ходят школьники 🧒' },
+    { q: big('🎵','🚗'),   a: ['📻','по радио'],       o: [['📰','журнал'],['🏪','витрина'],['🎁','упаковка']], why: '📻 в машине слушают радио 🎵' },
+    { q: big('🧴☀️','🏖️'), a: ['🏖️','на пляже'],      o: [['❄️','на катке'],['🏫','в школе'],['🚇','в метро']], why: '🏖️ на пляже нужен крем от солнца ☀️' }
+  ]);
+
+  /* ===== Куда повесим плакат магазина украшений ===== */
+  const SPOTS = [
+    ['🏫','у школы',   1, '👧 тут ходят девочки!'],
+    ['🚏','остановка', 1, '👀 тут ждут все — и мамы, и бабушки'],
+    ['🛍️','торговый центр', 1, '🎁 тут ищут подарки'],
+    ['🌳','парк',      1, '👩‍👧 тут гуляют мамы с детьми'],
+    ['🏭','завод',     0, '🤔 тут мало мам и девочек'],
+    ['🚗','трасса',    0, '💨 машины едут быстро — не успеют рассмотреть'],
+    ['⚽','стадион',   0, '🤔 тут смотрят футбол, а не украшения'],
+    ['🏥','больница',  0, '🤔 сюда приходят не за подарками']
+  ];
+  const grid = document.getElementById('cityGrid'), say = document.getElementById('citySay');
+  L.shuffle(SPOTS).forEach(s => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'spot';
+    b.innerHTML = '<span class="mark">' + (s[2] ? '✅' : '🤔') + '</span><span class="em">' + s[0] + '</span><span class="t">' + s[1] + '</span>';
+    b.addEventListener('click', () => {
+      b.classList.add(s[2] ? 'good' : 'meh');
+      say.innerHTML = '<span>' + s[3] + '</span>';
+    });
+    grid.appendChild(b);
+  });
+
+  document.getElementById('printBtn').addEventListener('click', () => window.print());
+})();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

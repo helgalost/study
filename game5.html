@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Что лишнее?</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="games.css">
+</head>
+<body>
+<a class="home" href="index.html">← Все темы</a>
+<div class="wrap">
+  <h1 class="title">Что <span class="a">лишнее?</span></h1>
+  <div class="wrap" id="game" style="gap:16px;width:100%"></div>
+</div>
+<script src="games.js"></script>
+<script>
+G.run({
+  cols: 4,
+  rounds: [
+    { th:'🍽️', name:'Реклама кафе',          ok:['🍕','🍔','🌭'], odd:'🪥', why:'🪥 — это не еда!' },
+    { th:'🧸', name:'Магазин игрушек',       ok:['🧸','🪀','🧩'], odd:'🥦', why:'🥦 — это не игрушка!' },
+    { th:'💍', name:'Магазин украшений',     ok:['💍','📿','👑'], odd:'🧦', why:'🧦 — это не украшение!' },
+    { th:'🐶', name:'Зоомагазин',            ok:['🦴','🐟','🧶'], odd:'🔨', why:'🔨 — питомцам не нужен!' },
+    { th:'⚽', name:'Спортивный магазин',    ok:['⚽','🏀','🎾'], odd:'🍰', why:'🍰 — это не спорт!' },
+    { th:'🎒', name:'Всё для школы',         ok:['🎒','✏️','📏'], odd:'🛁', why:'🛁 — в школу не берут!' },
+    { th:'🏖️', name:'Всё для пляжа',         ok:['🩱','🕶️','⛱️'], odd:'⛄', why:'⛄ — на пляже не бывает!' },
+    { th:'🎂', name:'День рождения',         ok:['🎈','🎁','🎂'], odd:'🧹', why:'🧹 — это не праздник!' },
+    { th:'🍦', name:'Кафе-мороженое',        ok:['🍦','🍨','🍧'], odd:'🧤', why:'🧤 — это не едят!' },
+    { th:'🛁', name:'Всё для ванной',        ok:['🧼','🪥','🧽'], odd:'🍟', why:'🍟 — в ванной не едят!' }
+  ],
+  question: r => '<span class="big">' + r.th + '</span><span class="cap">' + r.name + '</span>',
+  options: r => [...r.ok.map(e => ({ html:'<span class="em">' + e + '</span>', right:false })), { html:'<span class="em">' + r.odd + '</span>', right:true }],
+  praise: r => '👏 ' + r.why
+});
+</script>
+</body>
+</html>
