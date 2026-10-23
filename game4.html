@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Кто? Что? Где?</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fff2d9; --bg2:#ffd1a8; --ink:#2b1a0f;
+    --pink:#ff5d8f; --yellow:#ffc93c; --blue:#5bc0eb; --green:#7bd389; --purple:#a06cd5; --white:#fffaf0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{min-height:100%}
+  body{
+    font-family:'Fredoka',system-ui,sans-serif;
+    background:radial-gradient(circle at 50% 0%, var(--bg) 0%, var(--bg2) 100%) fixed;
+    color:var(--ink);user-select:none;
+    padding:max(14px,env(safe-area-inset-top)) 16px max(24px,env(safe-area-inset-bottom));
+  }
+  .home{
+    display:inline-flex;align-items:center;gap:6px;
+    background:var(--white);border:3px solid var(--ink);border-radius:999px;
+    padding:6px 14px;font-weight:700;font-size:15px;color:var(--ink);text-decoration:none;
+    box-shadow:0 3px 0 var(--ink);
+  }
+  .wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center}
+  .title{font-size:clamp(2.2rem,10vw,4rem);font-weight:900;line-height:1;letter-spacing:-.02em;margin-top:10px}
+  .title span:nth-child(1){color:var(--pink)}
+  .title span:nth-child(2){color:var(--purple)}
+  .title span:nth-child(3){color:#2a9fd6}
+
+  .reels{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(8px,2.5vw,18px);width:100%}
+  .col{display:flex;flex-direction:column;align-items:center;gap:10px}
+  .cap{
+    font-size:clamp(1.1rem,4.5vw,1.6rem);font-weight:900;
+    background:var(--white);border:3px solid var(--ink);border-radius:999px;padding:4px 14px;
+  }
+  .col:nth-child(1) .cap{background:var(--pink);color:#fff}
+  .col:nth-child(2) .cap{background:var(--purple);color:#fff}
+  .col:nth-child(3) .cap{background:var(--blue);color:#fff}
+  .reel{
+    width:100%;aspect-ratio:1;background:var(--white);
+    border:4px solid var(--ink);border-radius:28px;box-shadow:0 6px 0 var(--ink);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  }
+  .reel .em{font-size:clamp(3rem,15vw,6rem);line-height:1}
+  .reel .w{font-size:clamp(.85rem,3.6vw,1.3rem);font-weight:700;opacity:.75;padding:0 6px;line-height:1.1}
+  .rolling{animation:shake .3s ease-in-out}
+  @keyframes shake{0%,100%{transform:translate(0)}25%{transform:translate(-5px,2px) rotate(-6deg)}75%{transform:translate(5px,-2px) rotate(6deg)}}
+  @keyframes pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+
+  .spin{
+    display:inline-flex;align-items:center;gap:10px;
+    background:var(--pink);color:#fff;border:4px solid var(--ink);border-radius:999px;
+    padding:14px 40px;font:inherit;font-size:clamp(1.3rem,5.5vw,1.8rem);font-weight:900;
+    box-shadow:0 6px 0 var(--ink);cursor:pointer;
+    transition:transform .12s;
+  }
+  .spin:active{transform:translateY(4px);box-shadow:0 2px 0 var(--ink)}
+  .spin:disabled{opacity:.75}
+
+  .tasks{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(8px,2.5vw,16px);width:100%}
+  .task{
+    background:var(--white);border:3px solid var(--ink);border-radius:22px;padding:14px 8px;
+    display:flex;flex-direction:column;align-items:center;gap:6px;
+  }
+  .task .em{font-size:clamp(2.2rem,9vw,3rem);line-height:1}
+  .task .t{font-size:clamp(.85rem,3.4vw,1.1rem);font-weight:700;line-height:1.15}
+  .task:nth-child(1){background:var(--yellow)}
+  .task:nth-child(2){background:var(--green)}
+  .task:nth-child(3){background:var(--blue)}
+  .tasks.pop .task{animation:pop .5s cubic-bezier(.34,1.56,.64,1) both}
+  .tasks.pop .task:nth-child(2){animation-delay:.08s}
+  .tasks.pop .task:nth-child(3){animation-delay:.16s}
+
+  .hist{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;min-height:44px}
+  .hist span{
+    background:rgba(255,250,240,.7);border:2px solid rgba(43,26,15,.25);border-radius:14px;
+    padding:4px 10px;font-size:1.4rem;line-height:1.2;
+  }
+  .confetti{position:fixed;top:-40px;pointer-events:none;z-index:9;animation:fall linear forwards}
+  @keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:.9}}
+  @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<a class="home" href="index.html">← Все темы</a>
+
+<div class="wrap">
+  <h1 class="title"><span>Кто?</span> <span>Что?</span> <span>Где?</span></h1>
+
+  <div class="reels">
+    <div class="col"><span class="cap">👤 Кто?</span><div class="reel" id="r1"><span class="em">❓</span><span class="w"></span></div></div>
+    <div class="col"><span class="cap">⚡ Что?</span><div class="reel" id="r2"><span class="em">❓</span><span class="w"></span></div></div>
+    <div class="col"><span class="cap">📍 Где?</span><div class="reel" id="r3"><span class="em">❓</span><span class="w"></span></div></div>
+  </div>
+
+  <button class="spin" id="spin" type="button">🎰 Крутить!</button>
+
+  <div class="tasks" id="tasks">
+    <div class="task"><span class="em">🏷️</span><span class="t">Как его зовут?</span></div>
+    <div class="task"><span class="em">🎁</span><span class="t">Что он продаёт?</span></div>
+    <div class="task"><span class="em">📣</span><span class="t">Что он кричит покупателям?</span></div>
+  </div>
+
+  <div class="hist" id="hist"></div>
+</div>
+
+<script>
+(function(){
+  const pick = a => a[Math.floor(Math.random() * a.length)];
+  const WHO = [['🐸','лягушка'],['🦄','единорог'],['🐱','котик'],['🐉','дракон'],['🧚','фея'],['🦊','лиса'],['🐝','пчёлка'],
+               ['🦋','бабочка'],['🐧','пингвин'],['🤖','робот'],['👩‍🍳','повар'],['🚀','ракета'],['🐻','мишка'],['🐙','осьминог'],
+               ['🦖','динозавр'],['👻','привидение'],['🐌','улитка'],['🦉','сова']];
+  const DO  = [['✨','сияет'],['💃','танцует'],['🦘','прыгает'],['🎵','поёт'],['🪄','колдует'],['😴','спит'],['🚀','летает'],
+               ['🎨','рисует'],['🍳','готовит'],['😂','смеётся'],['🔍','ищет клад'],['🎁','дарит подарки'],['🛹','катается'],['🧹','убирает']];
+  const WHERE=[['🏰','в замке'],['🌊','в море'],['🌌','в космосе'],['🌲','в лесу'],['🍭','в конфетной стране'],['❄️','в снегу'],
+               ['🏪','в магазине'],['🌋','у вулкана'],['☁️','на облаке'],['🏝️','на острове'],['🏫','в школе'],['🎪','в цирке']];
+  const reels = [['r1',WHO],['r2',DO],['r3',WHERE]].map(([id,list]) => ({el:document.getElementById(id), list}));
+  const set = (r, it) => { r.el.querySelector('.em').textContent = it[0]; r.el.querySelector('.w').textContent = it[1]; };
+  const btn = document.getElementById('spin'), tasks = document.getElementById('tasks'), hist = document.getElementById('hist');
+  let busy = false;
+
+  function confetti(){
+    const e = ['⭐','✨','🎉','💫','🌟'];
+    for (let i = 0; i < 18; i++) {
+      const c = document.createElement('div');
+      c.className = 'confetti'; c.textContent = pick(e);
+      c.style.left = Math.random() * 100 + 'vw';
+      c.style.fontSize = (18 + Math.random() * 22) + 'px';
+      c.style.animationDuration = (1.4 + Math.random() * 1.4) + 's';
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 3000);
+    }
+  }
+
+  btn.addEventListener('click', () => {
+    if (busy) return;
+    busy = true; btn.disabled = true;
+    const fin = reels.map(r => pick(r.list));
+    let t = 0;
+    const iv = setInterval(() => {
+      reels.forEach(r => { r.el.classList.remove('rolling'); void r.el.offsetWidth; r.el.classList.add('rolling'); set(r, pick(r.list)); });
+      if (++t >= 10) {
+        clearInterval(iv);
+        reels.forEach((r, i) => set(r, fin[i]));
+        tasks.classList.remove('pop'); void tasks.offsetWidth; tasks.classList.add('pop');
+        const h = document.createElement('span'); h.textContent = fin.map(x => x[0]).join('');
+        hist.prepend(h); while (hist.children.length > 8) hist.lastChild.remove();
+        confetti();
+        busy = false; btn.disabled = false;
+      }
+    }, 110);
+  });
+})();
+</script>
+</body>
+</html>

@@ -697,6 +697,44 @@
   .client-say b{font-weight:900;color:var(--signal)}
   .sg-slogan mark{padding:0 .12em}
 
+
+  /* ШАГ 1: ЗНАК И ИМЯ */
+  .signs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  @media(min-width:768px){.signs{grid-template-columns:repeat(8,1fr)}}
+  .sign{
+    aspect-ratio:1;background:#fff;border:3px solid var(--ink);border-radius:20px;cursor:pointer;
+    font-size:clamp(2.2rem,10vw,3rem);line-height:1;display:grid;place-items:center;
+    transition:transform .2s var(--ease-out),background .2s;
+  }
+  .sign:hover{transform:translateY(-3px) rotate(-4deg)}
+  .sign.on{background:var(--yellow);transform:scale(1.08) rotate(-4deg);box-shadow:4px 4px 0 var(--ink)}
+  .shop{margin:1.5rem auto 0;max-width:420px}
+  .shop-roof{
+    height:34px;border:3px solid var(--ink);border-bottom:0;border-radius:16px 16px 0 0;
+    background:repeating-linear-gradient(90deg,var(--signal) 0 30px,#fff 30px 60px);
+  }
+  .shop-body{
+    background:#fff;border:3px solid var(--ink);border-radius:0 0 20px 20px;padding:1.2rem 1rem;
+    display:flex;flex-direction:column;align-items:center;gap:.7rem;
+  }
+  .shop-logo{
+    width:clamp(96px,30vw,130px);aspect-ratio:1;border-radius:50%;
+    border:3px dashed var(--ink);display:grid;place-items:center;
+    font-size:clamp(3.2rem,14vw,4.6rem);line-height:1;background:var(--paper-2);
+  }
+  .shop-logo.set{border-style:solid;background:var(--pink);animation:pop .5s var(--ease-out)}
+  .shop-name{display:flex;align-items:center;gap:.6rem}
+  .shop-name .lbl{font-size:12px;font-weight:900;text-transform:uppercase;background:var(--yellow);border-radius:999px;padding:4px 10px}
+  .shop-name .line{font-size:clamp(1.1rem,4.5vw,1.4rem);font-weight:800;color:var(--muted);letter-spacing:.05em}
+  .shop-type{font-size:13px;font-weight:800;color:var(--muted);text-transform:uppercase}
+  .words{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:1rem;min-height:48px}
+  .words .wd{
+    background:var(--yellow);border:2px solid var(--ink);border-radius:999px;padding:8px 16px;
+    font-size:clamp(1rem,4vw,1.2rem);font-weight:900;animation:pop .45s var(--ease-out) both;
+  }
+  .words .wd:nth-child(2){background:var(--pink);animation-delay:.08s}
+  .words .wd:nth-child(3){background:var(--green);animation-delay:.16s}
+
   /* DOCK */
   .dock{
     position:fixed;bottom:max(14px,env(safe-area-inset-bottom));
@@ -987,7 +1025,7 @@
       <h2 class="display">Как мы<br><span class="it">поможем?</span></h2>
     </div>
     <div class="route rv">
-      <div class="rstep"><span class="n">1</span><span class="em">🎰</span><span class="t">Герой и имя</span><span class="out">🎨 🏷️</span></div>
+      <div class="rstep"><span class="n">1</span><span class="em">⭐</span><span class="t">Знак и имя</span><span class="out">🎨 🏷️</span></div>
       <span class="rarrow">➜</span>
       <div class="rstep"><span class="n">2</span><span class="em">🎲</span><span class="t">Слоган</span><span class="out">💬</span></div>
       <span class="rarrow">➜</span>
@@ -999,20 +1037,21 @@
   </div>
 </section>
 
-<!-- ИГРА 2: ГЕРОЙ И ИМЯ МАГАЗИНА -->
-<section class="slide" id="roulette">
+<!-- ШАГ 1: ЗНАК И ИМЯ ДЛЯ МАГАЗИНА УКРАШЕНИЙ (выбираем картинку → логотип, слова-подсказки → имя) -->
+<section class="slide" id="logo">
   <div class="slide-content">
     <div class="section-head rv">
-      <span class="kicker">Шаг 1 · Игра</span>
-      <h2 class="display">Герой<br><span class="it">и имя</span></h2>
+      <span class="kicker">Шаг 1</span>
+      <h2 class="display">Знак<br><span class="it">и имя</span></h2>
     </div>
-    <div class="goal rv"><span class="em">🎯</span><span class="tx">Придумываем <b>логотип</b> и <b>имя</b> для магазина украшений</span></div>
+    <div class="goal rv"><span class="em">🎯</span><span class="tx">Выбери картинку, которая подходит <b>украшениям</b> — это будет <b>логотип</b>. Из неё придумай <b>имя</b>.</span></div>
 
-    <!-- Как это работает — на примере ДРУГОГО магазина, чтобы не копировали -->
     <div class="howto rv">
       <span class="howto-lbl">Смотри, как это работает</span>
       <div class="howto-row">
-        <span class="hx">🐸</span><span class="hx">🦘</span><span class="hx">🏪</span>
+        <span class="hx">🐸</span>
+        <span class="harr">➜</span>
+        <span class="hx" style="font-size:1rem;font-weight:900">прыгает</span>
         <span class="harr">➜</span>
         <span class="hres"><span class="hlogo">🐸</span>«Прыг-скок»</span>
       </div>
@@ -1020,18 +1059,19 @@
     </div>
 
     <div class="game-box rv">
-      <div class="reels">
-        <div class="reel-col"><span class="reel-cap" title="Кто?">👤</span><div class="reel" id="reelWho"><span class="em">❓</span><span class="w">кто?</span></div></div>
-        <div class="reel-col"><span class="reel-cap" title="Что делает?">⚡</span><div class="reel" id="reelDo"><span class="em">❓</span><span class="w">что делает?</span></div></div>
-        <div class="reel-col"><span class="reel-cap" title="Где?">📍</span><div class="reel" id="reelWhere"><span class="em">❓</span><span class="w">где?</span></div></div>
+      <div class="signs" id="signs"></div>
+      <div class="center"><button class="play-btn alt" id="signRand" type="button"><span class="em">🎲</span> Не знаю — выбери за меня</button></div>
+
+      <div class="shop" id="shop">
+        <div class="shop-roof"></div>
+        <div class="shop-body">
+          <div class="shop-logo" id="shopLogo">❓</div>
+          <div class="shop-name"><span class="lbl">🏷️ Имя</span><span class="line">✍️ . . . . . . . .</span></div>
+          <div class="shop-type">💍 магазин украшений</div>
+        </div>
       </div>
-      <div class="center"><button class="play-btn" id="spinRoulette" type="button"><span class="em">🎰</span> Крутить!</button></div>
-      <div class="mine" id="rMine">
-        <div class="mine-row"><span class="mine-tag">🎨 Логотип</span><span class="mine-val" id="rLogo">❓</span></div>
-        <div class="mine-row"><span class="mine-tag">🏷️ Имя</span><span class="mine-val">из того, что выпало ✍️</span></div>
-      </div>
+      <div class="words" id="words"></div>
     </div>
-    <div class="rule-big rv"><span class="em">🎯</span><span class="tx">Что выпало — <em>то и берём!</em></span></div>
   </div>
 </section>
 
@@ -1039,7 +1079,7 @@
 <section class="slide" id="builder">
   <div class="slide-content">
     <div class="section-head rv">
-      <span class="kicker">Шаг 2 · Игра</span>
+      <span class="kicker">Шаг 2</span>
       <h2 class="display">Собери<br><span class="it">слоган</span></h2>
     </div>
     <div class="goal rv"><span class="em">🎯</span><span class="tx">Придумываем <b>слоган</b> для магазина украшений</span></div>
@@ -1066,7 +1106,7 @@
 <section class="slide" id="impossible">
   <div class="slide-content">
     <div class="section-head rv">
-      <span class="kicker">Шаг 3 · Игра</span>
+      <span class="kicker">Шаг 3</span>
       <h2 class="display">Чудо-<br><span class="it">украшение</span></h2>
     </div>
     <div class="goal rv"><span class="em">🎯</span><span class="tx">Придумываем украшение, <b>которого нет ни в одном магазине</b> — его и соберём из вырезок!</span></div>
@@ -1106,8 +1146,8 @@
       <h2 class="display">Что мы<br><span class="it">делаем?</span></h2>
     </div>
     <div class="make rv">
-      <div class="mk"><span class="n">1</span><span class="em">🏷️</span><span class="t">Нейм</span><span class="from">🎰</span></div>
-      <div class="mk"><span class="n">2</span><span class="em">🎨</span><span class="t">Логотип</span><span class="from">🎰</span></div>
+      <div class="mk"><span class="n">1</span><span class="em">🏷️</span><span class="t">Нейм</span><span class="from">⭐</span></div>
+      <div class="mk"><span class="n">2</span><span class="em">🎨</span><span class="t">Логотип</span><span class="from">⭐</span></div>
       <div class="mk"><span class="n">3</span><span class="em">💬</span><span class="t">Слоган</span><span class="from">🎲</span></div>
       <div class="mk"><span class="n">4</span><span class="em">🖼️</span><span class="t">Плакат</span><span class="from">💍✂️</span></div>
     </div>
@@ -1224,7 +1264,7 @@
   <a href="#how" title="Как придумать">💡</a>
   <a href="#client" title="Заказчик">👸</a>
   <a href="#plan" title="Как поможем">🗺️</a>
-  <a href="#roulette" title="Герой и имя">🎰</a>
+  <a href="#logo" title="Знак и имя">⭐</a>
   <a href="#builder" title="Слоган">🎲</a>
   <a href="#impossible" title="Чудо-украшение">💍</a>
   <a href="#task" title="Что делаем">📋</a>
@@ -1323,29 +1363,36 @@
   sgNext.addEventListener('click', () => { sgI = (sgI + 1) % SG.length; sgRender(); });
   sgRender();
 
-  /* ===== ИГРА 2: КТО? ЧТО ДЕЛАЕТ? ГДЕ? ===== */
-  const WHO = [['🐸','лягушка'],['🦄','единорог'],['🐱','котик'],['🐉','дракон'],['🧚','фея'],['🦊','лиса'],
-               ['🐝','пчёлка'],['🦋','бабочка'],['🐧','пингвин'],['🤖','робот'],['👩‍🍳','повар'],['🚀','ракета'],['🐦','сорока'],['🐻','мишка']];
-  const DO  = [['✨','сияет'],['💃','танцует'],['🦘','прыгает'],['🎵','поёт'],['🪄','колдует'],['😴','спит'],
-               ['🚀','летает'],['🎨','рисует'],['🍳','готовит'],['😂','смеётся'],['🔍','ищет клад'],['🎁','дарит']];
-  const WHERE = [['🏰','в замке'],['🌊','в море'],['🌌','в космосе'],['🌲','в лесу'],['🍭','в конфетной стране'],
-                 ['❄️','в снегу'],['🏪','в магазине'],['🌋','у вулкана'],['☁️','на облаке'],['🏝️','на острове']];
-  const reels = [['reelWho', WHO], ['reelDo', DO], ['reelWhere', WHERE]].map(([id, list]) => ({ el: document.getElementById(id), list }));
-  const setReel = (r, item) => { r.el.querySelector('.em').textContent = item[0]; r.el.querySelector('.w').textContent = item[1]; };
-  const rBtn = document.getElementById('spinRoulette');
-  let rBusy = false;
-  rBtn.addEventListener('click', () => {
-    if (rBusy) return;
-    rBusy = true; rBtn.disabled = true;
-    const final = reels.map(r => pick(r.list));
+  /* ===== ШАГ 1: ЗНАК И ИМЯ ===== */
+  const SIGNS = [
+    ['⭐', ['звезда','звёздочка','сияние']],
+    ['🦋', ['бабочка','крылышки','порхать']],
+    ['💧', ['капелька','роса','блеск']],
+    ['🌙', ['луна','лунный свет','ночка']],
+    ['👑', ['корона','королева','принцесса']],
+    ['🌸', ['цветочек','лепесток','весна']],
+    ['🐚', ['ракушка','жемчужинка','море']],
+    ['🐦', ['сорока','блестяшка','гнёздышко']]
+  ];
+  const signsEl = document.getElementById('signs'), shopLogo = document.getElementById('shopLogo'), wordsEl = document.getElementById('words');
+  function chooseSign(k){
+    const [em, ws] = SIGNS[k];
+    signsEl.querySelectorAll('.sign').forEach((x, n) => x.classList.toggle('on', n === k));
+    shopLogo.textContent = em; shopLogo.classList.remove('set'); void shopLogo.offsetWidth; shopLogo.classList.add('set');
+    wordsEl.innerHTML = ws.map(w => '<span class="wd">' + w + '</span>').join('');
+  }
+  SIGNS.forEach((sg, k) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'sign'; b.textContent = sg[0];
+    b.addEventListener('click', () => chooseSign(k));
+    signsEl.appendChild(b);
+  });
+  document.getElementById('signRand').addEventListener('click', () => {
     let t = 0;
     const iv = setInterval(() => {
-      reels.forEach(r => { r.el.classList.remove('rolling'); void r.el.offsetWidth; r.el.classList.add('rolling'); setReel(r, pick(r.list)); });
-      if (++t >= 9) {
-        clearInterval(iv); reels.forEach((r, i) => setReel(r, final[i])); rBusy = false; rBtn.disabled = false;
-        const lg = document.getElementById('rLogo'); lg.textContent = final[0][0]; lg.classList.remove('pop'); void lg.offsetWidth; lg.classList.add('pop');
-      }
-    }, 110);
+      chooseSign(Math.floor(Math.random() * SIGNS.length));
+      if (++t >= 7) clearInterval(iv);
+    }, 120);
   });
 
   /* ===== ИГРА 3: СОБЕРИ СЛОГАН ===== */
