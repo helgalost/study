@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="referrer" content="no-referrer">
+<title>Мудборд</title>
+<script>document.documentElement.classList.add('js');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="lesson.css">
+<style>
+  /* ===== Пробковая доска ===== */
+  .cork{
+    position:relative;margin-top:1.5rem;border-radius:22px;padding:clamp(14px,4vw,26px);
+    background:#c99a62 radial-gradient(rgba(0,0,0,.08) 1px,transparent 1.5px) 0 0/9px 9px;
+    border:10px solid #8a5a2b;box-shadow:inset 0 0 0 3px rgba(0,0,0,.15),8px 8px 0 var(--ink);
+    display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(8px,2.5vw,16px);
+  }
+  .pin{position:relative;background:#fff;padding:6px 6px 10px;box-shadow:0 4px 10px rgba(0,0,0,.25)}
+  .pin:nth-child(3n+1){transform:rotate(-3deg)} .pin:nth-child(3n+2){transform:rotate(2deg)} .pin:nth-child(3n){transform:rotate(-1deg)}
+  .pin::before{content:"";position:absolute;top:-7px;left:50%;width:16px;height:16px;margin-left:-8px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ff8a8a,#d90f0f);box-shadow:0 2px 2px rgba(0,0,0,.4);z-index:2}
+  .pin .ph{aspect-ratio:1}
+  .pin.sw{display:flex;gap:4px;align-items:stretch;padding:8px}
+  .pin.sw i{flex:1;border-radius:4px;min-height:clamp(60px,20vw,110px)}
+  .pin.word{display:grid;place-items:center;font-weight:900;font-size:clamp(1rem,4.6vw,1.6rem);text-transform:uppercase;letter-spacing:-.02em;background:#fff8c2;text-align:center;line-height:1}
+
+  /* Формула «доска + настроение» */
+  .mb-eq{display:flex;align-items:center;justify-content:center;gap:clamp(.25rem,1.5vw,1rem);flex-wrap:wrap;margin-top:1.5rem}
+  .mb-eq .it-b{background:var(--paper-2);border:3px solid var(--ink);border-radius:24px;padding:.9rem .5rem;min-width:clamp(82px,23vw,150px);display:flex;flex-direction:column;align-items:center;gap:.3rem;text-align:center}
+  .mb-eq .it-b .em{font-size:clamp(2.4rem,10vw,3.4rem);line-height:1}
+  .mb-eq .it-b .t{font-size:clamp(.78rem,3.4vw,1.3rem);font-weight:900;text-transform:uppercase}
+  .mb-eq .it-b .en{font-size:12px;font-weight:700;color:var(--muted)}
+  .mb-eq .it-b.res{background:var(--signal);color:#fff;border-color:var(--signal);transform:rotate(-2deg)}
+  .mb-eq .it-b.res .en{color:rgba(255,255,255,.8)}
+  .mb-eq .op{font-size:clamp(1.4rem,6vw,2.6rem);font-weight:900;color:var(--muted)}
+
+  /* Настоящие мудборды */
+  .gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:1.5rem}
+  @media(min-width:768px){.gallery{grid-template-columns:repeat(3,1fr)}}
+  .gallery .ph{aspect-ratio:4/5;border-radius:20px;border:3px solid var(--ink)}
+  .gallery .ph:nth-child(odd){transform:rotate(-1.2deg)} .gallery .ph:nth-child(even){transform:rotate(1.2deg)}
+  .credit{margin-top:.8rem;font-size:11px;color:var(--muted);text-align:center}
+  .credit a{text-decoration:underline}
+
+  /* ===== Игра «Чей это мудборд?» ===== */
+  .mg-count{text-align:center;font-size:13px;font-weight:900;letter-spacing:.14em;color:var(--muted)}
+  .mg-board{
+    margin:.9rem auto 0;max-width:560px;border-radius:20px;padding:12px;
+    background:#c99a62 radial-gradient(rgba(0,0,0,.08) 1px,transparent 1.5px) 0 0/9px 9px;border:8px solid #8a5a2b;
+    display:grid;grid-template-columns:1fr 1fr;gap:10px;
+  }
+  .mg-tile{position:relative;aspect-ratio:1;border-radius:12px;overflow:hidden;cursor:pointer;border:0;padding:0;background:#fff;perspective:800px}
+  .mg-tile .ph{position:absolute;inset:0}
+  .mg-tile .cover{
+    position:absolute;inset:0;display:grid;place-items:center;font-size:clamp(2.6rem,12vw,4rem);font-weight:900;color:#fff;
+    transition:transform .5s var(--ease-out),opacity .5s;z-index:2;
+  }
+  .mg-tile:nth-child(1) .cover{background:var(--pink)} .mg-tile:nth-child(2) .cover{background:var(--blue)}
+  .mg-tile:nth-child(3) .cover{background:var(--yellow);color:var(--ink)} .mg-tile:nth-child(4) .cover{background:var(--green);color:var(--ink)}
+  .mg-tile.open .cover{transform:rotateY(90deg);opacity:0;pointer-events:none}
+  .mg-colors{grid-column:1/-1;display:flex;height:34px;border-radius:10px;overflow:hidden;border:3px solid #fff;transition:opacity .4s}
+  .mg-colors i{flex:1}
+  .mg-colors.hide{opacity:0}
+  .mg-hint{text-align:center;margin-top:.7rem;font-size:13px;font-weight:800;color:var(--muted)}
+  .mg-answer{
+    display:none;margin:1rem auto 0;max-width:560px;background:var(--ink);color:var(--paper);border-radius:22px;padding:1rem;
+    align-items:center;justify-content:center;gap:1rem;font-size:clamp(1.3rem,5.5vw,2rem);font-weight:900;text-transform:uppercase;
+  }
+  .mg-answer.on{display:flex;animation:pop .5s var(--ease-out)}
+  .mg-answer .em{font-size:1.8em;line-height:1}
+  .mg-answer img{height:64px;width:auto;border-radius:10px;background:#fff;padding:4px}
+
+  /* ===== Заказчик: магазин слаймов ===== */
+  .slimes{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:1.25rem}
+  @media(min-width:768px){.slimes{grid-template-columns:repeat(6,1fr)}}
+  .slimes .ph{aspect-ratio:1;border-radius:16px;border:2px solid var(--ink)}
+  .slimes .ph:nth-child(odd){transform:rotate(-2deg)} .slimes .ph:nth-child(even){transform:rotate(2deg)}
+  .style-words{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:1.25rem}
+  .style-words span{border:2px solid var(--ink);border-radius:999px;padding:8px 16px;font-weight:900;font-size:clamp(1rem,4vw,1.2rem)}
+  .style-words span:nth-child(1){background:linear-gradient(90deg,#ff9cc8,#ffc93c,#7bd389,#7cc8f0,#c9b8ff)}
+  .style-words span:nth-child(2){background:#f1e6ff}
+  .style-words span:nth-child(3){background:#bdeee0}
+  .style-words span:nth-child(4){background:var(--yellow)}
+  .style-words span:nth-child(5){background:#ffd6ec}
+
+  /* ===== Схема: копировать → вставить ===== */
+  .demo{display:grid;gap:14px;margin-top:1.5rem;align-items:stretch;grid-template-columns:minmax(0,1fr)}
+  @media(min-width:900px){.demo{grid-template-columns:minmax(0,1.1fr) auto minmax(0,1fr)}}
+  .browser{background:#fff;border:3px solid var(--ink);border-radius:18px;overflow:hidden;position:relative}
+  .browser .bar{display:flex;align-items:center;gap:6px;padding:8px 10px;background:var(--paper-3);border-bottom:3px solid var(--ink)}
+  .browser .bar i{width:11px;height:11px;border-radius:50%;background:#ff5f57}
+  .browser .bar i:nth-child(2){background:#febc2e} .browser .bar i:nth-child(3){background:#28c840}
+  .browser .search{
+    margin:10px;display:flex;align-items:center;gap:8px;border:3px solid var(--ink);border-radius:999px;padding:8px 14px;
+    font-weight:800;font-size:clamp(1rem,4vw,1.2rem);min-height:46px;
+  }
+  .browser .search .typed{border-right:3px solid var(--signal);padding-right:2px;white-space:nowrap;overflow:hidden}
+  .browser .res{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:0 10px 12px}
+  .browser .res .ph{aspect-ratio:1;border-radius:10px;transition:box-shadow .3s,transform .3s;opacity:.25}
+  .demo.st1 .browser .res .ph,.demo.st2 .browser .res .ph,.demo.st3 .browser .res .ph,.demo.st4 .browser .res .ph{opacity:1}
+  .demo.st2 .browser .res .ph.pick,.demo.st3 .browser .res .ph.pick{box-shadow:0 0 0 4px var(--signal);transform:scale(1.05)}
+  .ctx{
+    position:absolute;z-index:5;background:#fff;border:2px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--ink);
+    padding:6px;display:none;min-width:200px;font-weight:700;font-size:14px;
+  }
+  .ctx div{padding:7px 10px;border-radius:8px;color:var(--muted)}
+  .ctx div.hl{background:var(--yellow);color:var(--ink);font-weight:900}
+  .demo.st2 .ctx{display:block;animation:pop .35s var(--ease-out)}
+  .cursor{position:absolute;z-index:6;font-size:28px;display:none;transition:all .6s var(--ease-out);pointer-events:none}
+  .demo.st2 .cursor,.demo.st3 .cursor{display:block}
+  .demo-arrow{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+  .demo-arrow .ar{font-size:clamp(2rem,8vw,3rem);font-weight:900;color:var(--signal);line-height:1}
+  .keys{display:flex;gap:6px;align-items:center}
+  .key{border:3px solid var(--ink);border-bottom-width:6px;border-radius:10px;background:#fff;padding:6px 12px;font-weight:900;font-size:clamp(1rem,4vw,1.2rem)}
+  .demo.st3 .key{background:var(--yellow);animation:pop .4s var(--ease-out)}
+  .mini-board{
+    border-radius:18px;padding:12px;background:#fff;border:3px dashed var(--ink);min-height:220px;
+    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;align-content:start;position:relative;
+  }
+  .mini-board .lbl{grid-column:1/-1;text-align:center;font-size:12px;font-weight:900;text-transform:uppercase;color:var(--muted)}
+  .mini-board .ph{aspect-ratio:1;border-radius:10px;opacity:0;transform:scale(.4)}
+  .mini-board .ph.in{opacity:1;transform:none;transition:all .5s var(--ease-out)}
+  .demo-steps{display:grid;gap:8px;margin-top:1.25rem}
+  @media(min-width:768px){.demo-steps{grid-template-columns:repeat(4,1fr)}}
+  .dstep{display:flex;align-items:center;gap:.7rem;background:var(--paper-2);border-radius:18px;padding:.8rem 1rem;border:3px solid transparent;transition:all .3s}
+  .dstep .n{width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:900;font-style:italic;flex-shrink:0}
+  .dstep .em{font-size:1.8rem;line-height:1}
+  .dstep .t{font-weight:900;font-size:clamp(.9rem,3.6vw,1rem);line-height:1.15}
+  .dstep.on{border-color:var(--ink);background:var(--yellow);transform:scale(1.03)}
+  .demo-ctrl{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+  /* ===== Тренировка: собери мудборд ===== */
+  .builder{display:grid;gap:16px;margin-top:1.5rem;align-items:start}
+  @media(min-width:900px){.builder{grid-template-columns:1fr 1fr}}
+  .web{background:#fff;border:3px solid var(--ink);border-radius:18px;overflow:hidden}
+  .web .bar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--paper-3);border-bottom:3px solid var(--ink);font-weight:800;font-size:14px}
+  .web .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:10px}
+  .web .grid button{position:relative;aspect-ratio:1;border:0;padding:0;border-radius:10px;overflow:hidden;cursor:pointer;background:#eee}
+  .web .grid button .ph{position:absolute;inset:0}
+  .web .grid button.used{opacity:.25}
+  .web .grid button.used::after{content:"📋";position:absolute;inset:0;display:grid;place-items:center;font-size:1.8rem}
+  .myboard{
+    border-radius:18px;padding:12px;min-height:280px;
+    background:#c99a62 radial-gradient(rgba(0,0,0,.08) 1px,transparent 1.5px) 0 0/9px 9px;border:8px solid #8a5a2b;
+  }
+  .myboard .slots{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .slot{position:relative;aspect-ratio:1;border-radius:10px;border:3px dashed rgba(255,255,255,.7);display:grid;place-items:center;font-size:1.6rem;color:rgba(255,255,255,.8);background:rgba(255,255,255,.15)}
+  .slot.full{border:0;background:#fff;padding:5px;box-shadow:0 4px 10px rgba(0,0,0,.25);cursor:pointer}
+  .slot.full .ph{width:100%;height:100%;border-radius:6px}
+  .slot .mk{position:absolute;top:-10px;right:-8px;font-size:20px;z-index:2}
+  .slot.full:nth-child(odd){transform:rotate(-2deg)} .slot.full:nth-child(even){transform:rotate(2deg)}
+  .slot.pop{animation:pop .45s var(--ease-out)}
+  .myboard .extras{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;align-items:center}
+  .myboard .cols{display:flex;gap:6px;background:#fff;padding:6px;border-radius:10px}
+  .myboard .cols i{width:30px;height:30px;border-radius:6px;border:2px solid rgba(0,0,0,.15)}
+  .myboard .wds{display:flex;gap:6px;flex-wrap:wrap}
+  .myboard .wds span{background:#fff8c2;border-radius:6px;padding:4px 10px;font-weight:900;font-size:14px;box-shadow:0 2px 4px rgba(0,0,0,.2)}
+  .mb-tools{margin-top:1rem}
+  .mb-tools .lbl{font-size:12px;font-weight:900;text-transform:uppercase;margin:.6rem 0 .4rem}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chipb{min-width:46px;height:46px;border-radius:14px;border:3px solid var(--ink);background:#fff;cursor:pointer;font:inherit;font-weight:900;font-size:15px;padding:0 .7rem;transition:transform .15s}
+  .chipb.col{border-radius:50%;width:46px;padding:0}
+  .chipb.on{transform:scale(1.1);box-shadow:0 0 0 3px #fff,0 0 0 6px var(--ink)}
+  .mb-say{min-height:2.6rem;margin-top:1rem;text-align:center;font-size:clamp(1.1rem,4.5vw,1.4rem);font-weight:900}
+  .mb-say span{display:inline-block;animation:pop .45s var(--ease-out) both}
+
+  /* Где делать */
+  .where{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:1.25rem}
+  .where .ic .t{font-size:11px}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="top-brand" href="index.html">Мудборд<span>✦</span></a>
+  <span>Ольга</span>
+</header>
+
+<!-- HERO -->
+<section class="slide" id="top">
+  <div class="slide-content">
+    <h1 class="hero-title rv" style="font-size:clamp(2.8rem,14vw,9.5rem);display:flex;justify-content:space-between;line-height:.8;font-weight:900;letter-spacing:-.05em;">
+      <span>М</span><span>У</span><span>Д</span><span>Б</span><span>О</span><span>Р</span><span style="color:var(--signal);font-style:italic">Д</span>
+    </h1>
+    <div class="rv" style="margin-top:2rem;border-top:1px solid var(--line);padding-top:1rem;display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">доска <b style="color:var(--ink);">настроения 🎨</b></div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">↓ листай</div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <div class="marquee-item">Картинки 🖼️</div><div class="marquee-item">Цвета 🎨</div><div class="marquee-item">Слова 💬</div><div class="marquee-item">Настроение 😊</div>
+    <div class="marquee-item">Картинки 🖼️</div><div class="marquee-item">Цвета 🎨</div><div class="marquee-item">Слова 💬</div><div class="marquee-item">Настроение 😊</div>
+  </div>
+</div>
+
+<!-- 01 · ЧТО ТАКОЕ МУДБОРД -->
+<section class="slide" id="what">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Что такое<br><span class="it">мудборд?</span></h2>
+    </div>
+    <div class="mb-eq rv">
+      <div class="it-b"><span class="em">😊</span><span class="t">Настроение</span><span class="en">mood · муд</span></div>
+      <span class="op">+</span>
+      <div class="it-b"><span class="em">📋</span><span class="t">Доска</span><span class="en">board · борд</span></div>
+      <span class="op">=</span>
+      <div class="it-b res"><span class="em">🎨</span><span class="t">Мудборд</span><span class="en">доска настроения</span></div>
+    </div>
+
+    <!-- Пример: мудборд «Лето на море» -->
+    <div class="cork rv">
+      <div class="pin"><div class="ph"><img loading="lazy" alt="ракушка" data-u="https://images.unsplash.com/photo-1650012332958-2aa054c850ff"><span class="fb">🐚</span></div></div>
+      <div class="pin word">Море!</div>
+      <div class="pin"><div class="ph"><img loading="lazy" alt="пляж" data-u="https://images.unsplash.com/photo-1782320645111-d5efb62ea055"><span class="fb">🏖️</span></div></div>
+      <div class="pin sw"><i style="background:#7cc8f0"></i><i style="background:#f6e3c1"></i><i style="background:#ffc93c"></i></div>
+      <div class="pin"><div class="ph"><img loading="lazy" alt="мороженое" data-u="https://images.unsplash.com/photo-1497034825429-c343d7c6a68f"><span class="fb">🍦</span></div></div>
+      <div class="pin word">Тепло ☀️</div>
+    </div>
+    <div class="icons c3 rv">
+      <div class="ic y"><span class="em">🖼️</span><span class="t">Картинки</span></div>
+      <div class="ic b"><span class="em">🎨</span><span class="t">Цвета</span></div>
+      <div class="ic p"><span class="em">💬</span><span class="t">Слова</span></div>
+    </div>
+    <div class="rule-big rv"><span class="em">😊</span><span class="tx">Всё вместе — <em>одно настроение.</em> Посмотрел — и сразу понял!</span></div>
+  </div>
+</section>
+
+<!-- 02 · НАСТОЯЩИЕ МУДБОРДЫ -->
+<section class="slide" id="real">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Так делают<br><span class="it">художники</span></h2>
+    </div>
+    <div class="gallery rv" id="realGallery"></div>
+    <p class="credit rv">Фото: <a href="https://unsplash.com/s/photos/moodboard" target="_blank" rel="noopener">Unsplash</a></p>
+  </div>
+</section>
+
+<!-- 03 · ЗАЧЕМ -->
+<section class="slide" id="why">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Зачем<br><span class="it">мудборд?</span></h2>
+    </div>
+    <div class="icons rv">
+      <div class="ic y"><span class="em">👀</span><span class="t">Показать заказчику</span></div>
+      <div class="ic g"><span class="em">🤝</span><span class="t">Все понимают одинаково</span></div>
+      <div class="ic b"><span class="em">🧭</span><span class="t">Не потеряться</span></div>
+      <div class="ic r"><span class="em">💡</span><span class="t">Идеи не забудутся</span></div>
+    </div>
+    <div class="steps3 rv">
+      <div class="s3"><span class="em">🎨</span><span class="t">Мудборд</span></div>
+      <span class="s3a">➜</span>
+      <div class="s3"><span class="em">👍</span><span class="t">Заказчик: «Да!»</span></div>
+      <span class="s3a">➜</span>
+      <div class="s3"><span class="em">🖼️</span><span class="t">Рисуем рекламу</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 · МУЛЬТИК -->
+<section class="slide" id="video">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Смотрим<br><span class="it">мультик</span></h2>
+    </div>
+    <!-- Три кота, серия 256 «Как настроить настроение» (офиц. канал):
+         Компот грустит, друзья «настраивают» ему настроение — музыкой, игрой, танцами, как гитару. -->
+    <div class="ep rv">
+      <div class="ep-idea"><span class="chip y"><span class="em">🎸</span>Настроение можно создать!</span></div>
+      <div class="video-block" data-title="Три кота — «Как настроить настроение»" data-yt="l3TnpcK5678" data-yt-search="Три кота Как настроить настроение" data-vk="" data-rt=""></div>
+      <div class="ep-ask"><span>😔</span><span>➜</span><span>🎸🎵💃</span><span>➜</span><span>😄</span></div>
+    </div>
+    <div class="rule-big rv"><span class="em">🎨</span><span class="tx">Котята создали настроение музыкой. <em>Мудборд создаёт его картинками!</em></span></div>
+  </div>
+</section>
+
+<!-- 05 · ИГРА: ЧЕЙ ЭТО МУДБОРД? -->
+<section class="slide" id="game">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <span class="kicker">Игра</span>
+      <h2 class="display">Чей это<br><span class="it">мудборд?</span></h2>
+    </div>
+    <div class="game-box rv">
+      <div class="mg-count" id="mgCount"></div>
+      <div class="mg-board" id="mgBoard"></div>
+      <div class="mg-hint">👆 Открывай по одной картинке</div>
+      <div class="qz-opts n4" id="mgOpts" style="margin-top:1rem"></div>
+      <div class="mg-answer" id="mgAnswer"></div>
+      <div class="center"><button class="play-btn" id="mgNext" type="button">Дальше ➜</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 · ЗАКАЗЧИК -->
+<section class="slide" id="client">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">У нас<br><span class="it">заказчик!</span></h2>
+    </div>
+    <div class="client rv">
+      <div class="client-head">
+        <span class="ava" style="background:linear-gradient(135deg,#c9b8ff,#7bd389)">🧪</span>
+        <h3>Магазин<br>слаймов</h3>
+      </div>
+      <div class="client-say">
+        «Привет, ребята! Я открываю магазин слаймов: тянучки, хрустяшки, блестящие и даже светятся в темноте!
+        Скоро будем делать рекламу. Но сначала мне нужна <b>доска настроения</b> — чтобы все сразу поняли,
+        какой мой магазин. Соберите мне <b>мудборд</b>, пожалуйста!»
+      </div>
+      <div class="slimes" id="slimes"></div>
+      <div class="style-words">
+        <span>🌈 яркий</span><span>✨ блестящий</span><span>🫠 тянется</span><span>😄 весёлый</span><span>🍬 конфетные цвета</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 · КАК СОБРАТЬ: КОПИРУЕМ И ВСТАВЛЯЕМ -->
+<section class="slide" id="how">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Копируем —<br><span class="it">вставляем</span></h2>
+    </div>
+    <div class="demo st0 rv" id="demo">
+      <div class="browser" id="browser">
+        <div class="bar"><i></i><i></i><i></i></div>
+        <div class="search">🔍 <span class="typed" id="typed"></span></div>
+        <div class="res" id="demoRes"></div>
+        <div class="ctx" id="ctx">
+          <div>Открыть в новой вкладке</div>
+          <div>Сохранить картинку как…</div>
+          <div class="hl">📋 Копировать картинку</div>
+        </div>
+        <span class="cursor" id="cursor">👆</span>
+      </div>
+      <div class="demo-arrow">
+        <span class="ar">➜</span>
+        <div class="keys"><span class="key">Ctrl</span>+<span class="key">V</span></div>
+        <span style="font-size:12px;font-weight:800;color:var(--muted)">на Mac: ⌘ + V</span>
+      </div>
+      <div class="mini-board" id="miniBoard"><span class="lbl">Мой мудборд</span></div>
+    </div>
+    <div class="demo-steps rv" id="dsteps">
+      <div class="dstep"><span class="n">1</span><span class="em">🔍</span><span class="t">Напиши: «слайм»</span></div>
+      <div class="dstep"><span class="n">2</span><span class="em">🖱️</span><span class="t">Правая кнопка → «Копировать картинку»</span></div>
+      <div class="dstep"><span class="n">3</span><span class="em">📋</span><span class="t">На доске: Ctrl + V</span></div>
+      <div class="dstep"><span class="n">4</span><span class="em">🔁</span><span class="t">Ещё и ещё!</span></div>
+    </div>
+    <div class="demo-ctrl rv" style="margin-top:1rem">
+      <button class="play-btn" id="demoPlay" type="button"><span class="em">▶</span> Показать</button>
+      <button class="play-btn alt" id="demoStep" type="button">Шаг ➜</button>
+    </div>
+  </div>
+</section>
+
+<!-- 08 · ТРЕНИРОВКА: СОБЕРИ МУДБОРД -->
+<section class="slide" id="build">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <span class="kicker">Тренировка</span>
+      <h2 class="display">Собери<br><span class="it">мудборд</span></h2>
+    </div>
+    <div class="goal rv"><span class="em">🧪</span><span class="tx">Нажимай на картинки, которые подходят <b>магазину слаймов</b> — они «вставятся» на доску.</span></div>
+    <div class="builder rv">
+      <div class="web">
+        <div class="bar">🔍 Картинки из интернета</div>
+        <div class="grid" id="webGrid"></div>
+      </div>
+      <div>
+        <div class="myboard">
+          <div class="slots" id="slots"></div>
+          <div class="extras">
+            <div class="cols" id="myCols"></div>
+            <div class="wds" id="myWords"></div>
+          </div>
+        </div>
+        <div class="mb-tools">
+          <div class="lbl">🎨 Цвета</div><div class="chips" id="colChips"></div>
+          <div class="lbl">💬 Слова</div><div class="chips" id="wordChips"></div>
+        </div>
+      </div>
+    </div>
+    <div class="mb-say" id="mbSay"></div>
+    <div class="center"><button class="play-btn alt" id="mbClear" type="button">↺ Начать заново</button></div>
+  </div>
+</section>
+
+<!-- 09 · ЗАДАНИЕ -->
+<section class="slide" id="task">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <span class="kicker">Задание</span>
+      <h2 class="display">Мудборд<br><span class="it">для слаймов</span></h2>
+    </div>
+    <div class="goal rv"><span class="em">🎯</span><span class="tx">Собери свой мудборд для <b>магазина слаймов</b>.</span></div>
+    <div class="where rv">
+      <div class="ic y"><span class="em">💻</span><span class="t">На компьютере</span></div>
+      <div class="ic b"><span class="em">📱</span><span class="t">На планшете</span></div>
+      <div class="ic p"><span class="em">✂️</span><span class="t">Из журналов</span></div>
+    </div>
+    <div class="checks rv" style="margin-top:1.25rem">
+      <button class="ck" type="button"><span class="box"></span><span class="em">🖼️</span><span class="t">6 картинок</span></button>
+      <button class="ck" type="button"><span class="box"></span><span class="em">🎨</span><span class="t">3 цвета</span></button>
+      <button class="ck" type="button"><span class="box"></span><span class="em">💬</span><span class="t">2 слова</span></button>
+      <button class="ck" type="button"><span class="box"></span><span class="em">🧪</span><span class="t">Всё про слаймы</span></button>
+      <button class="ck" type="button"><span class="box"></span><span class="em">😄</span><span class="t">Одно настроение</span></button>
+    </div>
+    <div class="ck-done" id="ckDone"><span class="em">🎉</span>Мудборд готов для заказчика!</div>
+  </div>
+</section>
+
+<!-- 10 · ТАЙМЕР -->
+<section class="slide" id="time">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <h2 class="display">Время<br><span class="it">собирать!</span></h2>
+    </div>
+    <div class="timer rv" id="timer" data-icons="🔍,📋,🎨">
+      <div class="t-ring">
+        <svg viewBox="0 0 120 120"><circle class="bg" cx="60" cy="60" r="52" fill="none" stroke-width="10"/><circle class="fg" id="tArc" cx="60" cy="60" r="52" fill="none" stroke-width="10" stroke-linecap="round"/></svg>
+        <div class="t-mid"><span class="em" id="tEm">🔍</span><span class="time" id="tTime">00:00</span></div>
+      </div>
+      <div class="t-btns">
+        <button class="t-btn" type="button" data-min="10">10 мин</button>
+        <button class="t-btn" type="button" data-min="15">15 мин</button>
+        <button class="t-btn" type="button" data-min="20">20 мин</button>
+        <button class="t-btn stop" type="button" id="tStop">Стоп</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 11 · ФИНАЛ -->
+<section class="slide final" id="end">
+  <div class="slide-content">
+    <p class="final-label rv">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.9 7.4 15.2 10.6 24 12 15.2 13.4 12.9 16.6 12 24 11.1 16.6 8.8 13.4 0 12 8.8 10.6 11.1 7.4 12 0Z"/></svg>
+      запомни
+    </p>
+    <h2 class="display rv">
+      Мудборд —<br>
+      <span class="it">доска</span><br>
+      настроения.
+    </h2>
+    <div class="final-rule rv">
+      <p class="lbl">Правило</p>
+      <h3>
+        <span>Картинки + цвета</span>
+        <span>+ слова =</span>
+        <span>одно настроение.</span>
+      </h3>
+    </div>
+  </div>
+</section>
+
+<nav class="dock" id="dock">
+  <a href="#top" class="active" title="Старт">↑</a>
+  <a href="#what" title="Что такое мудборд">🎨</a>
+  <a href="#real" title="Настоящие мудборды">🖼️</a>
+  <a href="#why" title="Зачем">💡</a>
+  <a href="#video" title="Мультик">▶️</a>
+  <a href="#game" title="Игра">🎮</a>
+  <a href="#client" title="Заказчик">🧪</a>
+  <a href="#how" title="Копируем — вставляем">📋</a>
+  <a href="#build" title="Собери мудборд">🧩</a>
+  <a href="#task" title="Задание">✏️</a>
+  <a href="#time" title="Таймер">⏱️</a>
+  <a href="#end" title="Финал">🏁</a>
+</nav>
+
+<script>
+/* Картинки с Unsplash: одна функция для размера */
+const IMG = (u, w) => u + '?w=' + (w || 500) + '&q=70&auto=format&fit=crop';
+const ph = (u, fb, w, alt) => '<div class="ph"><img loading="lazy" alt="' + (alt || '') + '" src="' + IMG(u, w) + '"><span class="fb">' + (fb || '🖼️') + '</span></div>';
+document.querySelectorAll('img[data-u]').forEach(im => im.src = IMG(im.dataset.u, 400));
+
+const PIC = {
+  masha:  ['https://images.unsplash.com/photo-1507041957456-9c397ce39c97','https://images.unsplash.com/photo-1563559776084-759c4c52567f','https://images.unsplash.com/photo-1587049352851-8d4e89133924','https://images.unsplash.com/photo-1555078604-b2379f0e964a'],
+  fix:    ['https://images.unsplash.com/photo-1655927858183-fe31d5dd1080','https://images.unsplash.com/photo-1529310399831-ed472b81d589','https://images.unsplash.com/photo-1760842543713-108c3cadbba1','https://images.unsplash.com/photo-1581783898377-1c85bf937427'],
+  ny:     ['https://images.unsplash.com/photo-1770678817191-c3f8d0c52496','https://images.unsplash.com/photo-1612979168796-bcae1575b8c5','https://images.unsplash.com/photo-1613481950732-c1dcddcb410e','https://images.unsplash.com/photo-1767741857489-b28dcaa531a4'],
+  sea:    ['https://images.unsplash.com/photo-1650012332958-2aa054c850ff','https://images.unsplash.com/photo-1782320645111-d5efb62ea055','https://images.unsplash.com/photo-1497034825429-c343d7c6a68f','https://images.unsplash.com/photo-1563630381190-77c336ea545a'],
+  space:  ['https://images.unsplash.com/photo-1765754431926-964ed45a41e9','https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4','https://images.unsplash.com/photo-1614728263952-84ea256f9679','https://images.unsplash.com/photo-1541873676-a18131494184'],
+  pirate: ['https://images.unsplash.com/photo-1781820559556-c3e7924ade2f','https://images.unsplash.com/photo-1520299607509-dcd935f9a839','https://images.unsplash.com/photo-1775733894506-e0fcfa4405f2','https://images.unsplash.com/photo-1565214975484-3cfa9e56f914'],
+  autumn: ['https://images.unsplash.com/photo-1760905066148-2f04b5c6c087','https://images.unsplash.com/photo-1459478309853-2c33a60058e7','https://images.unsplash.com/photo-1523712999610-f77fbcfc3843','https://images.unsplash.com/photo-1506193503569-d57d2a678510'],
+  candy:  ['https://images.unsplash.com/photo-1582573732277-c5444fa37391','https://images.unsplash.com/photo-1575224300306-1b8da36134ec','https://images.unsplash.com/photo-1673124247113-a44d3c6ccbc5','https://images.unsplash.com/photo-1633158832466-be592c721217'],
+  real:   ['https://images.unsplash.com/photo-1652404445394-99b607de5e95','https://images.unsplash.com/photo-1763307411452-43cfd9f516ce','https://images.unsplash.com/photo-1532455900982-24be47fa89de','https://images.unsplash.com/photo-1632613714614-e817d3814a8e','https://images.unsplash.com/photo-1630893173613-ceaf4a6797d3','https://images.unsplash.com/photo-1649930536248-df58fd1f54f8'],
+  slime:  ['https://images.unsplash.com/photo-1631931931379-9dc037ac6a9d','https://images.unsplash.com/photo-1785233765864-b90014ab73b2','https://images.unsplash.com/photo-1686703428120-cf477ef2d389','https://images.unsplash.com/photo-1686942316889-c0afc0beee16','https://images.unsplash.com/photo-1543981625-66b822c50072','https://images.unsplash.com/photo-1686942485101-2f975378395f'],
+  pastel: ['https://images.unsplash.com/photo-1767552659473-9a541393de94','https://images.unsplash.com/photo-1579546928686-286c9fbde1ec','https://images.unsplash.com/photo-1488867605300-0380106bc701','https://images.unsplash.com/photo-1787580113187-1a50ab0abac2','https://images.unsplash.com/photo-1458682625221-3a45f8a844c7','https://images.unsplash.com/photo-1587586062323-836089e60d52']
+};
+
+/* Настоящие мудборды и слаймы заказчика */
+document.getElementById('realGallery').innerHTML = PIC.real.map(u => ph(u, '🎨', 600)).join('');
+document.getElementById('slimes').innerHTML = PIC.slime.map(u => ph(u, '🧪', 300)).join('');
+</script>
+<script src="lesson.js"></script>
+<script>
+(function(){
+  /* ===== Игра «Чей это мудборд?» ===== */
+  const MASHA_LOGO = 'https://upload.wikimedia.org/wikipedia/commons/8/8b/Masha_and_the_Bear_2019_stamp_of_Russia_3.jpg';
+  const FIX_LOGO = 'https://thumb.wikimedia.org/wikipedia/ru/thumb/2/2a/%D0%A4%D0%B8%D0%BA%D1%81%D0%B8%D0%BA%D0%B8_-_%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80.png/300px-%D0%A4%D0%B8%D0%BA%D1%81%D0%B8%D0%BA%D0%B8_-_%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80.png';
+  const ROUNDS = [
+    { k:'masha',  cols:['#2f6b3a','#d61f45','#f2a900'], a:['🐻👧','Маша и Медведь'], logo:MASHA_LOGO, o:[['🔧','Фиксики'],['🏴‍☠️','Пираты'],['🎄','Новый год']] },
+    { k:'ny',     cols:['#e0262b','#2f9e4b','#ffc93c'], a:['🎄','Новый год'], o:[['🏖️','Лето на море'],['🍂','Осень'],['🚀','Космос']] },
+    { k:'fix',    cols:['#ff8a2b','#3a7bd5','#9aa3ad'], a:['🔧','Фиксики'], logo:FIX_LOGO, o:[['🐻👧','Маша и Медведь'],['🍬','Магазин сладостей'],['🏴‍☠️','Пираты']] },
+    { k:'sea',    cols:['#7cc8f0','#f6e3c1','#ffc93c'], a:['🏖️','Лето на море'], o:[['❄️','Зима'],['🚀','Космос'],['🔧','Фиксики']] },
+    { k:'space',  cols:['#0b1033','#5b3cc4','#e8e8ff'], a:['🚀','Космос'], o:[['🏴‍☠️','Пираты'],['🍂','Осень'],['🍬','Магазин сладостей']] },
+    { k:'pirate', cols:['#5a3a1d','#1f4e6b','#d4a83a'], a:['🏴‍☠️','Пираты'], o:[['🐻👧','Маша и Медведь'],['🎄','Новый год'],['🏖️','Лето на море']] },
+    { k:'autumn', cols:['#d9661f','#a3261b','#f0b429'], a:['🍂','Осень'], o:[['🌸','Весна'],['❄️','Зима'],['🚀','Космос']] },
+    { k:'candy',  cols:['#ff9cc8','#c9b8ff','#ffd6a0'], a:['🍬','Магазин сладостей'], o:[['🔧','Фиксики'],['🏴‍☠️','Пираты'],['🍂','Осень']] }
+  ];
+  const board = document.getElementById('mgBoard'), opts = document.getElementById('mgOpts'),
+        ans = document.getElementById('mgAnswer'), cnt = document.getElementById('mgCount'), next = document.getElementById('mgNext');
+  let i = 0;
+  function openAll(){ board.querySelectorAll('.mg-tile').forEach(t => t.classList.add('open')); board.querySelector('.mg-colors').classList.remove('hide'); }
+  function render(){
+    const r = ROUNDS[i];
+    cnt.textContent = (i + 1) + ' / ' + ROUNDS.length;
+    board.innerHTML = L.shuffle(PIC[r.k]).map(u => '<button class="mg-tile" type="button">' + ph(u, '🖼️', 400) + '<span class="cover">?</span></button>').join('') +
+      '<div class="mg-colors hide">' + r.cols.map(c => '<i style="background:' + c + '"></i>').join('') + '</div>';
+    board.querySelectorAll('.mg-tile').forEach(t => t.addEventListener('click', () => {
+      t.classList.add('open');
+      if (board.querySelectorAll('.mg-tile:not(.open)').length === 0) board.querySelector('.mg-colors').classList.remove('hide');
+    }));
+    ans.classList.remove('on'); ans.innerHTML = '';
+    opts.innerHTML = '';
+    L.shuffle([r.a, ...r.o]).forEach(o => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'qz-opt';
+      b.innerHTML = '<span class="em" style="font-size:clamp(2.2rem,10vw,3.2rem)">' + o[0] + '</span><span class="t">' + o[1] + '</span>';
+      b.addEventListener('click', () => {
+        if (o === r.a) {
+          b.classList.add('yes'); openAll();
+          opts.querySelectorAll('.qz-opt').forEach(x => { if (x !== b) x.classList.add('no'); });
+          ans.innerHTML = (r.logo ? '<img alt="" src="' + r.logo + '" referrerpolicy="no-referrer" onerror="this.remove()">' : '<span class="em">' + r.a[0] + '</span>') + r.a[1];
+          ans.classList.add('on');
+        } else { b.classList.remove('no'); void b.offsetWidth; b.classList.add('no'); }
+      });
+      opts.appendChild(b);
+    });
+    next.textContent = i === ROUNDS.length - 1 ? 'Сначала ↺' : 'Дальше ➜';
+  }
+  next.addEventListener('click', () => { i = (i + 1) % ROUNDS.length; render(); });
+  render();
+
+  /* ===== Схема «копируем → вставляем» ===== */
+  const demo = document.getElementById('demo'), typed = document.getElementById('typed'), res = document.getElementById('demoRes'),
+        mini = document.getElementById('miniBoard'), ctx = document.getElementById('ctx'), cursor = document.getElementById('cursor'),
+        browser = document.getElementById('browser'), dsteps = [...document.querySelectorAll('.dstep')];
+  const DEMO_PICS = [PIC.slime[0], PIC.slime[2], PIC.slime[1], PIC.pastel[2], PIC.slime[4], PIC.pastel[0]];
+  res.innerHTML = DEMO_PICS.map(u => ph(u, '🧪', 250)).join('');
+  const resTiles = [...res.querySelectorAll('.ph')];
+  let step = 0, pasted = 0, auto = null;
+  function placeCtx(tile){
+    const b = browser.getBoundingClientRect(), t = tile.getBoundingClientRect();
+    const x = Math.min(t.left - b.left + t.width * .55, b.width - 210);
+    const y = t.top - b.top + t.height * .5;
+    ctx.style.left = x + 'px'; ctx.style.top = y + 'px';
+    cursor.style.left = (t.left - b.left + t.width * .45) + 'px'; cursor.style.top = (t.top - b.top + t.height * .35) + 'px';
+  }
+  function setStep(s){
+    step = s;
+    demo.className = 'demo rv st' + s;
+    dsteps.forEach((d, k) => d.classList.toggle('on', k === s - 1 || (s === 4 && k === 3)));
+    const tile = resTiles[pasted % resTiles.length];
+    resTiles.forEach(t => t.classList.toggle('pick', t === tile));
+    if (s === 1) {
+      typed.textContent = '';
+      const word = 'слайм ✨'; let k = 0;
+      const iv = setInterval(() => { typed.textContent = word.slice(0, ++k); if (k >= word.length) clearInterval(iv); }, 120);
+    }
+    if (s === 2) placeCtx(tile);
+    if (s === 3) {
+      const slots = mini.querySelectorAll('.ph');
+      if (slots.length < 6) {
+        const d = document.createElement('div'); d.innerHTML = ph(DEMO_PICS[pasted % 6], '🧪', 250);
+        const el = d.firstChild; mini.appendChild(el);
+        requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('in')));
+        pasted++;
+      }
+    }
+    if (s === 4) {
+      // быстро добиваем доску до 6 картинок
+      let n = mini.querySelectorAll('.ph').length;
+      const fill = setInterval(() => {
+        if (n >= 6) { clearInterval(fill); return; }
+        const d = document.createElement('div'); d.innerHTML = ph(DEMO_PICS[n], '🧪', 250);
+        const el = d.firstChild; mini.appendChild(el);
+        requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('in')));
+        n++; pasted = n;
+      }, 350);
+    }
+  }
+  function nextStep(){
+    if (step >= 4) { mini.querySelectorAll('.ph').forEach(x => x.remove()); pasted = 0; setStep(1); return; }
+    setStep(step + 1);
+  }
+  document.getElementById('demoStep').addEventListener('click', () => { clearInterval(auto); auto = null; nextStep(); });
+  document.getElementById('demoPlay').addEventListener('click', () => {
+    clearInterval(auto);
+    mini.querySelectorAll('.ph').forEach(x => x.remove()); pasted = 0;
+    setStep(1);
+    auto = setInterval(() => { if (step >= 4) { clearInterval(auto); auto = null; return; } nextStep(); }, 1700);
+  });
+
+  /* ===== Тренировка: собери мудборд для слаймов ===== */
+  const GOOD = [...PIC.slime, PIC.pastel[0], PIC.pastel[1], PIC.pastel[2], PIC.candy[2]];
+  const BAD = [PIC.fix[0], PIC.fix[3], PIC.pirate[2], PIC.masha[0], PIC.autumn[0], PIC.space[3]];
+  const WEB = L.shuffle([...GOOD.map(u => ({ u, ok: true })), ...BAD.map(u => ({ u, ok: false }))]);
+  const webGrid = document.getElementById('webGrid'), slotsEl = document.getElementById('slots'), say = document.getElementById('mbSay');
+  const SLOTS = 6;
+  let placed = [];
+  function talk(t){ say.innerHTML = '<span>' + t + '</span>'; }
+  function drawSlots(){
+    slotsEl.innerHTML = '';
+    for (let k = 0; k < SLOTS; k++) {
+      const s = document.createElement('div');
+      const p = placed[k];
+      if (p) {
+        s.className = 'slot full';
+        s.innerHTML = '<span class="mk">' + (p.ok ? '✅' : '🤔') + '</span>' + ph(p.u, '🖼️', 250);
+        s.title = 'Убрать';
+        s.addEventListener('click', () => { placed.splice(k, 1); p.btn.classList.remove('used'); drawSlots(); talk('🗑️ Убрали'); });
+      } else { s.className = 'slot'; s.textContent = '📋'; }
+      slotsEl.appendChild(s);
+    }
+    const okCount = placed.filter(p => p.ok).length;
+    if (placed.length === SLOTS && okCount === SLOTS) talk('🎉 Мудборд для слаймов готов! Добавь цвета и слова ✨');
+  }
+  WEB.forEach(w => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.innerHTML = ph(w.u, '🖼️', 250);
+    b.addEventListener('click', () => {
+      if (b.classList.contains('used')) return;
+      if (placed.length >= SLOTS) { talk('📋 Доска полная! Нажми на картинку на доске, чтобы убрать'); return; }
+      placed.push({ u: w.u, ok: w.ok, btn: b }); b.classList.add('used'); drawSlots();
+      const last = slotsEl.children[placed.length - 1]; last.classList.add('pop');
+      talk(w.ok ? '✅ Подходит слаймам!' : '🤔 Это про слаймы? Нажми на неё на доске, чтобы убрать');
+    });
+    webGrid.appendChild(b);
+  });
+  const COLS = ['#ff9cc8','#c9b8ff','#7bd389','#7cc8f0','#ffc93c','#bdeee0','#5a3a1d','#2b2b2b','#9aa3ad'];
+  const WORDS = ['тянется','блестит','весело','мягкий','хрусть!','ярко','скучно','серьёзно'];
+  let myCols = [], myWords = [];
+  const colChips = document.getElementById('colChips'), wordChips = document.getElementById('wordChips');
+  COLS.forEach(c => {
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'chipb col'; b.style.background = c; b.setAttribute('aria-label','цвет');
+    b.addEventListener('click', () => {
+      if (myCols.includes(c)) myCols = myCols.filter(x => x !== c); else { if (myCols.length >= 3) myCols.shift(); myCols.push(c); }
+      colChips.querySelectorAll('.chipb').forEach((x, k) => x.classList.toggle('on', myCols.includes(COLS[k])));
+      document.getElementById('myCols').innerHTML = myCols.map(x => '<i style="background:' + x + '"></i>').join('');
+      if (['#5a3a1d','#2b2b2b','#9aa3ad'].includes(c) && myCols.includes(c)) talk('🤔 Тёмный цвет — это весело и ярко?');
+    });
+    colChips.appendChild(b);
+  });
+  WORDS.forEach(w => {
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'chipb'; b.textContent = w;
+    b.addEventListener('click', () => {
+      if (myWords.includes(w)) myWords = myWords.filter(x => x !== w); else { if (myWords.length >= 3) myWords.shift(); myWords.push(w); }
+      wordChips.querySelectorAll('.chipb').forEach(x => x.classList.toggle('on', myWords.includes(x.textContent)));
+      document.getElementById('myWords').innerHTML = myWords.map(x => '<span>' + x + '</span>').join('');
+      if ((w === 'скучно' || w === 'серьёзно') && myWords.includes(w)) talk('🤔 Слаймы — это «' + w + '»?');
+    });
+    wordChips.appendChild(b);
+  });
+  document.getElementById('mbClear').addEventListener('click', () => {
+    placed = []; myCols = []; myWords = [];
+    webGrid.querySelectorAll('button').forEach(b => b.classList.remove('used'));
+    document.querySelectorAll('.mb-tools .chipb').forEach(b => b.classList.remove('on'));
+    document.getElementById('myCols').innerHTML = ''; document.getElementById('myWords').innerHTML = '';
+    drawSlots(); say.innerHTML = '';
+  });
+  drawSlots();
+
+  /* картинки, добавленные скриптом, тоже получают запасной эмодзи */
+  document.addEventListener('error', e => {
+    const im = e.target;
+    if (im.tagName === 'IMG' && im.parentElement && im.parentElement.classList.contains('ph')) im.parentElement.classList.add('noimg');
+  }, true);
+})();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>
