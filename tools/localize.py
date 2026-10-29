@@ -27,7 +27,7 @@ def other(m):
     return loc
 
 RX_U = re.compile(r'https://images\.unsplash\.com/(photo-[0-9a-f]+-[0-9a-f]+)(?:\?[^"\'\s)<>]*)?')
-RX_O = re.compile(r'https://(?:upload\.wikimedia\.org|thumb\.wikimedia\.org|free-png\.ru|m\.dom-eda\.com|cdn2\.botanichka\.ru|helgalost\.github\.io/portfolio)/[^"\'\s)<>]+\.(?:jpe?g|png|gif|webp|JPE?G|PNG)')
+RX_O = re.compile(r'https://(?:upload\.wikimedia\.org|thumb\.wikimedia\.org|free-png\.ru|m\.dom-eda\.com|cdn2\.botanichka\.ru)/[^"\'\s)<>]+\.(?:jpe?g|png|gif|webp|JPE?G|PNG)')
 
 for f in sorted(list(root.glob('*.html')) + list(root.glob('*.js'))):
     t = f.read_text()

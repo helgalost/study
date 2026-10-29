@@ -109,11 +109,11 @@
       if (!running) return;
       const dt = Math.min(0.05, (now - last) / 1000); last = now; t += dt;
       const H = road.clientHeight;
-      const speed = 200 + Math.min(1, t / DUR) * 230;   // быстрее к концу
+      const speed = 120 + Math.min(1, t / DUR) * 90;    // спокойная скорость, чуть быстрее к концу
       lineY = (lineY + speed * dt) % 60;
       lines.style.backgroundPosition = '33.33% ' + lineY + 'px, 66.66% ' + lineY + 'px';
       spawnT -= dt;
-      if (spawnT <= 0) { spawn(); spawnT = 0.95 - Math.min(0.45, t / DUR * 0.45); }
+      if (spawnT <= 0) { spawn(); spawnT = 1.5 - Math.min(0.35, t / DUR * 0.35); }
       const carTop = H - 18 - car.offsetHeight, carBot = H - 18;
       items = items.filter(it => {
         it.y += speed * dt;
@@ -146,7 +146,7 @@
       items.forEach(i => i.el.remove()); items = [];
       const uniq = []; const seen = new Set();
       good.forEach(g => { if (!seen.has(g[0])) { seen.add(g[0]); uniq.push(g); } });
-      const stars = good.length >= 14 && bad <= 1 ? 3 : good.length >= 8 && bad <= 3 ? 2 : 1;
+      const stars = good.length >= 10 && bad <= 1 ? 3 : good.length >= 6 && bad <= 3 ? 2 : 1;
       over.className = 'race-over';
       over.innerHTML =
         '<span class="h">🏁 Финиш!</span>' +

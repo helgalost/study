@@ -10,142 +10,194 @@
 <link rel="stylesheet" href="lesson.css">
 <link rel="stylesheet" href="race.css">
 <style>
-  /* ===== Поток: заказчик → мудборд → мы рисуем ===== */
-  .sx-flow{display:flex;align-items:center;justify-content:center;gap:clamp(.3rem,2vw,1rem);flex-wrap:wrap;margin-top:1.5rem}
-  .sx-step{background:var(--paper-2);border:3px solid var(--ink);border-radius:22px;padding:1rem .7rem;width:clamp(96px,27vw,170px);display:flex;flex-direction:column;align-items:center;gap:.35rem;text-align:center}
-  .sx-step .em{font-size:clamp(2.4rem,10vw,3.4rem);line-height:1}
-  .sx-step .t{font-size:clamp(.8rem,3.4vw,1rem);font-weight:900;text-transform:uppercase;line-height:1.1}
-  .sx-step .say{font-size:12px;font-weight:800;background:#fff;border-radius:10px;padding:3px 8px}
-  .sx-step.c{background:var(--pink)} .sx-step.m{background:var(--yellow)} .sx-step.w{background:var(--green)}
-  .sx-arr{font-size:clamp(1.6rem,6vw,2.4rem);font-weight:900;color:var(--signal)}
+  /* Все картинки урока лежат в репозитории: img/u/… */
+  .sx-q{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:1.25rem}
+  .sx-q button{border:3px solid var(--ink);border-radius:999px;background:#fff;padding:.55rem 1rem;font:inherit;font-weight:900;font-size:clamp(1rem,4vw,1.2rem);cursor:pointer;box-shadow:0 4px 0 var(--ink)}
+  .sx-q button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+  .sx-q button.on{background:var(--yellow)}
+  .sx-ans{min-height:3rem;text-align:center;font-weight:900;font-size:clamp(1.3rem,5.5vw,2rem);margin-top:.8rem}
+  .sx-ans span{display:inline-block;animation:pop .45s var(--ease-out) both}
 
-  /* ===== Торт: по хотелкам или «как нравится мне» ===== */
-  .sx-wish{display:flex;align-items:center;justify-content:center;gap:.6rem;flex-wrap:wrap;margin-top:1.5rem;background:var(--ink);color:var(--paper);border-radius:22px;padding:.9rem 1rem}
-  .sx-wish .lbl{font-weight:900;text-transform:uppercase;font-size:clamp(.95rem,3.8vw,1.15rem)}
-  .sx-wish span.w{background:rgba(255,255,255,.12);border-radius:999px;padding:5px 12px;font-weight:800;font-size:clamp(.95rem,3.8vw,1.1rem)}
-  .sx-cakes{display:grid;grid-template-columns:1fr 1fr;gap:clamp(.6rem,3vw,1.25rem);margin-top:1rem}
-  .sx-cake{border:3px solid var(--ink);border-radius:24px;background:#fff;cursor:pointer;font:inherit;color:inherit;padding:1rem .6rem;display:flex;flex-direction:column;align-items:center;gap:.6rem;transition:transform .2s var(--ease-out)}
-  .sx-cake:hover{transform:translateY(-3px)}
-  .sx-cake .who{font-size:12px;font-weight:900;text-transform:uppercase;color:var(--muted)}
-  .cakeart{position:relative;width:min(100%,170px);aspect-ratio:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}
-  .cakeart .ck-top{font-size:clamp(1.4rem,6vw,2rem);letter-spacing:.1em;line-height:1;margin-bottom:-4px;z-index:2}
-  .cakeart .t1{width:62%;height:28%;border-radius:14px 14px 4px 4px;border:3px solid var(--ink);border-bottom:0}
-  .cakeart .t2{width:88%;height:36%;border-radius:14px 14px 8px 8px;border:3px solid var(--ink)}
-  .cakeart .plate{width:100%;height:8%;border-radius:999px;background:#e0ddd5;border:3px solid var(--ink);margin-top:-2px}
-  .cakeart.pink .t1{background:repeating-linear-gradient(90deg,#ffd6ec 0 14px,#ffc2df 14px 28px)} .cakeart.pink .t2{background:#ffe3f1}
-  .cakeart.dark .t1{background:#1b1b1b} .cakeart.dark .t2{background:repeating-linear-gradient(90deg,#2b2b2b 0 14px,#c62828 14px 18px)}
-  .sx-react{min-height:2.2rem;font-weight:900;font-size:clamp(1rem,4.2vw,1.25rem);text-align:center}
-  .sx-react span{display:inline-block;animation:pop .45s var(--ease-out) both}
-  .sx-cake.on.good{background:#d6f5dc;box-shadow:5px 5px 0 var(--ink)} .sx-cake.on.bad{background:#ffd9d9;box-shadow:5px 5px 0 var(--ink)}
+  /* ===== 1. Один товар — три мира ===== */
+  .sx-worlds{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(.4rem,2vw,1rem);margin-top:1.5rem}
+  .sx-w{position:relative;border:3px solid var(--ink);border-radius:22px;overflow:hidden;aspect-ratio:3/4;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:transform .3s var(--ease-out),box-shadow .3s}
+  .sx-w .ph{width:74%;aspect-ratio:1;position:relative;z-index:2;margin-top:-8%}
+  .sx-w .ph img{object-fit:cover}
+  .sx-w .nm{position:absolute;left:0;right:0;bottom:0;z-index:3;text-align:center;font-weight:900;font-size:clamp(.7rem,3vw,1.05rem);text-transform:uppercase;padding:.45rem .2rem;background:rgba(255,255,255,.9);color:var(--ink);border-top:3px solid var(--ink)}
+  .sx-w .deco{position:absolute;z-index:3;font-size:clamp(1.3rem,6vw,2.4rem);line-height:1;pointer-events:none}
+  .sx-w .word{position:absolute;z-index:3;top:6%;left:0;right:0;text-align:center;line-height:1;pointer-events:none}
+  /* спокойный: светлая рамка, много воздуха */
+  .sx-w.calm{background:linear-gradient(180deg,#faf7f1,#efe7da)}
+  .sx-w.calm .ph{border-radius:50%;border:2px solid #e2d6c2;box-shadow:0 16px 30px rgba(120,100,70,.18)}
+  .sx-w.calm .word{font-family:Georgia,serif;font-style:italic;color:#a08c6c;font-size:clamp(.8rem,3.4vw,1.3rem);letter-spacing:.1em}
+  /* энергичный: яркий фон, наклейка с толстой обводкой */
+  .sx-w.energy{background:repeating-linear-gradient(-35deg,rgba(255,255,255,.28) 0 10px,transparent 10px 26px),linear-gradient(135deg,#ffe600,#ff3d8b 70%,#7a2cff)}
+  .sx-w.energy .ph{border:5px solid #000;border-radius:14px;transform:rotate(-10deg);box-shadow:7px 7px 0 #000}
+  .sx-w.energy .ph img{filter:saturate(1.6) contrast(1.15) hue-rotate(-10deg)}
+  .sx-w.energy .word{font-family:'Russo One',sans-serif;color:#fff;font-size:clamp(1.3rem,6.5vw,2.6rem);text-shadow:3px 3px 0 #000;transform:rotate(-6deg)}
+  /* ретро: старое фото-полароид на плёнке */
+  .sx-w.retro{background:#e7d3a8}
+  .sx-w.retro::before,.sx-w.retro::after{content:"";position:absolute;top:0;bottom:0;width:12%;z-index:1;background:#2a2118 radial-gradient(circle,#e7d3a8 0 35%,transparent 38%) center top/100% 16%}
+  .sx-w.retro::before{left:0}.sx-w.retro::after{right:0}
+  .sx-w.retro .ph{width:62%;border:5px solid #fbf3e2;border-bottom-width:18px;border-radius:3px;transform:rotate(3deg);box-shadow:0 6px 10px rgba(60,40,10,.35)}
+  .sx-w.retro .ph img{filter:sepia(.9) contrast(1.1) brightness(.92)}
+  .sx-w.retro .word{font-family:Georgia,serif;font-weight:700;color:#7a4b1d;font-size:clamp(.9rem,4vw,1.6rem);letter-spacing:.06em}
+  .sx-w.ok{box-shadow:0 0 0 5px #fff,0 0 0 9px #1b8a3a;transform:translateY(-6px) rotate(-1deg)}
+  .sx-w .stamp{position:absolute;z-index:4;top:6px;right:6px;font-size:clamp(1.6rem,7vw,2.6rem);display:none;animation:pop .45s var(--ease-out) both}
+  .sx-w.ok .stamp{display:block}
+  .sx-w.same .ph{animation:sxPulse 1s ease-in-out 2}
+  @keyframes sxPulse{50%{transform:scale(1.15)}}
 
-  /* ===== Одна вывеска — три стиля ===== */
-  .sx-switch{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:1.5rem}
-  .sx-switch button{border:3px solid var(--ink);border-radius:20px;background:#fff;width:72px;height:64px;font-size:2rem;cursor:pointer}
-  .sx-switch button.on{background:var(--ink);color:var(--paper)}
-  .sx-shop{max-width:520px;margin:1.25rem auto 0}
-  .sx-roof{height:40px;border:4px solid var(--ink);border-bottom:0;border-radius:18px 18px 0 0;transition:background .4s}
-  .sx-board{position:relative;overflow:hidden;border:4px solid var(--ink);border-radius:0 0 20px 20px;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;padding:1.4rem 1rem;transition:background .4s}
-  .sx-board .pat{position:absolute;inset:0;pointer-events:none;display:flex;flex-wrap:wrap;align-content:space-around;justify-content:space-around;font-size:28px;opacity:.55;padding:6px}
-  .sx-board .name{position:relative;z-index:2;font-size:clamp(2.2rem,11vw,4rem);line-height:1;transition:all .3s}
-  .sx-board .sub{position:relative;z-index:2;font-weight:800;font-size:13px;letter-spacing:.12em;text-transform:uppercase}
-  .sx-parts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:1.25rem}
-  .sx-part{background:var(--paper-2);border-radius:20px;padding:.9rem .5rem;display:flex;flex-direction:column;align-items:center;gap:.4rem;text-align:center}
-  .sx-part .lbl{font-size:12px;font-weight:900;text-transform:uppercase}
-  .sx-part .v{min-height:44px;display:flex;align-items:center;justify-content:center;gap:4px}
-  .sx-part .v i{width:26px;height:26px;border-radius:50%;border:2px solid var(--ink)}
-  .sx-part .v .e{font-size:2.2rem;line-height:1}
-  .sx-part .v .f{font-size:2rem;line-height:1}
+  /* ===== 2. Угадай стиль ===== */
+  .sx-guess{max-width:620px;margin:1.5rem auto 0}
+  .sx-gtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem;font-weight:900;font-size:1.2rem}
+  .sx-dots{display:flex;gap:5px}
+  .sx-dots i{width:14px;height:14px;border-radius:50%;border:2px solid var(--ink);background:#fff}
+  .sx-dots i.ok{background:var(--green)} .sx-dots i.now{background:var(--yellow)}
+  .sx-gcard{position:relative;border:4px solid var(--ink);border-radius:26px;overflow:hidden;aspect-ratio:4/3;display:grid;grid-template-columns:1fr 1fr;gap:4%;padding:7% 6% 16%;transition:background .3s}
+  .sx-gcard .ph{border-radius:16px;position:relative;z-index:2}
+  .sx-gcard .em{position:absolute;z-index:3;left:0;right:0;bottom:3%;text-align:center;font-size:clamp(1.6rem,7vw,2.6rem);letter-spacing:.2em}
+  .sx-gcard .wd{position:absolute;z-index:3;top:2.5%;left:0;right:0;text-align:center;font-size:clamp(1.1rem,5vw,1.9rem);line-height:1}
+  .sx-gcard .lbl{position:absolute;z-index:5;inset:0;display:none;align-items:center;justify-content:center;background:rgba(255,255,255,.55)}
+  .sx-gcard .lbl b{background:#fff;border:4px solid var(--ink);border-radius:20px;padding:.5rem 1.2rem;font-size:clamp(1.5rem,7vw,2.4rem);font-weight:900;transform:rotate(-4deg);animation:pop .45s var(--ease-out) both}
+  .sx-gcard.done .lbl{display:flex}
+  .sx-gcard.no{animation:shake .4s}
+  .sx-g-cute{background:radial-gradient(circle at 20% 20%,#fff 0 6%,transparent 7%),linear-gradient(160deg,#ffe0f0,#e8dcff)}
+  .sx-g-cute .ph{border-radius:40px;border:4px solid #fff}
+  .sx-g-cute .wd{font-family:'Nunito',sans-serif;font-weight:900;color:#d0569a}
+  .sx-g-bright{background:conic-gradient(from 20deg,#ffe600 0 25%,#ff3d3d 0 50%,#2d7dff 0 75%,#00c853 0)}
+  .sx-g-bright .ph{border-radius:4px;border:5px solid #000;transform:rotate(-4deg)}
+  .sx-g-bright .ph:nth-child(2){transform:rotate(5deg);clip-path:polygon(8% 0,100% 6%,92% 100%,0 92%)}
+  .sx-g-bright .wd{font-family:'Russo One',sans-serif;color:#fff;text-shadow:3px 3px 0 #000;font-size:clamp(1.4rem,6vw,2.4rem)}
+  .sx-g-nature{background:#d9c4a0 url('img/u/photo-1616410731303-6affae095a0a.jpg') center/cover}
+  .sx-g-nature .ph{border-radius:6px;border:6px solid #f6efe2;box-shadow:0 4px 10px rgba(80,50,20,.25)}
+  .sx-g-nature .wd{font-family:Georgia,serif;font-style:italic;font-weight:700;color:#5b7a3a}
+  .sx-g-space{background:radial-gradient(1.5px 1.5px at 15% 25%,#fff,transparent),radial-gradient(1.5px 1.5px at 80% 20%,#fff,transparent),radial-gradient(2px 2px at 60% 85%,#ffe066,transparent),radial-gradient(1px 1px at 35% 70%,#fff,transparent),radial-gradient(circle at 30% 20%,#3a1f78,#0b0820 70%)}
+  .sx-g-space .ph{border-radius:50%;border:3px solid #9c7bff;box-shadow:0 0 22px #7c4dff}
+  .sx-g-space .wd{font-family:'Unbounded',sans-serif;font-weight:900;color:#ffe066;text-shadow:0 0 12px #7c4dff;letter-spacing:.1em}
+  .sx-gbtns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+  @media(min-width:720px){.sx-gbtns{grid-template-columns:repeat(4,minmax(0,1fr))}}
+  .sx-gbtns button{border:3px solid var(--ink);border-radius:20px;padding:.7rem .3rem;font:inherit;font-weight:900;font-size:clamp(1rem,4.2vw,1.2rem);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;box-shadow:0 5px 0 var(--ink);color:var(--ink)}
+  .sx-gbtns button .e{font-size:2rem;line-height:1}
+  .sx-gbtns button:active{transform:translateY(4px);box-shadow:0 1px 0 var(--ink)}
+  .sx-gbtns [data-s=cute]{background:#ffe0f0} .sx-gbtns [data-s=bright]{background:#ffe600}
+  .sx-gbtns [data-s=nature]{background:#cfe3b4} .sx-gbtns [data-s=space]{background:#2a1a5e;color:#ffe066}
+  .sx-gbtns button.wrong{opacity:.35}
+  .sx-gend{display:none;text-align:center;margin-top:1rem}
+  .sx-gend.show{display:block}
+  .sx-gsum{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:1rem}
+  @media(min-width:720px){.sx-gsum{grid-template-columns:repeat(4,minmax(0,1fr))}}
+  .sx-gsum div{border:3px solid var(--ink);border-radius:20px;padding:.8rem .4rem;display:flex;flex-direction:column;align-items:center;gap:.3rem;text-align:center}
+  .sx-gsum b{font-size:clamp(1rem,4.2vw,1.2rem);text-transform:uppercase}
+  .sx-gsum span{font-size:1.7rem;letter-spacing:.1em;line-height:1.2}
 
-  /* ===== Элементы стиля ===== */
-  .sx-els{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:1.5rem}
-  .sx-el{background:var(--paper-2);border-radius:20px;padding:1rem .4rem;display:flex;flex-direction:column;align-items:center;gap:.35rem;text-align:center}
-  .sx-el .em{font-size:clamp(2.2rem,9vw,3rem);line-height:1}
-  .sx-el .t{font-size:11px;font-weight:900;text-transform:uppercase}
-  .sx-repeat{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:1.25rem}
-  .sx-rp{border:3px solid var(--ink);border-radius:18px;background:#ffe3f1;padding:.9rem .4rem;display:flex;flex-direction:column;align-items:center;gap:.3rem;position:relative;overflow:hidden}
-  .sx-rp .em{font-size:clamp(2rem,8vw,2.6rem);line-height:1;position:relative;z-index:2}
-  .sx-rp .t{font-size:11px;font-weight:900;text-transform:uppercase;position:relative;z-index:2}
-  .sx-rp::before{content:"☁️ ☁️ ☁️ ☁️ ☁️ ☁️ ☁️ ☁️ ☁️";position:absolute;inset:0;font-size:16px;line-height:1.8;opacity:.45;word-spacing:6px;padding:4px}
+  /* ===== 4. Агентство: карточки заказчиков ===== */
+  .sx-card{border:4px solid var(--ink);border-radius:26px;background:#fff;padding:1rem;margin-top:1rem;animation:pop .45s var(--ease-out) both}
+  .sx-chead{display:flex;align-items:center;gap:.8rem}
+  .sx-chead .ava{font-size:clamp(2.6rem,11vw,3.4rem);line-height:1;flex-shrink:0;transition:transform .3s}
+  .sx-chead .ava.pop{animation:pop .45s var(--ease-out)}
+  .sx-chead h3{font-size:clamp(1.2rem,5vw,1.7rem);font-weight:900;text-transform:uppercase;line-height:1.05}
+  .sx-say{margin-top:.7rem;background:var(--paper-2);border-radius:18px;padding:.7rem .9rem;font-weight:800;font-size:clamp(1rem,4.2vw,1.2rem);line-height:1.3}
+  .sx-say b{color:var(--signal)}
+  .sx-cphotos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:.7rem}
+  .sx-cphotos .ph{aspect-ratio:16/10;border-radius:14px;border:2px solid var(--ink)}
+  .sx-tlbl{font-weight:900;font-size:clamp(1.05rem,4.4vw,1.3rem);margin:1rem 0 .5rem;text-align:center}
+  .sx-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  @media(min-width:720px){.sx-tiles{grid-template-columns:repeat(5,minmax(0,1fr))}}
+  .sx-tile{position:relative;border:3px solid var(--ink);border-radius:18px;overflow:hidden;background:#fff;padding:0;cursor:pointer;font:inherit;color:var(--ink);display:flex;flex-direction:column;transition:transform .2s}
+  .sx-tile .ph,.sx-tile .sw{aspect-ratio:1;width:100%;display:grid;place-items:center;font-size:2.2rem}
+  .sx-tile .t{font-weight:900;font-size:clamp(.72rem,3vw,.9rem);padding:.35rem .2rem;text-align:center;line-height:1.1;text-transform:uppercase}
+  .sx-tile .mk{position:absolute;top:4px;right:4px;z-index:3;font-size:1.8rem;display:none;animation:pop .4s var(--ease-out) both}
+  .sx-tile.yes{background:#d6f5dc;transform:translateY(-4px)} .sx-tile.yes .mk{display:block}
+  .sx-tile.no{background:#ffd9d9;opacity:.75} .sx-tile.no .mk{display:block}
+  .sx-done{text-align:center;font-weight:900;font-size:clamp(1.2rem,5vw,1.6rem);margin-top:.8rem;min-height:2rem}
 
-  /* ===== Заказчик «Жмяк!» ===== */
+  /* ===== 5. Красиво, но не подходит ===== */
+  .sx-ab{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(.5rem,3vw,1.25rem);margin-top:1rem}
+  .sx-abb{border:0;background:none;padding:0;cursor:pointer;font:inherit;color:inherit;display:flex;flex-direction:column;gap:.5rem;align-items:center}
+  .sx-abb .who{font-weight:900;font-size:clamp(1.4rem,6vw,2rem)}
+  .sx-cork{width:100%;border-radius:16px;padding:8px;background:#c99a62 radial-gradient(rgba(0,0,0,.08) 1px,transparent 1.5px) 0 0/9px 9px;border:7px solid #8a5a2b;transition:transform .25s var(--ease-out),box-shadow .25s}
+  .sx-cork .g{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+  .sx-cork .ph{aspect-ratio:1;border-radius:6px;border:3px solid #fff;box-shadow:0 3px 6px rgba(0,0,0,.25)}
+  .sx-cork .ph:nth-child(odd){transform:rotate(-2deg)} .sx-cork .ph:nth-child(even){transform:rotate(2deg)}
+  .sx-cork .cols{display:flex;gap:5px;justify-content:center;margin-top:8px;background:#fff;border-radius:8px;padding:5px}
+  .sx-cork .cols i{width:clamp(22px,7vw,32px);height:clamp(22px,7vw,32px);border-radius:6px;border:2px solid rgba(0,0,0,.15)}
+  .sx-abb.on.good .sx-cork{box-shadow:0 0 0 5px #fff,0 0 0 9px #1b8a3a;transform:translateY(-4px)}
+  .sx-abb.on.bad .sx-cork{box-shadow:0 0 0 5px #fff,0 0 0 9px var(--signal)}
+  .sx-abb .r{min-height:2.6rem;font-weight:900;font-size:clamp(1rem,4.2vw,1.3rem);text-align:center;line-height:1.15}
+  .sx-abb .r span{display:inline-block;animation:pop .45s var(--ease-out) both}
+  .sx-mini{display:flex;align-items:center;gap:.7rem;justify-content:center;flex-wrap:wrap;margin-top:1rem;background:#eef5e6;border:3px solid var(--ink);border-radius:22px;padding:.7rem 1rem;font-weight:900;font-size:clamp(1rem,4.2vw,1.25rem)}
+  .sx-mini .e{font-size:2.2rem;line-height:1}
+
+  /* ===== 6. Мир бренда ===== */
+  .sx-world{max-width:640px;margin:1.5rem auto 0;border-radius:18px;padding:14px;background:#c99a62 radial-gradient(rgba(0,0,0,.08) 1px,transparent 1.5px) 0 0/9px 9px;border:9px solid #8a5a2b;box-shadow:0 8px 0 rgba(0,0,0,.15)}
+  .sx-world .pics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+  .sx-world .pics .ph{aspect-ratio:3/4;border-radius:6px;border:5px solid #fff;box-shadow:0 4px 10px rgba(0,0,0,.25)}
+  .sx-world .pics .ph:nth-child(1){transform:rotate(-3deg)} .sx-world .pics .ph:nth-child(3){transform:rotate(3deg)}
+  .sx-world .cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}
+  .sx-world .cols div{border-radius:10px;aspect-ratio:2/1;display:grid;place-items:end center;padding-bottom:6px;font-weight:900;font-size:clamp(.7rem,3vw,.95rem);border:4px solid #fff;box-shadow:0 3px 8px rgba(0,0,0,.2)}
+  .sx-world .cols div span{background:#fff;border-radius:999px;padding:2px 8px}
+  .sx-world .note{margin:12px auto 0;background:#fff8c2;border-radius:6px;padding:.7rem 1rem;box-shadow:0 4px 8px rgba(0,0,0,.2);transform:rotate(-1deg);text-align:center;max-width:460px}
+  .sx-world .note .k{font-size:12px;font-weight:900;text-transform:uppercase;color:var(--muted)}
+  .sx-world .note .v{font-weight:900;font-size:clamp(1rem,4.4vw,1.3rem);line-height:1.3}
+
+  /* ===== 7. Заказчик «Жмяк!» ===== */
   .sx-logo{display:inline-flex;align-items:center;gap:.4rem;font-family:'Nunito',sans-serif;font-weight:900;color:#7a5bc7;font-size:clamp(1.6rem,6vw,2.2rem);line-height:1}
-  .sx-goods{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:1.25rem;max-width:480px}
-  .sx-goods .ph{aspect-ratio:1;border-radius:16px;border:2px solid var(--ink)}
+  .sx-sub{font-weight:900;text-transform:uppercase;font-size:13px;margin-top:4px}
+  .sx-brief{display:grid;gap:8px;margin-top:1rem}
+  @media(min-width:760px){.sx-brief{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  .sx-bi{display:flex;align-items:flex-start;gap:.7rem;background:#fff;border:3px solid var(--ink);border-radius:20px;padding:.7rem .9rem}
+  .sx-bi .e{font-size:2rem;line-height:1;flex-shrink:0}
+  .sx-bi .k{font-size:12px;font-weight:900;text-transform:uppercase;color:var(--muted)}
+  .sx-bi .v{font-weight:800;font-size:clamp(.98rem,4vw,1.15rem);line-height:1.25}
+  .sx-bi.need{background:var(--yellow);grid-column:1/-1}
+  .sx-h4{font-size:clamp(1.1rem,4.6vw,1.4rem);font-weight:900;text-transform:uppercase;margin:1.4rem 0 .6rem}
+  .sx-goods{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;max-width:520px}
+  .sx-goods .ph{aspect-ratio:1;border-radius:16px;border:3px solid var(--ink)}
   .sx-goods .ph:nth-child(odd){transform:rotate(-2deg)} .sx-goods .ph:nth-child(even){transform:rotate(2deg)}
-  .sx-wl{display:grid;gap:12px;margin-top:1.25rem}
+  .sx-wl{display:grid;gap:12px}
   @media(min-width:768px){.sx-wl{grid-template-columns:1.4fr 1fr}}
-  .sx-card{border:3px solid var(--ink);border-radius:22px;padding:1rem;background:#fff}
-  .sx-card.yes{background:#f2fff4} .sx-card.no{background:#fff2f2}
-  .sx-card h4{font-size:clamp(1.1rem,4.5vw,1.4rem);font-weight:900;text-transform:uppercase;margin-bottom:.7rem}
+  .sx-wcard{border:3px solid var(--ink);border-radius:22px;padding:1rem;background:#fff}
+  .sx-wcard.yes{background:#f2fff4} .sx-wcard.no{background:#fff2f2}
+  .sx-wcard h4{font-size:clamp(1.1rem,4.5vw,1.4rem);font-weight:900;text-transform:uppercase;margin-bottom:.6rem}
   .sx-row{display:flex;align-items:center;gap:.6rem;margin:.45rem 0;flex-wrap:wrap}
-  .sx-row .k{font-size:12px;font-weight:900;text-transform:uppercase;color:var(--muted);min-width:76px}
-  .sx-row i{width:34px;height:34px;border-radius:50%;border:3px solid var(--ink);display:inline-block}
+  .sx-row .k{font-size:12px;font-weight:900;text-transform:uppercase;color:var(--muted);min-width:84px}
+  .sx-row i{width:34px;height:34px;border-radius:50%;border:3px solid var(--ink);display:inline-block;position:relative}
   .sx-row .e{font-size:2rem;line-height:1}
   .sx-row .w{background:var(--paper-2);border-radius:999px;padding:4px 10px;font-weight:900}
   .sx-row .fnt{font-family:'Nunito',sans-serif;font-weight:900;font-size:1.5rem;color:#7a5bc7}
-  .sx-card.no .sx-row .x{position:relative;font-size:1.8rem;line-height:1}
-  .sx-card.no .sx-row .x::after{content:"";position:absolute;left:-4px;right:-4px;top:50%;height:4px;background:var(--signal);transform:rotate(-20deg);border-radius:4px}
-  .sx-card.no .sx-row i{position:relative}
-  .sx-card.no .sx-row i::after{content:"";position:absolute;left:-6px;right:-6px;top:50%;height:4px;background:var(--signal);transform:rotate(-20deg);border-radius:4px}
+  .sx-wcard.no .sx-row .x{position:relative;font-size:1.8rem;line-height:1}
+  .sx-wcard.no .sx-row .x::after,.sx-wcard.no .sx-row i::after{content:"";position:absolute;left:-6px;right:-6px;top:50%;height:4px;background:var(--signal);transform:rotate(-20deg);border-radius:4px}
+  .sx-ex{display:grid;gap:14px}
+  @media(min-width:860px){.sx-ex{grid-template-columns:1fr 1fr}}
+  .sx-exi{display:flex;flex-direction:column;gap:.5rem}
+  .sx-exi .cap{font-weight:900;font-size:clamp(.95rem,4vw,1.1rem);text-transform:uppercase}
+  .sx-exmb{border-radius:16px;padding:10px;background:#c99a62 radial-gradient(rgba(0,0,0,.08) 1px,transparent 1.5px) 0 0/9px 9px;border:7px solid #8a5a2b}
+  .sx-exmb .g{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+  .sx-exmb .ph{aspect-ratio:1;border-radius:6px;border:3px solid #fff;box-shadow:0 3px 6px rgba(0,0,0,.25)}
+  .sx-exmb .ph:nth-child(odd){transform:rotate(-2deg)} .sx-exmb .ph:nth-child(even){transform:rotate(2deg)}
+  .sx-exmb .x{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:8px}
+  .sx-exmb .x .cols{display:flex;gap:4px;background:#fff;border-radius:8px;padding:4px}
+  .sx-exmb .x .cols i{width:26px;height:26px;border-radius:6px}
+  .sx-exmb .x .el{background:#fff;border-radius:8px;padding:0 6px;font-size:1.6rem;line-height:1.3}
+  .sx-exmb .x .wd{background:#fff8c2;border-radius:6px;padding:4px 9px;font-weight:900;font-size:13px;box-shadow:0 2px 4px rgba(0,0,0,.2)}
+  .sx-shop{width:100%}
+  .sx-roof{height:34px;border:4px solid var(--ink);border-bottom:0;border-radius:18px 18px 0 0;background:repeating-linear-gradient(90deg,#ffd6ec 0 30px,#c9f2e6 30px 60px)}
+  .sx-board{position:relative;overflow:hidden;border:4px solid var(--ink);border-radius:0 0 20px 20px;min-height:190px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;padding:1.2rem 1rem;background:linear-gradient(160deg,#ffe3f1,#e6dcff)}
+  .sx-board .pat{position:absolute;inset:0;pointer-events:none;display:flex;flex-wrap:wrap;align-content:space-around;justify-content:space-around;font-size:26px;opacity:.5;padding:6px}
+  .sx-board .name{position:relative;z-index:2;font-family:'Nunito',sans-serif;font-weight:900;color:#7a5bc7;font-size:clamp(2.4rem,11vw,3.6rem);line-height:1}
+  .sx-board .wins{display:flex;gap:6px;justify-content:center;position:relative;z-index:2}
+  .sx-board .wins .ph{width:clamp(52px,15vw,70px);aspect-ratio:1;border-radius:14px;border:3px solid #fff;box-shadow:0 3px 6px rgba(0,0,0,.2)}
 
-  /* ===== Собери мудборд по хотелкам ===== */
-  .sx-build{display:grid;gap:16px;margin-top:1.5rem;align-items:start}
-  @media(min-width:900px){.sx-build{grid-template-columns:1fr 1fr}}
-  .sx-client{display:flex;align-items:center;gap:.8rem;background:#fff;border:3px solid var(--ink);border-radius:22px;padding:.7rem 1rem}
-  .sx-face{font-size:clamp(2.8rem,12vw,3.6rem);line-height:1;flex-shrink:0;transition:transform .3s}
-  .sx-face.pop{animation:pop .45s var(--ease-out)}
-  .sx-bubble{position:relative;flex:1;background:var(--paper-2);border-radius:16px;padding:.6rem .8rem;font-weight:900;font-size:clamp(.95rem,4vw,1.15rem);line-height:1.2}
-  .sx-checks{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
-  .sx-chk{display:flex;align-items:center;gap:.5rem;background:var(--paper-2);border-radius:14px;padding:.5rem .7rem;font-weight:900;font-size:1.5rem;line-height:1.1;justify-content:center;transition:background .3s}
-  .sx-chk .b{width:24px;height:24px;border-radius:7px;border:3px solid var(--ink);background:#fff;flex-shrink:0;display:grid;place-items:center;font-size:14px}
-  .sx-chk.on{background:#c8f0d0} .sx-chk.on .b::after{content:"✓"}
-  .sx-chk.bad{background:#ffd9d9} .sx-chk.bad .b::after{content:"✕";color:var(--signal)}
-  .sx-mb{border-radius:18px;padding:12px;margin-top:12px;background:#c99a62 radial-gradient(rgba(0,0,0,.08) 1px,transparent 1.5px) 0 0/9px 9px;border:8px solid #8a5a2b}
-  .sx-slots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-  .sx-slot{position:relative;aspect-ratio:1;border-radius:10px;border:3px dashed rgba(255,255,255,.7);display:grid;place-items:center;font-size:1.4rem;color:rgba(255,255,255,.85);background:rgba(255,255,255,.15)}
-  .sx-slot.full{border:0;background:#fff;padding:4px;box-shadow:0 4px 10px rgba(0,0,0,.25);cursor:pointer}
-  .sx-slot.full .ph{width:100%;height:100%;border-radius:6px}
-  .sx-slot.full:nth-child(odd){transform:rotate(-2deg)} .sx-slot.full:nth-child(even){transform:rotate(2deg)}
-  .sx-slot .mk{position:absolute;top:-10px;right:-8px;font-size:18px;z-index:2}
-  .sx-mbx{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px}
-  .sx-mbx .cols{display:flex;gap:4px;background:#fff;border-radius:10px;padding:5px;min-height:38px;min-width:40px}
-  .sx-mbx .cols i{width:28px;height:28px;border-radius:6px;border:2px solid rgba(0,0,0,.15)}
-  .sx-mbx .el{background:#fff;border-radius:10px;padding:2px 8px;font-size:1.8rem;line-height:1.2;min-width:40px;min-height:38px;text-align:center}
-  .sx-mbx .wd{background:#fff8c2;border-radius:6px;padding:4px 10px;font-weight:900;font-size:14px;box-shadow:0 2px 4px rgba(0,0,0,.2)}
-  .sx-pick .lbl{font-size:1.6rem;margin:.9rem 0 .45rem;line-height:1}
-  .sx-pics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-  .sx-pics button{position:relative;aspect-ratio:1;border:0;padding:0;border-radius:10px;overflow:hidden;cursor:pointer;background:#eee}
-  .sx-pics button .ph{position:absolute;inset:0}
-  .sx-pics button.used{opacity:.25}
-  .sx-chips{display:flex;flex-wrap:wrap;gap:8px}
-  .sx-cb{min-width:46px;height:46px;border-radius:14px;border:3px solid var(--ink);background:#fff;cursor:pointer;font:inherit;font-weight:900;font-size:15px;padding:0 .7rem;transition:transform .15s}
-  .sx-cb.col{border-radius:50%;width:46px;padding:0}
-  .sx-cb.el{font-size:1.5rem}
-  .sx-cb.on{transform:scale(1.1);box-shadow:0 0 0 3px #fff,0 0 0 6px var(--ink)}
-
-  /* ===== Вывеска по мудборду ===== */
-  .sx-signs{display:grid;gap:16px;margin-top:1.5rem}
-  @media(min-width:860px){.sx-signs{grid-template-columns:1fr 1fr}}
-  .sx-sg{display:flex;flex-direction:column;gap:.6rem}
-  .sx-sg .cap{display:flex;align-items:center;justify-content:space-between;gap:.5rem;font-weight:900;text-transform:uppercase;font-size:clamp(.9rem,3.8vw,1.05rem)}
-  .sx-sg .cap .face{font-size:2.2rem;line-height:1}
-  .sx-sg .wins{display:flex;gap:6px;justify-content:center;position:relative;z-index:2}
-  .sx-sg .wins .ph{width:clamp(52px,15vw,70px);aspect-ratio:1;border-radius:12px;border:3px solid #fff;box-shadow:0 3px 6px rgba(0,0,0,.2)}
-  .sx-from{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:.4rem}
-  .sx-from span{background:#c8f0d0;border-radius:12px;padding:.45rem .3rem;text-align:center;font-weight:900;font-size:12px}
-  .sx-empty{border:3px dashed var(--muted);border-radius:20px;padding:2rem 1rem;text-align:center;font-weight:900;color:var(--muted);font-size:clamp(1rem,4vw,1.2rem)}
-  .sx-bad .sx-roof{background:repeating-linear-gradient(90deg,#111 0 30px,#c62828 30px 60px)}
-  .sx-bad .sx-board{background:#1b1b1b;color:#ff3d3d}
-  .sx-bad .sx-board .name{font-family:'Russo One',sans-serif;letter-spacing:.06em}
-
-  /* Печать хотелок */
+  /* Печать брифа */
   #printSheet{display:none}
   @page{size:A4 portrait;margin:12mm}
   @media print{
     body > *:not(#printSheet){display:none!important}
     #printSheet{display:block!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;font-family:Inter,sans-serif}
-    #printSheet h1{font-size:26pt;text-align:center;margin-bottom:6mm}
-    #printSheet .sx-card{margin-bottom:6mm}
+    #printSheet h1{font-size:24pt;text-align:center;margin-bottom:5mm}
+    #printSheet .sx-brief{grid-template-columns:1fr 1fr}
+    #printSheet .sx-wcard{margin-top:5mm}
   }
 </style>
 </head>
@@ -163,7 +215,7 @@
       <span>С</span><span>Т</span><span>И</span><span>Л</span><span style="color:var(--signal);font-style:italic">Ь</span>
     </h1>
     <div class="rv" style="margin-top:2rem;border-top:1px solid var(--line);padding-top:1rem;display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;">
-      <div style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">мудборд <b style="color:var(--ink);">для заказчика 🎨</b></div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">один товар — <b style="color:var(--ink);">разные миры ✨</b></div>
       <div style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">↓ листай</div>
     </div>
   </div>
@@ -171,73 +223,82 @@
 
 <div class="marquee" aria-hidden="true">
   <div class="marquee-track">
-    <div class="marquee-item">Цвета 🎨</div><div class="marquee-item">Элемент ☁️</div><div class="marquee-item">Буквы 🔤</div><div class="marquee-item">Хотелки заказчика 👸</div>
-    <div class="marquee-item">Цвета 🎨</div><div class="marquee-item">Элемент ☁️</div><div class="marquee-item">Буквы 🔤</div><div class="marquee-item">Хотелки заказчика 👸</div>
+    <div class="marquee-item">Милый ☁️</div><div class="marquee-item">Яркий 💥</div><div class="marquee-item">Природный 🌿</div><div class="marquee-item">Космический 🚀</div><div class="marquee-item">Ретро 📼</div>
+    <div class="marquee-item">Милый ☁️</div><div class="marquee-item">Яркий 💥</div><div class="marquee-item">Природный 🌿</div><div class="marquee-item">Космический 🚀</div><div class="marquee-item">Ретро 📼</div>
   </div>
 </div>
 
-<!-- 01 · ЧЕЙ МУДБОРД? -->
-<section class="slide" id="whose">
+<!-- 01 · ОДИН ТОВАР — ТРИ МИРА -->
+<section class="slide" id="worlds">
   <div class="slide-content">
     <div class="section-head rv">
-      <h2 class="display">Мудборд —<br><span class="it">для кого?</span></h2>
+      <span class="kicker">Разминка</span>
+      <h2 class="display">Один товар —<br><span class="it">три мира</span></h2>
     </div>
-    <div class="sx-flow rv">
-      <div class="sx-step c"><span class="em">👸</span><span class="t">Заказчик</span></div>
-      <span class="sx-arr">➜</span>
-      <div class="sx-step m"><span class="em">📋</span><span class="t">Мудборд</span></div>
-      <span class="sx-arr">➜</span>
-      <div class="sx-step w"><span class="em">🎨</span><span class="t">Мы рисуем</span></div>
+    <div class="sx-worlds rv" id="worldCards">
+      <div class="sx-w calm" data-k="calm">
+        <span class="word">спокойно</span>
+        <div class="ph"><img alt="кроссовок" src="img/u/photo-1587563871167-1ee9c731aefb.jpg"><span class="fb">👟</span></div>
+        <span class="stamp">✅</span>
+        <span class="nm">🤍 Спокойный</span>
+      </div>
+      <div class="sx-w energy" data-k="energy">
+        <span class="word">GO!</span>
+        <span class="deco" style="left:6%;bottom:22%">⚡</span><span class="deco" style="right:6%;top:26%">💥</span>
+        <div class="ph"><img alt="кроссовок" src="img/u/photo-1587563871167-1ee9c731aefb.jpg"><span class="fb">👟</span></div>
+        <span class="stamp">✅</span>
+        <span class="nm">⚡ Энергичный</span>
+      </div>
+      <div class="sx-w retro" data-k="retro">
+        <span class="word">1985</span>
+        <div class="ph"><img alt="кроссовок" src="img/u/photo-1587563871167-1ee9c731aefb.jpg"><span class="fb">👟</span></div>
+        <span class="stamp">✅</span>
+        <span class="nm">📼 Ретро</span>
+      </div>
     </div>
-
-    <div class="sx-wish rv">
-      <span class="lbl" style="font-size:2rem">👸💭</span>
-      <span class="w" style="font-size:1.6rem">🎂 💗 🍓</span>
+    <div class="sx-q rv" id="worldQ">
+      <button type="button" data-a="same">🤔 Что одинаковое?</button>
+      <button type="button" data-a="energy">🏃 Для спортклуба?</button>
+      <button type="button" data-a="calm">👗 Для модного магазина?</button>
+      <button type="button" data-a="retro">📻 Для бабушкиного магазина?</button>
     </div>
-    <div class="sx-cakes rv">
-      <button class="sx-cake" type="button" data-r="good">
-        <span class="who">А</span>
-        <div class="cakeart pink"><span class="ck-top">🍓🍓🍓</span><div class="t1"></div><div class="t2"></div><div class="plate"></div></div>
-      </button>
-      <button class="sx-cake" type="button" data-r="bad">
-        <span class="who">Б</span>
-        <div class="cakeart dark"><span class="ck-top">💀⚡💀</span><div class="t1"></div><div class="t2"></div><div class="plate"></div></div>
-      </button>
-    </div>
-    <div class="sx-react rv" id="cakeReact">👆</div>
-    <div class="rule-big rv"><span class="em">🎯</span><span class="tx">Как хочет <em>заказчик!</em></span></div>
+    <div class="sx-ans" id="worldAns"></div>
+    <div class="rule-big rv"><span class="em">👟</span><span class="tx">Товар один — <em>впечатление разное!</em></span></div>
   </div>
 </section>
 
-<!-- 02 · ЧТО ТАКОЕ СТИЛЬ -->
-<section class="slide" id="style">
+<!-- 02 · УГАДАЙ СТИЛЬ -->
+<section class="slide" id="guess">
   <div class="slide-content">
     <div class="section-head rv">
-      <h2 class="display">Что такое<br><span class="it">стиль?</span></h2>
+      <span class="kicker">Игра</span>
+      <h2 class="display">Угадай<br><span class="it">стиль!</span></h2>
     </div>
-    <div class="mb-eq rv" style="display:flex;align-items:center;justify-content:center;gap:clamp(.25rem,1.5vw,1rem);flex-wrap:wrap">
-      <div class="sx-step"><span class="em">🎨</span><span class="t">Цвета</span></div>
-      <span class="sx-arr" style="color:var(--muted)">+</span>
-      <div class="sx-step"><span class="em">☁️</span><span class="t">Элемент</span></div>
-      <span class="sx-arr" style="color:var(--muted)">+</span>
-      <div class="sx-step"><span class="em">🔤</span><span class="t">Буквы</span></div>
-      <span class="sx-arr" style="color:var(--muted)">=</span>
-      <div class="sx-step c" style="transform:rotate(-2deg)"><span class="em">✨</span><span class="t">Стиль</span></div>
-    </div>
-
-    <div class="sx-switch rv" id="styleSwitch">
-      <button type="button" data-s="soft" class="on">☁️</button>
-      <button type="button" data-s="race">🏁</button>
-      <button type="button" data-s="space">⭐</button>
-    </div>
-    <div class="sx-shop rv">
-      <div class="sx-roof" id="ssRoof"></div>
-      <div class="sx-board" id="ssBoard"><div class="pat" id="ssPat"></div><div class="name" id="ssName">Игрушки</div></div>
+    <div class="sx-guess rv">
+      <div class="sx-gtop"><span id="gNum">1 / 8</span><span class="sx-dots" id="gDots"></span></div>
+      <div class="sx-gcard" id="gCard"></div>
+      <div class="sx-gbtns" id="gBtns">
+        <button type="button" data-s="cute"><span class="e">☁️</span>Милый</button>
+        <button type="button" data-s="bright"><span class="e">💥</span>Яркий</button>
+        <button type="button" data-s="nature"><span class="e">🌿</span>Природный</button>
+        <button type="button" data-s="space"><span class="e">🚀</span>Космический</button>
+      </div>
+      <div class="center"><button class="play-btn" id="gNext" type="button" style="margin-top:1rem;display:none">Дальше ➜</button></div>
+      <div class="sx-gend" id="gEnd">
+        <div class="sx-ans"><span>🎉 Ура! Все стили угаданы!</span></div>
+        <div class="sx-gsum">
+          <div style="background:#ffe0f0"><b>☁️ Милый</b><span>🩷☁️💗</span></div>
+          <div style="background:#ffe600"><b>💥 Яркий</b><span>🔴🟡🔵</span></div>
+          <div style="background:#cfe3b4"><b>🌿 Природный</b><span>🍃🪵📜</span></div>
+          <div style="background:#2a1a5e;color:#ffe066"><b>🚀 Космос</b><span>🪐⭐✨</span></div>
+        </div>
+        <button class="play-btn alt" id="gAgain" type="button" style="margin-top:1rem">↺ Ещё раз</button>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- 04 · ИГРА: СТИЛЬ-ГОНКИ -->
+<!-- 03 · ИГРА: СТИЛЬ-ГОНКИ -->
 <section class="slide" id="race">
   <div class="slide-content">
     <div class="section-head rv">
@@ -248,10 +309,89 @@
   </div>
 </section>
 
-<!-- 05 · ЗАКАЗЧИК «ЖМЯК!» -->
+<!-- 04 · ЗАКАЗЧИК ПРИШЁЛ В АГЕНТСТВО -->
+<section class="slide" id="agency">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <span class="kicker">Игра</span>
+      <h2 class="display">Заказчик пришёл<br><span class="it">в агентство!</span></h2>
+    </div>
+    <div class="rule-big rv"><span class="em">🎯</span><span class="tx">Не «мне нравится» — а <em>задача заказчика!</em></span></div>
+    <div class="center rv"><button class="play-btn" id="drawCard" type="button" style="margin-top:1.25rem"><span class="em">🎲</span> Тянуть карточку</button></div>
+    <div id="agencyCard"></div>
+  </div>
+</section>
+
+<!-- 05 · КРАСИВО, НО НЕ ПОДХОДИТ -->
+<section class="slide" id="ab">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <span class="kicker">Игра</span>
+      <h2 class="display">Красиво, но<br><span class="it">не подходит</span></h2>
+    </div>
+    <div class="sx-mini rv"><span class="e">🌿</span><span>Натуральная косметика:</span><span>«Спокойно! Природно!»</span></div>
+    <div class="sx-ab rv" id="abBox">
+      <button class="sx-abb" type="button" data-r="good">
+        <span class="who">А</span>
+        <div class="sx-cork">
+          <div class="g">
+            <div class="ph"><img alt="" src="img/u/photo-1624454002302-36b824d7bd0a.jpg"><span class="fb">🧴</span></div>
+            <div class="ph"><img alt="" src="img/u/photo-1525498128493-380d1990a112.jpg"><span class="fb">🌿</span></div>
+            <div class="ph"><img alt="" src="img/u/photo-1771398105642-2cbcec0c8743.jpg"><span class="fb">🌾</span></div>
+            <div class="ph"><img alt="" src="img/u/photo-1616410731303-6affae095a0a.jpg"><span class="fb">📜</span></div>
+          </div>
+          <div class="cols"><i style="background:#efe4cf"></i><i style="background:#8aa877"></i><i style="background:#a47148"></i></div>
+        </div>
+        <span class="r"></span>
+      </button>
+      <button class="sx-abb" type="button" data-r="bad">
+        <span class="who">Б</span>
+        <div class="sx-cork">
+          <div class="g">
+            <div class="ph"><img alt="" src="img/u/photo-1546640646-89b557854b23.jpg"><span class="fb">💡</span></div>
+            <div class="ph"><img alt="" src="img/u/photo-1511447333015-45b65e60f6d5.jpg"><span class="fb">🔺</span></div>
+            <div class="ph"><img alt="" src="img/u/photo-1563089145-599997674d42.jpg"><span class="fb">✨</span></div>
+            <div class="ph"><img alt="" src="img/u/photo-1518656291-ba160b5554e9.jpg"><span class="fb">🌈</span></div>
+          </div>
+          <div class="cols"><i style="background:#ff00c8"></i><i style="background:#00e5ff"></i><i style="background:#7c3aed"></i></div>
+        </div>
+        <span class="r"></span>
+      </button>
+    </div>
+    <div class="rule-big rv"><span class="em">🤩</span><span class="tx">Красиво — ещё не значит <em>подходит!</em></span></div>
+  </div>
+</section>
+
+<!-- 06 · МИР БРЕНДА -->
+<section class="slide" id="world">
+  <div class="slide-content">
+    <div class="section-head rv">
+      <span class="kicker">Пример</span>
+      <h2 class="display">Мир<br><span class="it">бренда</span></h2>
+    </div>
+    <div class="sx-mini rv" style="background:#fff3c4"><span class="e">🧸</span><span>Мудборд магазина игрушек</span></div>
+    <div class="sx-world rv">
+      <div class="pics">
+        <div class="ph"><img alt="" src="img/u/photo-1545558014-8692077e9b5c.jpg"><span class="fb">🧩</span></div>
+        <div class="ph"><img alt="" src="img/u/photo-1655087751207-1020c89f7eee.jpg"><span class="fb">🪀</span></div>
+        <div class="ph"><img alt="" src="img/u/photo-1559764995-a071c12d009f.jpg"><span class="fb">🧸</span></div>
+      </div>
+      <div class="cols">
+        <div style="background:#ffd43b"><span>ЖЁЛТЫЙ</span></div>
+        <div style="background:#ff8fc7"><span>РОЗОВЫЙ</span></div>
+        <div style="background:#74c0fc"><span>ГОЛУБОЙ</span></div>
+      </div>
+      <div class="note"><div class="k">Настроение</div><div class="v">😄 весёлое · 🦄 фантазийное · 🤗 дружелюбное</div></div>
+    </div>
+    <div class="rule-big rv"><span class="em">🌍</span><span class="tx">Мудборд — это <em>мир бренда!</em></span></div>
+  </div>
+</section>
+
+<!-- 07 · ЗАКАЗЧИК «ЖМЯК!» -->
 <section class="slide" id="client">
   <div class="slide-content">
     <div class="section-head rv">
+      <span class="kicker">Наш заказчик</span>
       <h2 class="display">У нас<br><span class="it">заказчик!</span></h2>
     </div>
     <div class="client rv">
@@ -259,72 +399,82 @@
         <span class="ava" style="background:linear-gradient(135deg,#ffd6ec,#c9f2e6)">🧸</span>
         <div>
           <span class="sx-logo">☁️ Жмяк!</span>
+          <div class="sx-sub">магазин игрушек-антистрессов</div>
         </div>
       </div>
-      <div class="client-say">«Вот мои хотелки — сделайте мне <b>мудборд!</b>»</div>
-      <div class="sx-goods" id="goods"></div>
+      <div class="client-say">
+        «Привет, ребята! Я — магазин <b>«Жмяк!»</b>. У меня сквиши, слаймы и мягкие игрушки, которые приятно мять.
+        Скоро я открываюсь, и мне нужна <b>вывеска</b>. Сначала соберите <b>мудборд</b> — мир моего магазина, а потом по нему нарисуйте вывеску!»
+      </div>
     </div>
 
-    <div class="sx-wl rv">
-      <div class="sx-card yes">
+    <div class="sx-brief rv" id="brief">
+      <div class="sx-bi"><span class="e">🏪</span><div><div class="k">Что это?</div><div class="v">Магазин мягких игрушек-антистрессов</div></div></div>
+      <div class="sx-bi"><span class="e">🤲</span><div><div class="k">Что делает?</div><div class="v">Продаёт сквиши, слаймы и плюшевых котиков. Помял — и стало спокойно</div></div></div>
+      <div class="sx-bi"><span class="e">👧</span><div><div class="k">Кто приходит?</div><div class="v">Дети и школьники</div></div></div>
+      <div class="sx-bi"><span class="e">💭</span><div><div class="k">Что хочет?</div><div class="v">Мягко, мило, нежно — как облачко ☁️</div></div></div>
+      <div class="sx-bi need"><span class="e">📋</span><div><div class="k">Что нужно?</div><div class="v">1. Мудборд &nbsp; 2. Вывеска для магазина</div></div></div>
+    </div>
+
+    <div class="sx-h4 rv">🧸 Что продаёт «Жмяк!»</div>
+    <div class="sx-goods rv">
+      <div class="ph"><img alt="плюшевые котики" src="img/u/photo-1631567210298-d385d8d9476c.jpg"><span class="fb">🐱</span></div>
+      <div class="ph"><img alt="сквиши" src="img/u/photo-1763905145495-6e7d3f9b22a4.jpg"><span class="fb">🧸</span></div>
+      <div class="ph"><img alt="слаймы" src="img/u/photo-1686703428120-cf477ef2d389.jpg"><span class="fb">🫧</span></div>
+    </div>
+
+    <div class="sx-h4 rv">📝 Хотелки заказчика</div>
+    <div class="sx-wl rv" id="wishes">
+      <div class="sx-wcard yes">
         <h4>✅ Хочу</h4>
-        <div class="sx-row"><i style="background:#ffc7e0"></i><i style="background:#bff0dc"></i><i style="background:#dccbff"></i><span class="e">☁️</span><span class="e">🧸</span></div>
+        <div class="sx-row"><span class="k">Цвета</span><i style="background:#ffc7e0"></i><i style="background:#bff0dc"></i><i style="background:#dccbff"></i></div>
+        <div class="sx-row"><span class="k">Элемент</span><span class="e">☁️</span><span class="w">облачка</span></div>
+        <div class="sx-row"><span class="k">Буквы</span><span class="fnt">круглые, пухлые</span></div>
+        <div class="sx-row"><span class="k">Настроение</span><span class="w">мягко</span><span class="w">мило</span><span class="w">нежно</span></div>
       </div>
-      <div class="sx-card no">
+      <div class="sx-wcard no">
         <h4>❌ Не хочу</h4>
-        <div class="sx-row"><i style="background:#1b1b1b"></i><i style="background:#e53935"></i><span class="x">💀</span><span class="x">⚡</span></div>
+        <div class="sx-row"><span class="k">Цвета</span><i style="background:#1b1b1b"></i><i style="background:#e53935"></i><i style="background:#6d4c41"></i></div>
+        <div class="sx-row"><span class="k">Страшное</span><span class="x">💀</span><span class="x">🕷️</span></div>
+        <div class="sx-row"><span class="k">Острое</span><span class="x">⚡</span><span class="x">🗡️</span></div>
       </div>
     </div>
-    <div class="center rv"><button class="print-btn" type="button" id="printBtn">🖨️ Распечатать хотелки</button></div>
-  </div>
-</section>
 
-<!-- 06 · СОБЕРИ МУДБОРД ПО ХОТЕЛКАМ -->
-<section class="slide" id="build">
-  <div class="slide-content">
-    <div class="section-head rv">
-      <span class="kicker">Шаг 1</span>
-      <h2 class="display">Мудборд<br><span class="it">по хотелкам</span></h2>
-    </div>
-    <div class="sx-build rv">
-      <div>
-        <div class="sx-client">
-          <span class="sx-face" id="face">😐</span>
-          <div class="sx-bubble" id="bubble">📋 ?</div>
-        </div>
-        <div class="sx-checks" id="checks">
-          <div class="sx-chk" data-w="cols"><span class="b"></span>🎨</div>
-          <div class="sx-chk" data-w="el"><span class="b"></span>☁️</div>
-          <div class="sx-chk" data-w="pics"><span class="b"></span>🧸</div>
-          <div class="sx-chk" data-w="nope"><span class="b"></span>🚫</div>
-        </div>
-        <div class="sx-mb">
-          <div class="sx-slots" id="slots"></div>
-          <div class="sx-mbx"><div class="cols" id="mbCols"></div><div class="el" id="mbEl"></div></div>
+    <div class="sx-h4 rv">⭐ Примеры работ</div>
+    <div class="sx-ex rv">
+      <div class="sx-exi">
+        <span class="cap">1 · Мудборд «Жмяк!»</span>
+        <div class="sx-exmb">
+          <div class="g">
+            <div class="ph"><img alt="" src="img/u/photo-1764590212225-b05ea6747046.jpg"><span class="fb">🐱</span></div>
+            <div class="ph"><img alt="" src="img/u/photo-1785874159180-e0d04409d4aa.jpg"><span class="fb">🍮</span></div>
+            <div class="ph"><img alt="" src="img/u/photo-1686942485101-2f975378395f.jpg"><span class="fb">🌸</span></div>
+            <div class="ph"><img alt="" src="img/u/photo-1674069686288-071c6e4ef838.jpg"><span class="fb">☁️</span></div>
+          </div>
+          <div class="x">
+            <div class="cols"><i style="background:#ffc7e0"></i><i style="background:#bff0dc"></i><i style="background:#dccbff"></i></div>
+            <div class="el">☁️</div>
+            <span class="wd">мягко</span><span class="wd">мило</span><span class="wd">нежно</span>
+          </div>
         </div>
       </div>
-      <div class="sx-pick">
-        <div class="lbl">🖼️</div><div class="sx-pics" id="pics"></div>
-        <div class="lbl">🎨</div><div class="sx-chips" id="colChips"></div>
-        <div class="lbl">⭐</div><div class="sx-chips" id="elChips"></div>
-        <button class="play-btn alt" id="buildClear" type="button" style="margin-top:1rem">↺</button>
+      <div class="sx-exi">
+        <span class="cap">2 · Вывеска по мудборду</span>
+        <div class="sx-shop">
+          <div class="sx-roof"></div>
+          <div class="sx-board">
+            <div class="pat" id="exPat"></div>
+            <div class="name">Жмяк!</div>
+            <div class="wins">
+              <div class="ph"><img alt="" src="img/u/photo-1631567210298-d385d8d9476c.jpg"><span class="fb">🐱</span></div>
+              <div class="ph"><img alt="" src="img/u/photo-1763905145495-6e7d3f9b22a4.jpg"><span class="fb">🧸</span></div>
+              <div class="ph"><img alt="" src="img/u/photo-1686703428120-cf477ef2d389.jpg"><span class="fb">🫧</span></div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- 07 · ПО МУДБОРДУ — ВЫВЕСКА -->
-<section class="slide" id="sign">
-  <div class="slide-content">
-    <div class="section-head rv">
-      <span class="kicker">Шаг 2</span>
-      <h2 class="display">По мудборду —<br><span class="it">вывеска!</span></h2>
-    </div>
-    <div class="center rv"><button class="play-btn" id="makeSign" type="button"><span class="em">🎨</span> Нарисовать</button></div>
-    <div class="sx-signs rv" id="signs">
-      <div class="sx-empty">📋 ↑</div>
-    </div>
-    <div class="rule-big rv"><span class="em">📋</span><span class="tx">Смотрю на мудборд — <em>и рисую!</em></span></div>
+    <div class="center rv"><button class="print-btn" type="button" id="printBtn">🖨️ Распечатать задание</button></div>
   </div>
 </section>
 
@@ -374,26 +524,27 @@
       запомни
     </p>
     <h2 class="display rv">
-      👸 ➜ 📋 ➜ 🎨<br>
-      <span class="it">Как хочет заказчик!</span>
+      👟 = 👟 = 👟<br>
+      <span class="it">Стиль — для задачи заказчика!</span>
     </h2>
   </div>
 </section>
 
 <nav class="dock" id="dock">
   <a href="#top" class="active" title="Старт">↑</a>
-  <a href="#whose" title="Для кого мудборд">👸</a>
-  <a href="#style" title="Что такое стиль">✨</a>
+  <a href="#worlds" title="Три мира">👟</a>
+  <a href="#guess" title="Угадай стиль">❓</a>
   <a href="#race" title="Стиль-гонки">🏎️</a>
-  <a href="#client" title="Заказчик">🧸</a>
-  <a href="#build" title="Мудборд по хотелкам">📋</a>
-  <a href="#sign" title="Вывеска">🏪</a>
+  <a href="#agency" title="Агентство">🎲</a>
+  <a href="#ab" title="Красиво, но не подходит">🤩</a>
+  <a href="#world" title="Мир бренда">🌍</a>
+  <a href="#client" title="Заказчик «Жмяк!»">🧸</a>
   <a href="#task" title="Задание">✏️</a>
   <a href="#time" title="Таймер">⏱️</a>
   <a href="#end" title="Финал">🏁</a>
 </nav>
 
-<!-- Печать: хотелки заказчика -->
+<!-- Печать: бриф заказчика -->
 <div id="printSheet"></div>
 
 <script>
@@ -402,200 +553,164 @@ document.addEventListener('error', e => {
   const im = e.target;
   if (im.tagName === 'IMG' && im.parentElement && im.parentElement.classList.contains('ph')) im.parentElement.classList.add('noimg');
 }, true);
-const IMG = (u, w) => u + '?w=' + (w || 400) + '&q=70&auto=format&fit=crop';
-const ph = (u, fb, w) => '<div class="ph"><img loading="lazy" alt="" src="' + IMG(u, w) + '"><span class="fb">' + (fb || '🖼️') + '</span></div>';
-const GOOD = [
-  'img/u/photo-1631567210298-d385d8d9476c.jpg',  // мятный плюшевый котик
-  'img/u/photo-1763905145495-6e7d3f9b22a4.jpg',  // котики-сквиши
-  'img/u/photo-1686703428120-cf477ef2d389.jpg',  // пастельные слаймы в руках
-  'img/u/photo-1760733672584-475e728f09c5.jpg',  // мягкая игрушка
-  'img/u/photo-1785874159180-e0d04409d4aa.jpg',  // желейный сквиш
-  'img/u/photo-1686942485101-2f975378395f.jpg',  // слайм-розочка
-  'img/u/photo-1764590212225-b05ea6747046.jpg',  // белый котик-сквиш
-  'img/u/photo-1674069686288-071c6e4ef838.jpg',  // пастельный зефир
-  'img/u/photo-1594165681163-1b85559cf250.jpg'   // пастельные пузырьки
-];
-const BAD = [
-  'img/u/photo-1510672981848-a1c4f1cb5ccf.jpg',  // огонь
-  'img/u/photo-1566864008360-e2c4c57fa5d4.jpg',  // тёмные пузыри
-  'img/u/photo-1655927858183-fe31d5dd1080.jpg',  // винтики
-  'img/u/photo-1775733894506-e0fcfa4405f2.jpg',  // пиратский корабль
-  'img/u/photo-1507041957456-9c397ce39c97.jpg',  // тёмный лес
-  'img/u/photo-1541873676-a18131494184.jpg',     // космонавт
-  'img/u/photo-1459478309853-2c33a60058e7.jpg'   // осенние листья
-];
-document.getElementById('goods').innerHTML = GOOD.slice(0, 3).map(u => ph(u, '🧸', 300)).join('');
 </script>
 <script src="lesson.js"></script>
 <script src="race.js"></script>
 <script>
 (function(){
-  /* ===== Торты ===== */
-  const cakeReact = document.getElementById('cakeReact');
-  document.querySelectorAll('.sx-cake').forEach(c => c.addEventListener('click', () => {
-    document.querySelectorAll('.sx-cake').forEach(x => x.classList.remove('on', 'good', 'bad'));
-    c.classList.add('on', c.dataset.r);
-    cakeReact.innerHTML = c.dataset.r === 'good'
-      ? '<span style="font-size:2.4rem">😍</span>'
-      : '<span style="font-size:2.4rem">😡</span>';
+  const P = id => 'img/u/photo-' + id + '.jpg';           // картинки лежат в репозитории
+  const ph = (id, fb) => '<div class="ph"><img alt="" src="' + P(id) + '"><span class="fb">' + (fb || '🖼️') + '</span></div>';
+
+  /* ===== 1. Один товар — три мира ===== */
+  const wCards = document.querySelectorAll('#worldCards .sx-w'), wAns = document.getElementById('worldAns');
+  const W_ANS = {
+    same:   '👟 = 👟 = 👟',
+    energy: '🏃 ⚡ Энергичный!',
+    calm:   '👗 🤍 Спокойный!',
+    retro:  '📻 📼 Ретро!'
+  };
+  document.querySelectorAll('#worldQ button').forEach(b => b.addEventListener('click', () => {
+    const a = b.dataset.a;
+    document.querySelectorAll('#worldQ button').forEach(x => x.classList.toggle('on', x === b));
+    wCards.forEach(c => { c.classList.remove('ok', 'same'); void c.offsetWidth;
+      if (a === 'same') c.classList.add('same'); else if (c.dataset.k === a) c.classList.add('ok'); });
+    wAns.innerHTML = '<span>' + W_ANS[a] + '</span>';
   }));
 
-  /* ===== Одна вывеска — три стиля ===== */
-  const ST = {
-    soft:  { cols:['#ffd6ec','#c9f2e6','#dccbff'], el:'☁️', font:"'Nunito',sans-serif", fw:900, tc:'#7a5bc7', ts:'none', ls:'0', tt:'none',
-             bg:'linear-gradient(160deg,#ffe3f1,#e6dcff)', roof:'repeating-linear-gradient(90deg,#ffd6ec 0 30px,#c9f2e6 30px 60px)', subc:'#7a5bc7' },
-    race:  { cols:['#e53935','#111111','#ffcc00'], el:'🏁', font:"'Russo One',sans-serif", fw:400, tc:'#ffcc00', ts:'3px 3px 0 #e53935', ls:'.04em', tt:'uppercase',
-             bg:'linear-gradient(160deg,#222,#111)', roof:'conic-gradient(#fff 0 25%,#111 0 50%,#fff 0 75%,#111 0) 0 0/30px 30px', subc:'#fff' },
-    space: { cols:['#1a1446','#6a3cd6','#ffe066'], el:'⭐', font:"'Unbounded',sans-serif", fw:900, tc:'#ffe066', ts:'0 0 14px #6a3cd6', ls:'.08em', tt:'uppercase',
-             bg:'radial-gradient(circle at 30% 20%,#3a1f78,#120d33)', roof:'repeating-linear-gradient(90deg,#1a1446 0 30px,#6a3cd6 30px 60px)', subc:'#c9b8ff' }
-  };
-  function setStyle(k){
-    const s = ST[k];
-    document.querySelectorAll('#styleSwitch button').forEach(b => b.classList.toggle('on', b.dataset.s === k));
-    document.getElementById('ssRoof').style.background = s.roof;
-    const board = document.getElementById('ssBoard'); board.style.background = s.bg;
-    const nm = document.getElementById('ssName');
-    Object.assign(nm.style, { fontFamily: s.font, fontWeight: s.fw, color: s.tc, textShadow: s.ts, letterSpacing: s.ls, textTransform: s.tt });
-    document.getElementById('ssPat').innerHTML = Array(18).fill('<span>' + s.el + '</span>').join('');
+  /* ===== 2. Угадай стиль ===== */
+  const STY = { cute: 'Милый ☁️', bright: 'Яркий 💥', nature: 'Природный 🌿', space: 'Космический 🚀' };
+  const ROUNDS = [
+    { s:'cute',   p:['1706556947194-16b18e7b864a','1631567210298-d385d8d9476c'], e:'☁️💗🌸', w:'мур-мур' },
+    { s:'cute',   p:['1622473541183-ddae2b015b9d','1674069686288-071c6e4ef838'], e:'🎀☁️💕', w:'обнимашки' },
+    { s:'bright', p:['1545558014-8692077e9b5c','1618842676088-c4d48a6a7c9d'], e:'💥⚡🔺', w:'БАМ!' },
+    { s:'bright', p:['1655087751207-1020c89f7eee','1558060370-d644479cb6f7'], e:'🌀⭐🔶', w:'ВАУ!' },
+    { s:'nature', p:['1525498128493-380d1990a112','1497250681960-ef046c08a56e'], e:'🌿🍃🪵', w:'лес' },
+    { s:'nature', p:['1771398105642-2cbcec0c8743','1763392199003-27cee33bae31'], e:'🌾🍂🌰', w:'травы' },
+    { s:'space',  p:['1614732414444-096e5f1122d5','1464802686167-b939a6910659'], e:'🪐⭐✨', w:'КОСМОС' },
+    { s:'space',  p:['1614730321146-b6fa6a46bcb4','1541873676-a18131494184'],  e:'🚀🌙⭐', w:'ПОЛЁТ' }
+  ];
+  let order = [], gi = 0;
+  const gCard = document.getElementById('gCard'), gNext = document.getElementById('gNext'), gEnd = document.getElementById('gEnd');
+  const gBtnBox = document.getElementById('gBtns'), gBtns = gBtnBox.querySelectorAll('button');
+  function gDots(){
+    document.getElementById('gDots').innerHTML = order.map((r, k) => '<i class="' + (k < gi ? 'ok' : k === gi ? 'now' : '') + '"></i>').join('');
+    document.getElementById('gNum').textContent = Math.min(gi + 1, order.length) + ' / ' + order.length;
   }
-  document.querySelectorAll('#styleSwitch button').forEach(b => b.addEventListener('click', () => setStyle(b.dataset.s)));
-  setStyle('soft');
+  function gShow(){
+    const r = order[gi];
+    gCard.className = 'sx-gcard sx-g-' + r.s;
+    gCard.innerHTML = '<span class="wd">' + r.w + '</span>' + r.p.map(id => ph(id, '🖼️')).join('') +
+      '<span class="em">' + r.e + '</span><div class="lbl"><b>' + STY[r.s] + '</b></div>';
+    gBtns.forEach(b => { b.classList.remove('wrong'); b.disabled = false; });
+    gNext.style.display = 'none'; gDots();
+  }
+  function gStart(){
+    order = L.shuffle(ROUNDS.slice()); gi = 0;
+    gEnd.classList.remove('show'); gBtnBox.style.display = ''; gCard.style.display = '';
+    gShow();
+  }
+  gBtns.forEach(b => b.addEventListener('click', () => {
+    const r = order[gi];
+    if (b.dataset.s === r.s) {
+      gCard.classList.add('done'); gBtns.forEach(x => x.disabled = true);
+      gNext.style.display = ''; gNext.textContent = gi === order.length - 1 ? '🎉 Готово!' : 'Дальше ➜';
+    } else {
+      b.classList.add('wrong'); gCard.classList.remove('no'); void gCard.offsetWidth; gCard.classList.add('no');
+    }
+  }));
+  gNext.addEventListener('click', () => {
+    gi++;
+    if (gi >= order.length) {
+      gDots(); gNext.style.display = 'none'; gCard.style.display = 'none';
+      gBtnBox.style.display = 'none'; gEnd.classList.add('show');
+    } else gShow();
+  });
+  document.getElementById('gAgain').addEventListener('click', gStart);
+  gStart();
 
-  /* ===== Стиль-гонки ===== */
+  /* ===== 3. Стиль-гонки (спокойная скорость) ===== */
   Race.mount(document.getElementById('raceBox'), { level: 'zhmyak', duration: 40 });
 
-  /* ===== Мудборд по хотелкам ===== */
-  const WANT_COLS = ['#ffc7e0','#bff0dc','#dccbff'];
-  const COLS = [
-    ['#ffc7e0','want'],['#bff0dc','want'],['#dccbff','want'],['#fff1cc','ok'],
-    ['#1b1b1b','no'],['#e53935','no'],['#6d4c41','no'],['#1a237e','meh'],['#8a8f98','meh']
+  /* ===== 4. Заказчик пришёл в агентство ===== */
+  const SW = (bg, em) => '<div class="sw" style="background:' + bg + '">' + em + '</div>';
+  const CLIENTS = [
+    { ava:'🧸', name:'Магазин игрушек', photos:['1596068587619-e4b11c7a3488','1655087751207-1020c89f7eee'],
+      say:'«Хочу, чтобы было <b>весело, ярко и необычно!</b> Чтобы дети увидели — и <b>захотели зайти!</b>»',
+      tiles:[
+        { ok:true,  t:'Яркие цвета',     h:ph('1545558014-8692077e9b5c','🎨') },
+        { ok:true,  t:'Забавные герои',  h:ph('1559764995-a071c12d009f','🐵') },
+        { ok:true,  t:'Необычные формы', h:ph('1618842676088-c4d48a6a7c9d','🌀') },
+        { ok:false, t:'Строгий чёрный',  h:SW('#111','<span style="color:#fff;font-size:1rem;font-weight:900;letter-spacing:.25em">STRICT</span>') },
+        { ok:false, t:'Серый и скучный', h:SW('#9a9a9a','😐') }
+      ] },
+    { ava:'🌿', name:'Натуральная косметика', photos:['1624454002302-36b824d7bd0a','1552046122-03184de85e08'],
+      say:'«Мои кремы — из трав и цветов. Хочу <b>спокойно и естественно</b>, чтобы мне <b>доверяли</b>.»',
+      tiles:[
+        { ok:true,  t:'Растения',        h:ph('1525498128493-380d1990a112','🌿') },
+        { ok:true,  t:'Бумага',          h:ph('1616410731303-6affae095a0a','📜') },
+        { ok:true,  t:'Природные цвета', h:ph('1771398105642-2cbcec0c8743','🌾') },
+        { ok:false, t:'Кислотные цвета', h:SW('linear-gradient(135deg,#39ff14,#ff00e6)','🧪') },
+        { ok:false, t:'Каляки-маляки',   h:SW('repeating-linear-gradient(35deg,#ff3d3d 0 6px,#ffe600 6px 12px,#2d7dff 12px 18px,#00c853 18px 24px)','🖍️') }
+      ] },
+    { ava:'🎮', name:'Игровой клуб', photos:['1546443046-ed1ce6ffd1ab','1768162125873-e52037a050fc'],
+      say:'«У меня играют в компьютерные игры. Хочу <b>современно, технологично</b> и чуть-чуть <b>загадочно</b>.»',
+      tiles:[
+        { ok:true,  t:'Неон',             h:ph('1546640646-89b557854b23','💡') },
+        { ok:true,  t:'Геометрия',        h:ph('1511447333015-45b65e60f6d5','🔺') },
+        { ok:true,  t:'Цифровые эффекты', h:ph('1518656291-ba160b5554e9','👾') },
+        { ok:false, t:'Цветочки',         h:ph('1586244897859-2cd81e1cad1f','🌸') },
+        { ok:false, t:'Деревенский стиль',h:ph('1763392199003-27cee33bae31','🪵') }
+      ] }
   ];
-  const ELS = [['☁️','want'],['🫧','ok'],['⭐','meh'],['🏁','meh'],['💀','no'],['⚡','no']];
-  const WORDS = [['мягко','want'],['мило','want'],['нежно','want'],['жмяк!','want'],['страшно','no'],['быстро','meh'],['серьёзно','meh']];
-  const PICS = L.shuffle([...GOOD.map(u => ({ u, ok: true })), ...BAD.map(u => ({ u, ok: false }))]);
-  const SLOTS = 6;
-  let st = { pics: [], cols: [], el: null, words: [] };
-  const face = document.getElementById('face'), bubble = document.getElementById('bubble');
-
-  function say(f, t){ face.textContent = f; face.classList.remove('pop'); void face.offsetWidth; face.classList.add('pop'); bubble.textContent = t; }
-  function kind(list, v){ const x = list.find(a => a[0] === v); return x ? x[1] : 'meh'; }
-  function status(){
-    const cols = WANT_COLS.every(c => st.cols.includes(c));
-    const el = st.el === '☁️';
-    const pics = st.pics.filter(p => p.ok).length >= 4;
-    const nope = !st.cols.some(c => kind(COLS, c) === 'no') && !(st.el && kind(ELS, st.el) === 'no')
-              && !st.pics.some(p => !p.ok);
-    return { cols, el, pics, nope, all: cols && el && pics && nope };
-  }
-  function draw(){
-    // доска
-    const slots = document.getElementById('slots'); slots.innerHTML = '';
-    for (let k = 0; k < SLOTS; k++) {
-      const p = st.pics[k], s = document.createElement('div');
-      if (p) {
-        s.className = 'sx-slot full'; s.innerHTML = '<span class="mk">' + (p.ok ? '✅' : '😬') + '</span>' + ph(p.u, '🖼️', 220);
-        s.addEventListener('click', () => { st.pics.splice(k, 1); p.btn.classList.remove('used'); draw(); });
-      } else { s.className = 'sx-slot'; s.textContent = '📋'; }
-      slots.appendChild(s);
-    }
-    document.getElementById('mbCols').innerHTML = st.cols.map(c => '<i style="background:' + c + '"></i>').join('');
-    document.getElementById('mbEl').textContent = st.el || '';
-    document.querySelectorAll('#colChips .sx-cb').forEach(b => b.classList.toggle('on', st.cols.includes(b.dataset.v)));
-    document.querySelectorAll('#elChips .sx-cb').forEach(b => b.classList.toggle('on', st.el === b.dataset.v));
-    // хотелки
-    const S = status();
-    document.querySelectorAll('.sx-chk').forEach(c => {
-      const w = c.dataset.w;
-      c.classList.toggle('on', !!S[w]);
-      c.classList.toggle('bad', w === 'nope' && !S.nope);
-    });
-    if (S.all) say('😍', '✅ Да! ↓');
-    document.getElementById('makeSign').classList.toggle('alt', !S.all);
-  }
-  function react(k){
-    if (k === 'no') say('😬', '❌ Нет!');
-    else if (k === 'want') say('😊', '✅ Да!');
-    else if (k === 'ok') say('🙂', '👌');
-    else say('🤔', '❓');
-  }
-  // картинки
-  const picsEl = document.getElementById('pics');
-  PICS.forEach(p => {
-    const b = document.createElement('button'); b.type = 'button'; b.innerHTML = ph(p.u, '🖼️', 220);
-    b.addEventListener('click', () => {
-      if (b.classList.contains('used')) return;
-      if (st.pics.length >= SLOTS) { say('🙂', '📋 ✋'); return; }
-      st.pics.push({ u: p.u, ok: p.ok, btn: b }); b.classList.add('used');
-      p.ok ? say('😊', '✅ Да!') : say('😬', '❌ Нет!');
-      draw();
-    });
-    picsEl.appendChild(b);
-  });
-  // цвета
-  const colChips = document.getElementById('colChips');
-  COLS.forEach(([c, k]) => {
-    const b = document.createElement('button'); b.type = 'button'; b.className = 'sx-cb col'; b.style.background = c; b.dataset.v = c; b.setAttribute('aria-label', 'цвет');
-    b.addEventListener('click', () => {
-      if (st.cols.includes(c)) st.cols = st.cols.filter(x => x !== c);
-      else { if (st.cols.length >= 4) st.cols.shift(); st.cols.push(c); react(k); }
-      draw();
-    });
-    colChips.appendChild(b);
-  });
-  // элемент
-  const elChips = document.getElementById('elChips');
-  ELS.forEach(([e, k]) => {
-    const b = document.createElement('button'); b.type = 'button'; b.className = 'sx-cb el'; b.textContent = e; b.dataset.v = e;
-    b.addEventListener('click', () => { st.el = st.el === e ? null : e; if (st.el) react(k); draw(); });
-    elChips.appendChild(b);
-  });
-  document.getElementById('buildClear').addEventListener('click', () => {
-    st = { pics: [], cols: [], el: null, words: [] };
-    picsEl.querySelectorAll('button').forEach(b => b.classList.remove('used'));
-    say('😐', '📋 ?'); draw();
-  });
-  draw();
-
-  /* ===== Вывеска по мудборду ===== */
-  document.getElementById('makeSign').addEventListener('click', () => {
-    const box = document.getElementById('signs');
-    const S = status();
-    if (st.cols.length < 2 || !st.el || st.pics.length < 2) {
-      box.innerHTML = '<div class="sx-empty">📋 ↑</div>';
-      return;
-    }
-    const c = st.cols, el = st.el, pics = st.pics.slice(0, 3);
-    const dark = ['#1b1b1b','#e53935','#6d4c41','#1a237e','#8a8f98'];
-    const txt = c.find(x => !['#fff1cc','#ffc7e0','#bff0dc','#dccbff'].includes(x)) ? '#ffffff' : '#7a5bc7';
-    const roof = 'repeating-linear-gradient(90deg,' + c[0] + ' 0 30px,' + (c[1] || '#fff') + ' 30px 60px)';
-    const bg = 'linear-gradient(160deg,' + c[0] + ',' + (c[2] || c[1]) + ')';
-    const mine =
-      '<div class="sx-sg">' +
-        '<div class="cap"><span>📋 ✅</span><span class="face">' + (S.all ? '😍' : '🤔') + '</span></div>' +
-        '<div class="sx-shop" style="margin:0;width:100%"><div class="sx-roof" style="background:' + roof + '"></div>' +
-        '<div class="sx-board" style="background:' + bg + '"><div class="pat">' + Array(18).fill('<span>' + el + '</span>').join('') + '</div>' +
-        '<div class="name" style="font-family:\'Nunito\',sans-serif;font-weight:900;color:' + txt + '">Жмяк!</div>' +
-        
-        '<div class="wins">' + pics.map(p => ph(p.u, '🧸', 160)).join('') + '</div></div></div>' +
-        
+  let lastC = -1;
+  const box = document.getElementById('agencyCard');
+  document.getElementById('drawCard').addEventListener('click', () => {
+    let k; do { k = Math.floor(Math.random() * CLIENTS.length); } while (k === lastC);
+    lastC = k; const c = CLIENTS[k];
+    const tiles = L.shuffle(c.tiles.slice());
+    box.innerHTML =
+      '<div class="sx-card">' +
+        '<div class="sx-chead"><span class="ava" id="cAva">' + c.ava + '</span><h3>' + c.name + '</h3></div>' +
+        '<div class="sx-cphotos">' + c.photos.map(id => ph(id, c.ava)).join('') + '</div>' +
+        '<div class="sx-say">' + c.say + '</div>' +
+        '<div class="sx-tlbl">👆 Что подходит?</div>' +
+        '<div class="sx-tiles">' + tiles.map((t, i) =>
+          '<button class="sx-tile" type="button" data-i="' + i + '">' + t.h + '<span class="t">' + t.t + '</span><span class="mk">' + (t.ok ? '✅' : '❌') + '</span></button>').join('') +
+        '</div>' +
+        '<div class="sx-done" id="cDone"></div>' +
       '</div>';
-    const theirs =
-      '<div class="sx-sg sx-bad">' +
-        '<div class="cap"><span>🙈 ❌</span><span class="face">😡</span></div>' +
-        '<div class="sx-shop" style="margin:0;width:100%"><div class="sx-roof"></div>' +
-        '<div class="sx-board"><div class="pat">' + Array(18).fill('<span>⚡</span>').join('') + '</div>' +
-        '<div class="name">ЖМЯК 💀</div></div></div>' +
-        
-      '</div>';
-    box.innerHTML = mine + theirs;
-    box.querySelectorAll('.ph img').forEach(img => img.addEventListener('error', () => img.parentElement.classList.add('noimg')));
+    const need = tiles.filter(t => t.ok).length; let found = 0;
+    const ava = document.getElementById('cAva'), done = document.getElementById('cDone');
+    const face = f => { ava.textContent = f; ava.classList.remove('pop'); void ava.offsetWidth; ava.classList.add('pop'); };
+    box.querySelectorAll('.sx-tile').forEach(b => b.addEventListener('click', () => {
+      if (b.classList.contains('yes') || b.classList.contains('no')) return;
+      const t = tiles[+b.dataset.i];
+      if (t.ok) { b.classList.add('yes'); found++; face('😊'); }
+      else { b.classList.add('no'); face('😬'); }
+      if (found === need) { face('😍'); done.innerHTML = '<span style="display:inline-block;animation:pop .45s both">🎉 Задача решена! Ещё карточку? 🎲</span>'; }
+    }));
+    box.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 
-  /* ===== Печать хотелок ===== */
-  const yes = document.querySelector('.sx-card.yes').outerHTML, no = document.querySelector('.sx-card.no').outerHTML;
-  document.getElementById('printSheet').innerHTML = '<h1>☁️ «Жмяк!» — хотелки заказчика</h1>' + yes + no;
+  /* ===== 5. Красиво, но не подходит ===== */
+  document.querySelectorAll('#abBox .sx-abb').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('#abBox .sx-abb').forEach(x => { x.classList.remove('on', 'good', 'bad'); x.querySelector('.r').innerHTML = ''; });
+    b.classList.add('on', b.dataset.r);
+    b.querySelector('.r').innerHTML = b.dataset.r === 'good'
+      ? '<span>😍 ✅ Подходит!</span>'
+      : '<span>🤩 Красиво…<br>❌ но не подходит!</span>';
+  }));
+
+  /* ===== 7. Пример вывески ===== */
+  document.getElementById('exPat').innerHTML = Array(18).fill('<span>☁️</span>').join('');
+
+  /* ===== Печать задания ===== */
+  document.getElementById('printSheet').innerHTML =
+    '<h1>☁️ «Жмяк!» — задание от заказчика</h1>' +
+    document.getElementById('brief').outerHTML.replace('id="brief"', '').replace(' rv', '') +
+    document.querySelector('#wishes .sx-wcard.yes').outerHTML +
+    document.querySelector('#wishes .sx-wcard.no').outerHTML;
   document.getElementById('printBtn').addEventListener('click', () => window.print());
-
 })();
 </script>
 <script src="nav.js"></script>
