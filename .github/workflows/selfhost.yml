@@ -1,0 +1,23 @@
+name: Картинки и шрифты в репозиторий
+on:
+  push:
+    branches: [main]
+    paths: ['img/sources.tsv', 'tools/fetch.py', '.github/workflows/selfhost.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 tools/fetch.py
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add img fonts || true
+          if ! git diff --cached --quiet; then
+            git commit -m "Картинки и шрифты: локальные копии"
+            git pull --rebase && git push
+          fi

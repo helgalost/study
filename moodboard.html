@@ -6,9 +6,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Мудборд</title>
 <script>document.documentElement.classList.add('js');</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="fonts/fonts.css">
 <link rel="stylesheet" href="lesson.css">
 <style>
   /* ===== Пробковая доска ===== */
@@ -214,11 +212,11 @@
 
     <!-- Пример: мудборд «Лето на море» -->
     <div class="cork rv">
-      <div class="pin"><div class="ph"><img loading="lazy" alt="ракушка" data-u="https://images.unsplash.com/photo-1650012332958-2aa054c850ff"><span class="fb">🐚</span></div></div>
+      <div class="pin"><div class="ph"><img loading="lazy" alt="ракушка" data-u="img/u/photo-1650012332958-2aa054c850ff.jpg"><span class="fb">🐚</span></div></div>
       <div class="pin word">Море!</div>
-      <div class="pin"><div class="ph"><img loading="lazy" alt="пляж" data-u="https://images.unsplash.com/photo-1782320645111-d5efb62ea055"><span class="fb">🏖️</span></div></div>
+      <div class="pin"><div class="ph"><img loading="lazy" alt="пляж" data-u="img/u/photo-1782320645111-d5efb62ea055.jpg"><span class="fb">🏖️</span></div></div>
       <div class="pin sw"><i style="background:#7cc8f0"></i><i style="background:#f6e3c1"></i><i style="background:#ffc93c"></i></div>
-      <div class="pin"><div class="ph"><img loading="lazy" alt="мороженое" data-u="https://images.unsplash.com/photo-1497034825429-c343d7c6a68f"><span class="fb">🍦</span></div></div>
+      <div class="pin"><div class="ph"><img loading="lazy" alt="мороженое" data-u="img/u/photo-1497034825429-c343d7c6a68f.jpg"><span class="fb">🍦</span></div></div>
       <div class="pin word">Тепло ☀️</div>
     </div>
     <div class="icons c3 rv">
@@ -477,22 +475,22 @@
 
 <script>
 /* Картинки с Unsplash: одна функция для размера */
-const IMG = (u, w) => u + '?w=' + (w || 500) + '&q=70&auto=format&fit=crop';
+const IMG = u => u;  /* картинки лежат в репозитории, в папке img/ */
 const ph = (u, fb, w, alt) => '<div class="ph"><img loading="lazy" alt="' + (alt || '') + '" src="' + IMG(u, w) + '"><span class="fb">' + (fb || '🖼️') + '</span></div>';
 document.querySelectorAll('img[data-u]').forEach(im => im.src = IMG(im.dataset.u, 400));
 
 const PIC = {
-  masha:  ['https://images.unsplash.com/photo-1507041957456-9c397ce39c97','https://images.unsplash.com/photo-1563559776084-759c4c52567f','https://images.unsplash.com/photo-1587049352851-8d4e89133924','https://images.unsplash.com/photo-1555078604-b2379f0e964a'],
-  fix:    ['https://images.unsplash.com/photo-1655927858183-fe31d5dd1080','https://images.unsplash.com/photo-1529310399831-ed472b81d589','https://images.unsplash.com/photo-1760842543713-108c3cadbba1','https://images.unsplash.com/photo-1581783898377-1c85bf937427'],
-  ny:     ['https://images.unsplash.com/photo-1770678817191-c3f8d0c52496','https://images.unsplash.com/photo-1612979168796-bcae1575b8c5','https://images.unsplash.com/photo-1613481950732-c1dcddcb410e','https://images.unsplash.com/photo-1767741857489-b28dcaa531a4'],
-  sea:    ['https://images.unsplash.com/photo-1650012332958-2aa054c850ff','https://images.unsplash.com/photo-1782320645111-d5efb62ea055','https://images.unsplash.com/photo-1497034825429-c343d7c6a68f','https://images.unsplash.com/photo-1563630381190-77c336ea545a'],
-  space:  ['https://images.unsplash.com/photo-1765754431926-964ed45a41e9','https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4','https://images.unsplash.com/photo-1614728263952-84ea256f9679','https://images.unsplash.com/photo-1541873676-a18131494184'],
-  pirate: ['https://images.unsplash.com/photo-1781820559556-c3e7924ade2f','https://images.unsplash.com/photo-1520299607509-dcd935f9a839','https://images.unsplash.com/photo-1775733894506-e0fcfa4405f2','https://images.unsplash.com/photo-1565214975484-3cfa9e56f914'],
-  autumn: ['https://images.unsplash.com/photo-1760905066148-2f04b5c6c087','https://images.unsplash.com/photo-1459478309853-2c33a60058e7','https://images.unsplash.com/photo-1523712999610-f77fbcfc3843','https://images.unsplash.com/photo-1506193503569-d57d2a678510'],
-  candy:  ['https://images.unsplash.com/photo-1582573732277-c5444fa37391','https://images.unsplash.com/photo-1575224300306-1b8da36134ec','https://images.unsplash.com/photo-1673124247113-a44d3c6ccbc5','https://images.unsplash.com/photo-1633158832466-be592c721217'],
-  real:   ['https://images.unsplash.com/photo-1652404445394-99b607de5e95','https://images.unsplash.com/photo-1763307411452-43cfd9f516ce','https://images.unsplash.com/photo-1532455900982-24be47fa89de','https://images.unsplash.com/photo-1632613714614-e817d3814a8e','https://images.unsplash.com/photo-1630893173613-ceaf4a6797d3','https://images.unsplash.com/photo-1649930536248-df58fd1f54f8'],
-  slime:  ['https://images.unsplash.com/photo-1631931931379-9dc037ac6a9d','https://images.unsplash.com/photo-1785233765864-b90014ab73b2','https://images.unsplash.com/photo-1686703428120-cf477ef2d389','https://images.unsplash.com/photo-1686942316889-c0afc0beee16','https://images.unsplash.com/photo-1543981625-66b822c50072','https://images.unsplash.com/photo-1686942485101-2f975378395f'],
-  pastel: ['https://images.unsplash.com/photo-1767552659473-9a541393de94','https://images.unsplash.com/photo-1579546928686-286c9fbde1ec','https://images.unsplash.com/photo-1488867605300-0380106bc701','https://images.unsplash.com/photo-1787580113187-1a50ab0abac2','https://images.unsplash.com/photo-1458682625221-3a45f8a844c7','https://images.unsplash.com/photo-1587586062323-836089e60d52']
+  masha:  ['img/u/photo-1507041957456-9c397ce39c97.jpg','img/u/photo-1563559776084-759c4c52567f.jpg','img/u/photo-1587049352851-8d4e89133924.jpg','img/u/photo-1555078604-b2379f0e964a.jpg'],
+  fix:    ['img/u/photo-1655927858183-fe31d5dd1080.jpg','img/u/photo-1529310399831-ed472b81d589.jpg','img/u/photo-1760842543713-108c3cadbba1.jpg','img/u/photo-1581783898377-1c85bf937427.jpg'],
+  ny:     ['img/u/photo-1770678817191-c3f8d0c52496.jpg','img/u/photo-1612979168796-bcae1575b8c5.jpg','img/u/photo-1613481950732-c1dcddcb410e.jpg','img/u/photo-1767741857489-b28dcaa531a4.jpg'],
+  sea:    ['img/u/photo-1650012332958-2aa054c850ff.jpg','img/u/photo-1782320645111-d5efb62ea055.jpg','img/u/photo-1497034825429-c343d7c6a68f.jpg','img/u/photo-1563630381190-77c336ea545a.jpg'],
+  space:  ['img/u/photo-1765754431926-964ed45a41e9.jpg','img/u/photo-1614730321146-b6fa6a46bcb4.jpg','img/u/photo-1614728263952-84ea256f9679.jpg','img/u/photo-1541873676-a18131494184.jpg'],
+  pirate: ['img/u/photo-1781820559556-c3e7924ade2f.jpg','img/u/photo-1520299607509-dcd935f9a839.jpg','img/u/photo-1775733894506-e0fcfa4405f2.jpg','img/u/photo-1565214975484-3cfa9e56f914.jpg'],
+  autumn: ['img/u/photo-1760905066148-2f04b5c6c087.jpg','img/u/photo-1459478309853-2c33a60058e7.jpg','img/u/photo-1523712999610-f77fbcfc3843.jpg','img/u/photo-1506193503569-d57d2a678510.jpg'],
+  candy:  ['img/u/photo-1582573732277-c5444fa37391.jpg','img/u/photo-1575224300306-1b8da36134ec.jpg','img/u/photo-1673124247113-a44d3c6ccbc5.jpg','img/u/photo-1633158832466-be592c721217.jpg'],
+  real:   ['img/u/photo-1652404445394-99b607de5e95.jpg','img/u/photo-1763307411452-43cfd9f516ce.jpg','img/u/photo-1532455900982-24be47fa89de.jpg','img/u/photo-1632613714614-e817d3814a8e.jpg','img/u/photo-1630893173613-ceaf4a6797d3.jpg','img/u/photo-1649930536248-df58fd1f54f8.jpg'],
+  slime:  ['img/u/photo-1631931931379-9dc037ac6a9d.jpg','img/u/photo-1785233765864-b90014ab73b2.jpg','img/u/photo-1686703428120-cf477ef2d389.jpg','img/u/photo-1686942316889-c0afc0beee16.jpg','img/u/photo-1543981625-66b822c50072.jpg','img/u/photo-1686942485101-2f975378395f.jpg'],
+  pastel: ['img/u/photo-1767552659473-9a541393de94.jpg','img/u/photo-1579546928686-286c9fbde1ec.jpg','img/u/photo-1488867605300-0380106bc701.jpg','img/u/photo-1787580113187-1a50ab0abac2.jpg','img/u/photo-1458682625221-3a45f8a844c7.jpg','img/u/photo-1587586062323-836089e60d52.jpg']
 };
 
 /* Настоящие мудборды и слаймы заказчика */
@@ -503,8 +501,8 @@ document.getElementById('slimes').innerHTML = PIC.slime.map(u => ph(u, '🧪', 3
 <script>
 (function(){
   /* ===== Игра «Чей это мудборд?» ===== */
-  const MASHA_LOGO = 'https://upload.wikimedia.org/wikipedia/commons/8/8b/Masha_and_the_Bear_2019_stamp_of_Russia_3.jpg';
-  const FIX_LOGO = 'https://thumb.wikimedia.org/wikipedia/ru/thumb/2/2a/%D0%A4%D0%B8%D0%BA%D1%81%D0%B8%D0%BA%D0%B8_-_%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80.png/300px-%D0%A4%D0%B8%D0%BA%D1%81%D0%B8%D0%BA%D0%B8_-_%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80.png';
+  const MASHA_LOGO = 'img/w/62c3e24264.jpg';
+  const FIX_LOGO = 'img/w/7f15b57a3a.png';
   const ROUNDS = [
     { k:'masha',  cols:['#2f6b3a','#d61f45','#f2a900'], a:['🐻👧','Маша и Медведь'], logo:MASHA_LOGO, o:[['🔧','Фиксики'],['🏴‍☠️','Пираты'],['🎄','Новый год']] },
     { k:'ny',     cols:['#e0262b','#2f9e4b','#ffc93c'], a:['🎄','Новый год'], o:[['🏖️','Лето на море'],['🍂','Осень'],['🚀','Космос']] },

@@ -6,9 +6,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Стилистика</title>
 <script>document.documentElement.classList.add('js');</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Nunito:wght@900&family=Russo+One&family=Unbounded:wght@700;900&family=Fredoka:wght@500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="fonts/fonts.css">
 <link rel="stylesheet" href="lesson.css">
 <link rel="stylesheet" href="race.css">
 <style>
@@ -407,24 +405,24 @@ document.addEventListener('error', e => {
 const IMG = (u, w) => u + '?w=' + (w || 400) + '&q=70&auto=format&fit=crop';
 const ph = (u, fb, w) => '<div class="ph"><img loading="lazy" alt="" src="' + IMG(u, w) + '"><span class="fb">' + (fb || '🖼️') + '</span></div>';
 const GOOD = [
-  'https://images.unsplash.com/photo-1631567210298-d385d8d9476c',  // мятный плюшевый котик
-  'https://images.unsplash.com/photo-1763905145495-6e7d3f9b22a4',  // котики-сквиши
-  'https://images.unsplash.com/photo-1686703428120-cf477ef2d389',  // пастельные слаймы в руках
-  'https://images.unsplash.com/photo-1760733672584-475e728f09c5',  // мягкая игрушка
-  'https://images.unsplash.com/photo-1785874159180-e0d04409d4aa',  // желейный сквиш
-  'https://images.unsplash.com/photo-1686942485101-2f975378395f',  // слайм-розочка
-  'https://images.unsplash.com/photo-1764590212225-b05ea6747046',  // белый котик-сквиш
-  'https://images.unsplash.com/photo-1674069686288-071c6e4ef838',  // пастельный зефир
-  'https://images.unsplash.com/photo-1594165681163-1b85559cf250'   // пастельные пузырьки
+  'img/u/photo-1631567210298-d385d8d9476c.jpg',  // мятный плюшевый котик
+  'img/u/photo-1763905145495-6e7d3f9b22a4.jpg',  // котики-сквиши
+  'img/u/photo-1686703428120-cf477ef2d389.jpg',  // пастельные слаймы в руках
+  'img/u/photo-1760733672584-475e728f09c5.jpg',  // мягкая игрушка
+  'img/u/photo-1785874159180-e0d04409d4aa.jpg',  // желейный сквиш
+  'img/u/photo-1686942485101-2f975378395f.jpg',  // слайм-розочка
+  'img/u/photo-1764590212225-b05ea6747046.jpg',  // белый котик-сквиш
+  'img/u/photo-1674069686288-071c6e4ef838.jpg',  // пастельный зефир
+  'img/u/photo-1594165681163-1b85559cf250.jpg'   // пастельные пузырьки
 ];
 const BAD = [
-  'https://images.unsplash.com/photo-1510672981848-a1c4f1cb5ccf',  // огонь
-  'https://images.unsplash.com/photo-1566864008360-e2c4c57fa5d4',  // тёмные пузыри
-  'https://images.unsplash.com/photo-1655927858183-fe31d5dd1080',  // винтики
-  'https://images.unsplash.com/photo-1775733894506-e0fcfa4405f2',  // пиратский корабль
-  'https://images.unsplash.com/photo-1507041957456-9c397ce39c97',  // тёмный лес
-  'https://images.unsplash.com/photo-1541873676-a18131494184',     // космонавт
-  'https://images.unsplash.com/photo-1459478309853-2c33a60058e7'   // осенние листья
+  'img/u/photo-1510672981848-a1c4f1cb5ccf.jpg',  // огонь
+  'img/u/photo-1566864008360-e2c4c57fa5d4.jpg',  // тёмные пузыри
+  'img/u/photo-1655927858183-fe31d5dd1080.jpg',  // винтики
+  'img/u/photo-1775733894506-e0fcfa4405f2.jpg',  // пиратский корабль
+  'img/u/photo-1507041957456-9c397ce39c97.jpg',  // тёмный лес
+  'img/u/photo-1541873676-a18131494184.jpg',     // космонавт
+  'img/u/photo-1459478309853-2c33a60058e7.jpg'   // осенние листья
 ];
 document.getElementById('goods').innerHTML = GOOD.slice(0, 3).map(u => ph(u, '🧸', 300)).join('');
 </script>
