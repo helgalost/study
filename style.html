@@ -30,7 +30,7 @@
   .sx-cake:hover{transform:translateY(-3px)}
   .sx-cake .who{font-size:12px;font-weight:900;text-transform:uppercase;color:var(--muted)}
   .cakeart{position:relative;width:min(100%,170px);aspect-ratio:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}
-  .cakeart .top{font-size:clamp(1.4rem,6vw,2rem);letter-spacing:.1em;line-height:1;margin-bottom:-4px;z-index:2}
+  .cakeart .ck-top{font-size:clamp(1.4rem,6vw,2rem);letter-spacing:.1em;line-height:1;margin-bottom:-4px;z-index:2}
   .cakeart .t1{width:62%;height:28%;border-radius:14px 14px 4px 4px;border:3px solid var(--ink);border-bottom:0}
   .cakeart .t2{width:88%;height:36%;border-radius:14px 14px 8px 8px;border:3px solid var(--ink)}
   .cakeart .plate{width:100%;height:8%;border-radius:999px;background:#e0ddd5;border:3px solid var(--ink);margin-top:-2px}
@@ -42,7 +42,7 @@
 
   /* ===== Одна вывеска — три стиля ===== */
   .sx-switch{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:1.5rem}
-  .sx-switch button{border:3px solid var(--ink);border-radius:999px;background:#fff;padding:8px 16px;font:inherit;font-weight:900;font-size:clamp(.95rem,3.8vw,1.1rem);cursor:pointer}
+  .sx-switch button{border:3px solid var(--ink);border-radius:20px;background:#fff;width:72px;height:64px;font-size:2rem;cursor:pointer}
   .sx-switch button.on{background:var(--ink);color:var(--paper)}
   .sx-shop{max-width:520px;margin:1.25rem auto 0}
   .sx-roof{height:40px;border:4px solid var(--ink);border-bottom:0;border-radius:18px 18px 0 0;transition:background .4s}
@@ -71,8 +71,7 @@
 
   /* ===== Заказчик «Жмяк!» ===== */
   .sx-logo{display:inline-flex;align-items:center;gap:.4rem;font-family:'Nunito',sans-serif;font-weight:900;color:#7a5bc7;font-size:clamp(1.6rem,6vw,2.2rem);line-height:1}
-  .sx-goods{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:1.25rem}
-  @media(min-width:768px){.sx-goods{grid-template-columns:repeat(6,1fr)}}
+  .sx-goods{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:1.25rem;max-width:480px}
   .sx-goods .ph{aspect-ratio:1;border-radius:16px;border:2px solid var(--ink)}
   .sx-goods .ph:nth-child(odd){transform:rotate(-2deg)} .sx-goods .ph:nth-child(even){transform:rotate(2deg)}
   .sx-wl{display:grid;gap:12px;margin-top:1.25rem}
@@ -98,8 +97,8 @@
   .sx-face{font-size:clamp(2.8rem,12vw,3.6rem);line-height:1;flex-shrink:0;transition:transform .3s}
   .sx-face.pop{animation:pop .45s var(--ease-out)}
   .sx-bubble{position:relative;flex:1;background:var(--paper-2);border-radius:16px;padding:.6rem .8rem;font-weight:900;font-size:clamp(.95rem,4vw,1.15rem);line-height:1.2}
-  .sx-checks{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
-  .sx-chk{display:flex;align-items:center;gap:.5rem;background:var(--paper-2);border-radius:14px;padding:.5rem .7rem;font-weight:900;font-size:13px;line-height:1.1;transition:background .3s}
+  .sx-checks{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+  .sx-chk{display:flex;align-items:center;gap:.5rem;background:var(--paper-2);border-radius:14px;padding:.5rem .7rem;font-weight:900;font-size:1.5rem;line-height:1.1;justify-content:center;transition:background .3s}
   .sx-chk .b{width:24px;height:24px;border-radius:7px;border:3px solid var(--ink);background:#fff;flex-shrink:0;display:grid;place-items:center;font-size:14px}
   .sx-chk.on{background:#c8f0d0} .sx-chk.on .b::after{content:"✓"}
   .sx-chk.bad{background:#ffd9d9} .sx-chk.bad .b::after{content:"✕";color:var(--signal)}
@@ -115,7 +114,7 @@
   .sx-mbx .cols i{width:28px;height:28px;border-radius:6px;border:2px solid rgba(0,0,0,.15)}
   .sx-mbx .el{background:#fff;border-radius:10px;padding:2px 8px;font-size:1.8rem;line-height:1.2;min-width:40px;min-height:38px;text-align:center}
   .sx-mbx .wd{background:#fff8c2;border-radius:6px;padding:4px 10px;font-weight:900;font-size:14px;box-shadow:0 2px 4px rgba(0,0,0,.2)}
-  .sx-pick .lbl{font-size:12px;font-weight:900;text-transform:uppercase;margin:.9rem 0 .45rem}
+  .sx-pick .lbl{font-size:1.6rem;margin:.9rem 0 .45rem;line-height:1}
   .sx-pics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
   .sx-pics button{position:relative;aspect-ratio:1;border:0;padding:0;border-radius:10px;overflow:hidden;cursor:pointer;background:#eee}
   .sx-pics button .ph{position:absolute;inset:0}
@@ -186,29 +185,29 @@
       <h2 class="display">Мудборд —<br><span class="it">для кого?</span></h2>
     </div>
     <div class="sx-flow rv">
-      <div class="sx-step c"><span class="em">👸</span><span class="t">Заказчик</span><span class="say">«Хочу так!»</span></div>
+      <div class="sx-step c"><span class="em">👸</span><span class="t">Заказчик</span></div>
       <span class="sx-arr">➜</span>
-      <div class="sx-step m"><span class="em">📋</span><span class="t">Мудборд</span><span class="say">его хотелки</span></div>
+      <div class="sx-step m"><span class="em">📋</span><span class="t">Мудборд</span></div>
       <span class="sx-arr">➜</span>
-      <div class="sx-step w"><span class="em">🎨</span><span class="t">Мы рисуем</span><span class="say">по мудборду</span></div>
+      <div class="sx-step w"><span class="em">🎨</span><span class="t">Мы рисуем</span></div>
     </div>
 
     <div class="sx-wish rv">
-      <span class="lbl">👸 Заказчик хочет торт:</span>
-      <span class="w">💗 розовый</span><span class="w">🍓 с клубникой</span><span class="w">☁️ нежный</span>
+      <span class="lbl" style="font-size:2rem">👸💭</span>
+      <span class="w" style="font-size:1.6rem">🎂 💗 🍓</span>
     </div>
     <div class="sx-cakes rv">
       <button class="sx-cake" type="button" data-r="good">
-        <span class="who">👩‍🍳 Повар А</span>
-        <div class="cakeart pink"><span class="top">🍓🍓🍓</span><div class="t1"></div><div class="t2"></div><div class="plate"></div></div>
+        <span class="who">А</span>
+        <div class="cakeart pink"><span class="ck-top">🍓🍓🍓</span><div class="t1"></div><div class="t2"></div><div class="plate"></div></div>
       </button>
       <button class="sx-cake" type="button" data-r="bad">
-        <span class="who">👨‍🍳 Повар Б</span>
-        <div class="cakeart dark"><span class="top">💀⚡💀</span><div class="t1"></div><div class="t2"></div><div class="plate"></div></div>
+        <span class="who">Б</span>
+        <div class="cakeart dark"><span class="ck-top">💀⚡💀</span><div class="t1"></div><div class="t2"></div><div class="plate"></div></div>
       </button>
     </div>
-    <div class="sx-react rv" id="cakeReact">👆 Какой торт понравится заказчику?</div>
-    <div class="rule-big rv"><span class="em">🎯</span><span class="tx">Делаем <em>не как нравится мне,</em> а как хочет заказчик!</span></div>
+    <div class="sx-react rv" id="cakeReact">👆</div>
+    <div class="rule-big rv"><span class="em">🎯</span><span class="tx">Как хочет <em>заказчик!</em></span></div>
   </div>
 </section>
 
@@ -229,45 +228,14 @@
     </div>
 
     <div class="sx-switch rv" id="styleSwitch">
-      <button type="button" data-s="soft" class="on">☁️ Нежный</button>
-      <button type="button" data-s="race">🏁 Гоночный</button>
-      <button type="button" data-s="space">⭐ Космический</button>
+      <button type="button" data-s="soft" class="on">☁️</button>
+      <button type="button" data-s="race">🏁</button>
+      <button type="button" data-s="space">⭐</button>
     </div>
     <div class="sx-shop rv">
       <div class="sx-roof" id="ssRoof"></div>
-      <div class="sx-board" id="ssBoard"><div class="pat" id="ssPat"></div><div class="name" id="ssName">Игрушки</div><div class="sub" id="ssSub">магазин</div></div>
+      <div class="sx-board" id="ssBoard"><div class="pat" id="ssPat"></div><div class="name" id="ssName">Игрушки</div></div>
     </div>
-    <div class="sx-parts rv">
-      <div class="sx-part"><span class="lbl">🎨 Цвета</span><div class="v" id="ssCols"></div></div>
-      <div class="sx-part"><span class="lbl">⭐ Элемент</span><div class="v" id="ssEl"></div></div>
-      <div class="sx-part"><span class="lbl">🔤 Буквы</span><div class="v" id="ssFont"></div></div>
-    </div>
-    <div class="rule-big rv"><span class="em">💡</span><span class="tx">Магазин один — а <em>стиль</em> может быть совсем разный!</span></div>
-  </div>
-</section>
-
-<!-- 03 · ЭЛЕМЕНТ СТИЛЯ -->
-<section class="slide" id="elements">
-  <div class="slide-content">
-    <div class="section-head rv">
-      <h2 class="display">Элемент<br><span class="it">стиля</span></h2>
-    </div>
-    <div class="sx-els rv">
-      <div class="sx-el"><span class="em">☁️</span><span class="t">облачко</span></div>
-      <div class="sx-el"><span class="em">⭐</span><span class="t">звёздочка</span></div>
-      <div class="sx-el"><span class="em">🏁</span><span class="t">клетка</span></div>
-      <div class="sx-el"><span class="em">⚡</span><span class="t">молния</span></div>
-      <div class="sx-el"><span class="em">💧</span><span class="t">капелька</span></div>
-      <div class="sx-el"><span class="em">💗</span><span class="t">сердечко</span></div>
-      <div class="sx-el"><span class="em">🫧</span><span class="t">пузырьки</span></div>
-      <div class="sx-el"><span class="em">🌸</span><span class="t">цветочек</span></div>
-    </div>
-    <div class="sx-repeat rv">
-      <div class="sx-rp"><span class="em">🏪</span><span class="t">Вывеска</span></div>
-      <div class="sx-rp"><span class="em">📦</span><span class="t">Коробка</span></div>
-      <div class="sx-rp"><span class="em">🖼️</span><span class="t">Плакат</span></div>
-    </div>
-    <div class="rule-big rv"><span class="em">🔁</span><span class="tx">Элемент <em>повторяем везде</em> — и всё становится похожим, одним стилем.</span></div>
   </div>
 </section>
 
@@ -293,30 +261,20 @@
         <span class="ava" style="background:linear-gradient(135deg,#ffd6ec,#c9f2e6)">🧸</span>
         <div>
           <span class="sx-logo">☁️ Жмяк!</span>
-          <div style="font-weight:900;text-transform:uppercase;font-size:13px;margin-top:4px">магазин антистресс-игрушек</div>
         </div>
       </div>
-      <div class="client-say">
-        «Привет, ребята! У меня магазин <b>«Жмяк!»</b> — сквиши, слаймы и мягкие игрушки-антистрессы.
-        Я уже знаю, <b>какой</b> он должен быть! Вот мои хотелки.
-        Соберите мне <b>мудборд по моим хотелкам</b> — а потом по нему нарисуйте вывеску!»
-      </div>
+      <div class="client-say">«Вот мои хотелки — сделайте мне <b>мудборд!</b>»</div>
       <div class="sx-goods" id="goods"></div>
     </div>
 
     <div class="sx-wl rv">
       <div class="sx-card yes">
         <h4>✅ Хочу</h4>
-        <div class="sx-row"><span class="k">Цвета</span><i style="background:#ffc7e0"></i><i style="background:#bff0dc"></i><i style="background:#dccbff"></i></div>
-        <div class="sx-row"><span class="k">Элемент</span><span class="e">☁️</span><span class="w">облачка</span></div>
-        <div class="sx-row"><span class="k">Буквы</span><span class="fnt">круглые, пухлые</span></div>
-        <div class="sx-row"><span class="k">Настроение</span><span class="w">мягко</span><span class="w">мило</span><span class="w">нежно</span></div>
+        <div class="sx-row"><i style="background:#ffc7e0"></i><i style="background:#bff0dc"></i><i style="background:#dccbff"></i><span class="e">☁️</span><span class="e">🧸</span></div>
       </div>
       <div class="sx-card no">
         <h4>❌ Не хочу</h4>
-        <div class="sx-row"><span class="k">Цвета</span><i style="background:#1b1b1b"></i><i style="background:#e53935"></i><i style="background:#6d4c41"></i></div>
-        <div class="sx-row"><span class="k">Страшное</span><span class="x">💀</span><span class="x">🕷️</span></div>
-        <div class="sx-row"><span class="k">Острое</span><span class="x">⚡</span><span class="x">🗡️</span></div>
+        <div class="sx-row"><i style="background:#1b1b1b"></i><i style="background:#e53935"></i><span class="x">💀</span><span class="x">⚡</span></div>
       </div>
     </div>
     <div class="center rv"><button class="print-btn" type="button" id="printBtn">🖨️ Распечатать хотелки</button></div>
@@ -334,26 +292,24 @@
       <div>
         <div class="sx-client">
           <span class="sx-face" id="face">😐</span>
-          <div class="sx-bubble" id="bubble">Собери мой мудборд! Смотри на хотелки ☝️</div>
+          <div class="sx-bubble" id="bubble">📋 ?</div>
         </div>
         <div class="sx-checks" id="checks">
-          <div class="sx-chk" data-w="cols"><span class="b"></span>💗 Мои 3 цвета</div>
-          <div class="sx-chk" data-w="el"><span class="b"></span>☁️ Облачка</div>
-          <div class="sx-chk" data-w="pics"><span class="b"></span>🧸 4 картинки</div>
-          <div class="sx-chk" data-w="words"><span class="b"></span>💬 2 слова</div>
-          <div class="sx-chk" data-w="nope" style="grid-column:1/-1"><span class="b"></span>🚫 Ничего из «не хочу»</div>
+          <div class="sx-chk" data-w="cols"><span class="b"></span>🎨</div>
+          <div class="sx-chk" data-w="el"><span class="b"></span>☁️</div>
+          <div class="sx-chk" data-w="pics"><span class="b"></span>🧸</div>
+          <div class="sx-chk" data-w="nope"><span class="b"></span>🚫</div>
         </div>
         <div class="sx-mb">
           <div class="sx-slots" id="slots"></div>
-          <div class="sx-mbx"><div class="cols" id="mbCols"></div><div class="el" id="mbEl"></div><span id="mbWords" style="display:flex;gap:6px;flex-wrap:wrap"></span></div>
+          <div class="sx-mbx"><div class="cols" id="mbCols"></div><div class="el" id="mbEl"></div></div>
         </div>
       </div>
       <div class="sx-pick">
-        <div class="lbl">🖼️ Картинки (нажми — и она на доске)</div><div class="sx-pics" id="pics"></div>
-        <div class="lbl">🎨 Цвета</div><div class="sx-chips" id="colChips"></div>
-        <div class="lbl">⭐ Элемент</div><div class="sx-chips" id="elChips"></div>
-        <div class="lbl">💬 Слова</div><div class="sx-chips" id="wordChips"></div>
-        <button class="play-btn alt" id="buildClear" type="button" style="margin-top:1rem">↺ Заново</button>
+        <div class="lbl">🖼️</div><div class="sx-pics" id="pics"></div>
+        <div class="lbl">🎨</div><div class="sx-chips" id="colChips"></div>
+        <div class="lbl">⭐</div><div class="sx-chips" id="elChips"></div>
+        <button class="play-btn alt" id="buildClear" type="button" style="margin-top:1rem">↺</button>
       </div>
     </div>
   </div>
@@ -366,11 +322,11 @@
       <span class="kicker">Шаг 2</span>
       <h2 class="display">По мудборду —<br><span class="it">вывеска!</span></h2>
     </div>
-    <div class="center rv"><button class="play-btn" id="makeSign" type="button"><span class="em">🎨</span> Нарисовать по мудборду</button></div>
+    <div class="center rv"><button class="play-btn" id="makeSign" type="button"><span class="em">🎨</span> Нарисовать</button></div>
     <div class="sx-signs rv" id="signs">
-      <div class="sx-empty">📋 Сначала собери мудборд выше ↑</div>
+      <div class="sx-empty">📋 ↑</div>
     </div>
-    <div class="rule-big rv"><span class="em">📋</span><span class="tx">Мудборд — это <em>подсказка:</em> смотришь на него — и сразу знаешь, как рисовать!</span></div>
+    <div class="rule-big rv"><span class="em">📋</span><span class="tx">Смотрю на мудборд — <em>и рисую!</em></span></div>
   </div>
 </section>
 
@@ -382,20 +338,12 @@
       <h2 class="display">Для<br><span class="it">«Жмяк!»</span></h2>
     </div>
     <div class="steps3 rv">
-      <div class="s3" style="background:#ffe3f1"><span class="em">👸</span><span class="t">Читаем хотелки</span></div>
+      <div class="s3" style="background:#ffe3f1"><span class="em">👸</span><span class="t">Хотелки</span></div>
       <span class="s3a">➜</span>
       <div class="s3" style="background:#fff1cc"><span class="em">📋</span><span class="t">Мудборд</span></div>
       <span class="s3a">➜</span>
-      <div class="s3" style="background:#d6f5dc"><span class="em">🏪</span><span class="t">Вывеска по мудборду</span></div>
+      <div class="s3" style="background:#d6f5dc"><span class="em">🏪</span><span class="t">Вывеска</span></div>
     </div>
-    <div class="checks rv" style="margin-top:1.25rem">
-      <button class="ck" type="button"><span class="box"></span><span class="em">💗</span><span class="t">Цвета заказчика</span></button>
-      <button class="ck" type="button"><span class="box"></span><span class="em">☁️</span><span class="t">Облачка</span></button>
-      <button class="ck" type="button"><span class="box"></span><span class="em">🔤</span><span class="t">Круглые буквы</span></button>
-      <button class="ck" type="button"><span class="box"></span><span class="em">🚫</span><span class="t">Нет «не хочу»</span></button>
-      <button class="ck" type="button"><span class="box"></span><span class="em">📋</span><span class="t">Похоже на мудборд</span></button>
-    </div>
-    <div class="ck-done" id="ckDone"><span class="em">😍</span>Заказчик доволен!</div>
   </div>
 </section>
 
@@ -428,18 +376,9 @@
       запомни
     </p>
     <h2 class="display rv">
-      Хотелки<br>
-      заказчика —<br>
-      <span class="it">в мудборд.</span>
+      👸 ➜ 📋 ➜ 🎨<br>
+      <span class="it">Как хочет заказчик!</span>
     </h2>
-    <div class="final-rule rv">
-      <p class="lbl">Правило</p>
-      <h3>
-        <span>Смотрю на мудборд —</span>
-        <span>рисую</span>
-        <span>в его стиле.</span>
-      </h3>
-    </div>
   </div>
 </section>
 
@@ -447,7 +386,6 @@
   <a href="#top" class="active" title="Старт">↑</a>
   <a href="#whose" title="Для кого мудборд">👸</a>
   <a href="#style" title="Что такое стиль">✨</a>
-  <a href="#elements" title="Элемент стиля">☁️</a>
   <a href="#race" title="Стиль-гонки">🏎️</a>
   <a href="#client" title="Заказчик">🧸</a>
   <a href="#build" title="Мудборд по хотелкам">📋</a>
@@ -488,7 +426,7 @@ const BAD = [
   'https://images.unsplash.com/photo-1541873676-a18131494184',     // космонавт
   'https://images.unsplash.com/photo-1459478309853-2c33a60058e7'   // осенние листья
 ];
-document.getElementById('goods').innerHTML = GOOD.slice(0, 6).map(u => ph(u, '🧸', 300)).join('');
+document.getElementById('goods').innerHTML = GOOD.slice(0, 3).map(u => ph(u, '🧸', 300)).join('');
 </script>
 <script src="lesson.js"></script>
 <script src="race.js"></script>
@@ -500,8 +438,8 @@ document.getElementById('goods').innerHTML = GOOD.slice(0, 6).map(u => ph(u, '�
     document.querySelectorAll('.sx-cake').forEach(x => x.classList.remove('on', 'good', 'bad'));
     c.classList.add('on', c.dataset.r);
     cakeReact.innerHTML = c.dataset.r === 'good'
-      ? '<span>😍 «Это мой торт! Как я хотела!»</span>'
-      : '<span>😡 «Красиво… но я просила НЕ ТАК!»</span>';
+      ? '<span style="font-size:2.4rem">😍</span>'
+      : '<span style="font-size:2.4rem">😡</span>';
   }));
 
   /* ===== Одна вывеска — три стиля ===== */
@@ -520,11 +458,7 @@ document.getElementById('goods').innerHTML = GOOD.slice(0, 6).map(u => ph(u, '�
     const board = document.getElementById('ssBoard'); board.style.background = s.bg;
     const nm = document.getElementById('ssName');
     Object.assign(nm.style, { fontFamily: s.font, fontWeight: s.fw, color: s.tc, textShadow: s.ts, letterSpacing: s.ls, textTransform: s.tt });
-    document.getElementById('ssSub').style.color = s.subc;
     document.getElementById('ssPat').innerHTML = Array(18).fill('<span>' + s.el + '</span>').join('');
-    document.getElementById('ssCols').innerHTML = s.cols.map(c => '<i style="background:' + c + '"></i>').join('');
-    document.getElementById('ssEl').innerHTML = '<span class="e">' + s.el + '</span>';
-    document.getElementById('ssFont').innerHTML = '<span class="f" style="font-family:' + s.font.replace(/"/g,'&quot;') + ';font-weight:' + s.fw + '">Аа</span>';
   }
   document.querySelectorAll('#styleSwitch button').forEach(b => b.addEventListener('click', () => setStyle(b.dataset.s)));
   setStyle('soft');
@@ -551,10 +485,9 @@ document.getElementById('goods').innerHTML = GOOD.slice(0, 6).map(u => ph(u, '�
     const cols = WANT_COLS.every(c => st.cols.includes(c));
     const el = st.el === '☁️';
     const pics = st.pics.filter(p => p.ok).length >= 4;
-    const words = st.words.filter(w => kind(WORDS, w) === 'want').length >= 2;
     const nope = !st.cols.some(c => kind(COLS, c) === 'no') && !(st.el && kind(ELS, st.el) === 'no')
-              && !st.words.some(w => kind(WORDS, w) === 'no') && !st.pics.some(p => !p.ok);
-    return { cols, el, pics, words, nope, all: cols && el && pics && words && nope };
+              && !st.pics.some(p => !p.ok);
+    return { cols, el, pics, nope, all: cols && el && pics && nope };
   }
   function draw(){
     // доска
@@ -569,10 +502,8 @@ document.getElementById('goods').innerHTML = GOOD.slice(0, 6).map(u => ph(u, '�
     }
     document.getElementById('mbCols').innerHTML = st.cols.map(c => '<i style="background:' + c + '"></i>').join('');
     document.getElementById('mbEl').textContent = st.el || '';
-    document.getElementById('mbWords').innerHTML = st.words.map(w => '<span class="wd">' + w + '</span>').join('');
     document.querySelectorAll('#colChips .sx-cb').forEach(b => b.classList.toggle('on', st.cols.includes(b.dataset.v)));
     document.querySelectorAll('#elChips .sx-cb').forEach(b => b.classList.toggle('on', st.el === b.dataset.v));
-    document.querySelectorAll('#wordChips .sx-cb').forEach(b => b.classList.toggle('on', st.words.includes(b.dataset.v)));
     // хотелки
     const S = status();
     document.querySelectorAll('.sx-chk').forEach(c => {
@@ -580,14 +511,14 @@ document.getElementById('goods').innerHTML = GOOD.slice(0, 6).map(u => ph(u, '�
       c.classList.toggle('on', !!S[w]);
       c.classList.toggle('bad', w === 'nope' && !S.nope);
     });
-    if (S.all) say('😍', 'Да! Это мой «Жмяк!» — именно так я и хотела! Теперь рисуйте вывеску ↓');
+    if (S.all) say('😍', '✅ Да! ↓');
     document.getElementById('makeSign').classList.toggle('alt', !S.all);
   }
-  function react(k, what){
-    if (k === 'no') say('😬', 'Ой! ' + what + ' — я же просила НЕ так!');
-    else if (k === 'want') say('😊', 'Да, ' + what + ' — как я хотела!');
-    else if (k === 'ok') say('🙂', what + ' — ну… можно.');
-    else say('🤔', what + '? Я такого не просила…');
+  function react(k){
+    if (k === 'no') say('😬', '❌ Нет!');
+    else if (k === 'want') say('😊', '✅ Да!');
+    else if (k === 'ok') say('🙂', '👌');
+    else say('🤔', '❓');
   }
   // картинки
   const picsEl = document.getElementById('pics');
@@ -595,9 +526,9 @@ document.getElementById('goods').innerHTML = GOOD.slice(0, 6).map(u => ph(u, '�
     const b = document.createElement('button'); b.type = 'button'; b.innerHTML = ph(p.u, '🖼️', 220);
     b.addEventListener('click', () => {
       if (b.classList.contains('used')) return;
-      if (st.pics.length >= SLOTS) { say('🙂', 'Доска полная! Нажми на картинку на доске, чтобы убрать.'); return; }
+      if (st.pics.length >= SLOTS) { say('🙂', '📋 ✋'); return; }
       st.pics.push({ u: p.u, ok: p.ok, btn: b }); b.classList.add('used');
-      p.ok ? say('😊', 'Да! Это как у меня в магазине!') : say('😬', 'Ой! Это совсем не мой стиль!');
+      p.ok ? say('😊', '✅ Да!') : say('😬', '❌ Нет!');
       draw();
     });
     picsEl.appendChild(b);
@@ -608,7 +539,7 @@ document.getElementById('goods').innerHTML = GOOD.slice(0, 6).map(u => ph(u, '�
     const b = document.createElement('button'); b.type = 'button'; b.className = 'sx-cb col'; b.style.background = c; b.dataset.v = c; b.setAttribute('aria-label', 'цвет');
     b.addEventListener('click', () => {
       if (st.cols.includes(c)) st.cols = st.cols.filter(x => x !== c);
-      else { if (st.cols.length >= 4) st.cols.shift(); st.cols.push(c); react(k, 'Этот цвет'); }
+      else { if (st.cols.length >= 4) st.cols.shift(); st.cols.push(c); react(k); }
       draw();
     });
     colChips.appendChild(b);
@@ -617,24 +548,13 @@ document.getElementById('goods').innerHTML = GOOD.slice(0, 6).map(u => ph(u, '�
   const elChips = document.getElementById('elChips');
   ELS.forEach(([e, k]) => {
     const b = document.createElement('button'); b.type = 'button'; b.className = 'sx-cb el'; b.textContent = e; b.dataset.v = e;
-    b.addEventListener('click', () => { st.el = st.el === e ? null : e; if (st.el) react(k, e); draw(); });
+    b.addEventListener('click', () => { st.el = st.el === e ? null : e; if (st.el) react(k); draw(); });
     elChips.appendChild(b);
-  });
-  // слова
-  const wordChips = document.getElementById('wordChips');
-  WORDS.forEach(([w, k]) => {
-    const b = document.createElement('button'); b.type = 'button'; b.className = 'sx-cb'; b.textContent = w; b.dataset.v = w;
-    b.addEventListener('click', () => {
-      if (st.words.includes(w)) st.words = st.words.filter(x => x !== w);
-      else { if (st.words.length >= 3) st.words.shift(); st.words.push(w); react(k, '«' + w + '»'); }
-      draw();
-    });
-    wordChips.appendChild(b);
   });
   document.getElementById('buildClear').addEventListener('click', () => {
     st = { pics: [], cols: [], el: null, words: [] };
     picsEl.querySelectorAll('button').forEach(b => b.classList.remove('used'));
-    say('😐', 'Собери мой мудборд! Смотри на хотелки ☝️'); draw();
+    say('😐', '📋 ?'); draw();
   });
   draw();
 
@@ -643,7 +563,7 @@ document.getElementById('goods').innerHTML = GOOD.slice(0, 6).map(u => ph(u, '�
     const box = document.getElementById('signs');
     const S = status();
     if (st.cols.length < 2 || !st.el || st.pics.length < 2) {
-      box.innerHTML = '<div class="sx-empty">📋 Мудборд ещё пустой! Добавь цвета, элемент и картинки ↑</div>';
+      box.innerHTML = '<div class="sx-empty">📋 ↑</div>';
       return;
     }
     const c = st.cols, el = st.el, pics = st.pics.slice(0, 3);
@@ -653,21 +573,21 @@ document.getElementById('goods').innerHTML = GOOD.slice(0, 6).map(u => ph(u, '�
     const bg = 'linear-gradient(160deg,' + c[0] + ',' + (c[2] || c[1]) + ')';
     const mine =
       '<div class="sx-sg">' +
-        '<div class="cap"><span>📋 По мудборду</span><span class="face">' + (S.all ? '😍' : '🤔') + '</span></div>' +
+        '<div class="cap"><span>📋 ✅</span><span class="face">' + (S.all ? '😍' : '🤔') + '</span></div>' +
         '<div class="sx-shop" style="margin:0;width:100%"><div class="sx-roof" style="background:' + roof + '"></div>' +
         '<div class="sx-board" style="background:' + bg + '"><div class="pat">' + Array(18).fill('<span>' + el + '</span>').join('') + '</div>' +
         '<div class="name" style="font-family:\'Nunito\',sans-serif;font-weight:900;color:' + txt + '">Жмяк!</div>' +
-        '<div class="sub" style="color:' + txt + '">антистресс-игрушки</div>' +
+        
         '<div class="wins">' + pics.map(p => ph(p.u, '🧸', 160)).join('') + '</div></div></div>' +
-        '<div class="sx-from"><span>🎨 цвета ← мудборд</span><span>' + el + ' элемент ← мудборд</span><span>🖼️ картинки ← мудборд</span></div>' +
+        
       '</div>';
     const theirs =
       '<div class="sx-sg sx-bad">' +
-        '<div class="cap"><span>🙈 Как захотелось мне</span><span class="face">😡</span></div>' +
+        '<div class="cap"><span>🙈 ❌</span><span class="face">😡</span></div>' +
         '<div class="sx-shop" style="margin:0;width:100%"><div class="sx-roof"></div>' +
         '<div class="sx-board"><div class="pat">' + Array(18).fill('<span>⚡</span>').join('') + '</div>' +
-        '<div class="name">ЖМЯК</div><div class="sub" style="color:#fff">💀 антистресс 💀</div></div></div>' +
-        '<div class="sx-from"><span style="background:#ffd9d9">🎨 не те цвета</span><span style="background:#ffd9d9">⚡ не тот элемент</span><span style="background:#ffd9d9">😡 заказчик против</span></div>' +
+        '<div class="name">ЖМЯК 💀</div></div></div>' +
+        
       '</div>';
     box.innerHTML = mine + theirs;
     box.querySelectorAll('.ph img').forEach(img => img.addEventListener('error', () => img.parentElement.classList.add('noimg')));
