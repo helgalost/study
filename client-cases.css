@@ -1,0 +1,12 @@
+  .client-photos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:1.25rem}
+  @media(min-width:768px){.client-photos{grid-template-columns:repeat(6,minmax(0,1fr))}}
+  .client-photos span{display:block;aspect-ratio:1;border:2px solid var(--ink);border-radius:16px;background-image:url('img/agency-cases.jpg');background-size:600% 300%;background-repeat:no-repeat}
+  .client-photos span:nth-child(odd){transform:rotate(-2deg)} .client-photos span:nth-child(even){transform:rotate(2deg)}
+  .style-words{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:1.25rem}
+  .style-words span{border:2px solid var(--ink);border-radius:999px;padding:8px 16px;font-weight:900;font-size:clamp(1rem,4vw,1.2rem)}
+  .style-words span:nth-child(1){background:linear-gradient(90deg,#ff9cc8,#ffc93c,#7bd389,#7cc8f0,#c9b8ff)}
+  .style-words span:nth-child(2){background:#f1e6ff}
+  .style-words span:nth-child(3){background:#bdeee0}
+  .style-words span:nth-child(4){background:var(--yellow)}
+  .style-words span:nth-child(5){background:#ffd6ec}
+
