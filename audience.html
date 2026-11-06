@@ -46,6 +46,18 @@
   .tp .hints span{background:var(--paper-2);border-radius:999px;padding:5px 10px;font-size:12px;font-weight:900}
   .tp.k{background:linear-gradient(160deg,#fff7d1,#ffe0cc)}
   .tp.a{background:#f4f7fa}
+  .pizza-photos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:1.25rem}
+  @media(min-width:768px){.pizza-photos{grid-template-columns:repeat(6,minmax(0,1fr))}}
+  .pizza-photos span{display:block;aspect-ratio:1;border:2px solid var(--ink);border-radius:16px;background-image:url('img/pizza-skate.jpg');background-size:300% 200%;background-repeat:no-repeat}
+  .pizza-photos span:nth-child(odd){transform:rotate(-2deg)} .pizza-photos span:nth-child(even){transform:rotate(2deg)}
+  .style-words{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:1.25rem}
+  .style-words span{border:2px solid var(--ink);border-radius:999px;padding:8px 16px;font-weight:900;font-size:clamp(1rem,4vw,1.2rem)}
+  .style-words span:nth-child(1){background:linear-gradient(90deg,#ff9cc8,#ffc93c,#7bd389,#7cc8f0,#c9b8ff)}
+  .style-words span:nth-child(2){background:#f1e6ff}
+  .style-words span:nth-child(3){background:#bdeee0}
+  .style-words span:nth-child(4){background:var(--yellow)}
+  .style-words span:nth-child(5){background:#ffd6ec}
+
 </style>
 </head>
 <body>
@@ -205,16 +217,24 @@
 <section class="slide" id="client">
   <div class="slide-content">
     <div class="section-head rv">
-      <span class="kicker">Заказчик · 30 минут</span>
-      <h2 class="display">Пиццерия<br><span class="it">у скейт-парка</span></h2>
+      <h2 class="display">У нас<br><span class="it">заказчик!</span></h2>
     </div>
-    <div class="goal rv"><span class="em">🍕</span><span class="tx">«Я открываю окошко с пиццей у скейт-парка. Ребята берут по кусочку после катания. Хочу, чтобы они заметили нашу вывеску прямо с рампы!»</span></div>
-    <div class="icons rv">
-      <div class="ic y"><span class="em">🪧</span><span class="t">Название<br>Как зовётся пиццерия?</span></div>
-      <div class="ic b"><span class="em">🛹</span><span class="t">Логотип<br>Какой знак видно издалека?</span></div>
-      <div class="ic p"><span class="em">💬</span><span class="t">Слоган<br>Как позвать ребят на кусочек?</span></div>
+    <div class="client rv">
+      <div class="client-head">
+        <span class="ava" style="background:linear-gradient(135deg,#ffd23c,#ff795e)">🍕</span>
+        <h3>Пиццерия<br>у скейт-парка</h3>
+      </div>
+      <div class="client-say">«Привет, ребята! Я открываю пиццерию у скейт-парка. После катания друзья смогут взять по горячему кусочку прямо у рампы. Как им запомнить мою пиццерию? Придумайте для неё <b>название</b>, нарисуйте <b>логотип</b> и сочините короткий <b>слоган</b>!»</div>
+      <div class="pizza-photos">
+        <span role="img" aria-label="Пицца с базиликом" style="background-position:0% 0%"></span>
+        <span role="img" aria-label="Скейтборд у рампы" style="background-position:50% 0%"></span>
+        <span role="img" aria-label="Кусочек пиццы с тянущимся сыром" style="background-position:100% 0%"></span>
+        <span role="img" aria-label="Рампа скейт-парка" style="background-position:0% 100%"></span>
+        <span role="img" aria-label="Окошко пиццерии" style="background-position:50% 100%"></span>
+        <span role="img" aria-label="Друзья берут пиццу из коробки" style="background-position:100% 100%"></span>
+      </div>
+      <div class="style-words"><span>✍️ Название</span><span>🎨 Логотип</span><span>💬 Слоган</span></div>
     </div>
-    <div class="rule-big rv"><span class="em">✏️</span><span class="tx">Нарисуй <em>одну вывеску:</em> имя, знак и короткую фразу. Покажи соседу: для кого твоя пиццерия?</span></div>
   </div>
 </section>
 
