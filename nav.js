@@ -14,7 +14,8 @@
     ['audience.html', 'Кому это надо?'],
     ['color.html',    'Цвет и настроение'],
     ['pack.html',     'Упаковка'],
-    ['howad.html',    'Как рекламировать']
+    ['howad.html',    'Как рекламировать'],
+    ['case-kites.html','Кейс: мастерская воздушных змеев']
   ];
 
   var file = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
