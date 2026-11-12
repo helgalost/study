@@ -106,10 +106,11 @@
 
 
 .sample-board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:20px;border-radius:22px;background:#c99a62;border:7px solid #8a5a2b}.sample-board .ph{aspect-ratio:1}.sample-board .pin.word{font-size:clamp(.8rem,2vw,1.3rem)}.sample-board .pin.sw i{min-height:60px}.slogan-rows{display:grid;gap:14px}.slogan-rows>div{background:var(--paper-2);border-radius:22px;padding:1.3rem;display:grid;grid-template-columns:1fr 1.5fr;gap:16px;align-items:center;font-size:clamp(1rem,2.6vw,1.5rem);font-weight:800}.slogan-rows b{color:var(--signal);font-weight:900}.kite-drawing{display:block;width:clamp(90px,16vw,150px);height:auto;color:var(--paper)}.build-emoji{display:grid;place-items:center;width:100%;height:100%;font-size:clamp(2rem,6vw,3.8rem);background:var(--paper-2)}.slot.full{padding:0}.slot .build-emoji{border-radius:8px}.web .mb-tools{padding:0 14px 16px}.mg-tile:focus-visible{outline:4px solid var(--signal);outline-offset:2px}.sample-board{margin:0}.qz-opts{margin-top:1rem}.center{text-align:center}@media(max-width:600px){.slogan-rows>div{grid-template-columns:1fr}.sample-board{padding:12px;gap:8px}.sample-board .pin{padding:3px}.sample-board .pin.word{min-height:60px}}
+.order-clue{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:10px;padding:12px;background:#fff8dc}.order-clue>span{font-size:clamp(2.7rem,7vw,4.5rem);line-height:1.1}.order-clue small{font-size:clamp(.9rem,2vw,1.2rem);font-weight:900;line-height:1.1}.mg-board{max-width:520px}.mg-tile{aspect-ratio:1.25}#orderMission{margin-top:1.5rem}#orderChoices .em{font-size:clamp(2rem,5vw,3rem)}#mgOpts{grid-template-columns:repeat(3,minmax(0,1fr))}#orderFeedback{font-size:clamp(1rem,2.5vw,1.3rem)}@media(max-width:600px){#mgOpts{grid-template-columns:1fr}.mg-tile{aspect-ratio:1}#orderChoices{grid-template-columns:1fr}}
 </style></head><body><header class="top"><a class="top-brand" href="index.html">Идея для заказчика</a><span>Ольга</span></header><main><section class="slide" id="top"><div class="slide-content"><h1 class="display rv">Идея<br>для <span class="it">заказчика</span></h1><div class="visual-content rv"><div class="tiles"><div class="tile"><span class="em">👂</span><span>Слушаем</span></div><div class="tile"><span class="em">💡</span><span>Придумываем</span></div><div class="tile"><span class="em">🎯</span><span>Проверяем</span></div></div><a class="action" href="#mission">Начнём →</a></div></div></section>
 <section class="slide" id="mission"><div class="slide-content"><h2 class="display rv">Кто ставит<br><span class="it">задачу?</span></h2><div class="visual-content rv"><div class="equation"><div>🧑‍💼<small>Заказчик</small></div><b>→</b><div>🎯<small>Задача</small></div><b>→</b><div>🎨<small>Наша идея</small></div></div><p class="say">Что делаем? <em>Для кого?</em> Зачем?</p></div></div></section>
 <section class="slide" id="borders"><div class="slide-content"><h2 class="display rv">Фантазируем.<br><span class="it">В рамках задачи.</span></h2><div class="visual-content rv"><div class="compare"><div class="example dark"><span class="eyebrow">Заказ: вывеска пекарни</span><div class="big-emoji">🥐 → 🚗</div><h3>Магазин машин?</h3><p>Куда пропала пекарня?</p></div><div class="example blue"><span class="eyebrow">Тот же заказ</span><div class="big-emoji">🥐 + ☀️</div><h3>Солнечная пекарня</h3><p>Знакомый продукт · новый образ</p></div></div><p class="say">Что предлагает заказчик? <em>Как это показать?</em></p></div></div></section>
-<section class="slide" id="detectives"><div class="slide-content"><h2 class="display rv">Чей это<br><span class="it">мудборд?</span></h2><div class="visual-content rv"><div class="game-box"><p class="mg-count" id="mgCount"></p><div class="mg-board" id="mgBoard"></div><p class="mg-hint">👆 Открывай картинки. Угадай, для кого доска!</p><div class="qz-opts n4" id="mgOpts"></div><div class="mg-answer" id="mgAnswer" aria-live="polite"></div><div class="center"><button class="action" id="mgNext" type="button">Дальше →</button></div></div></div></div></section>
+<section class="slide" id="detectives"><div class="slide-content"><h2 class="display rv">Детектив<br><span class="it">заказов</span></h2><div class="visual-content rv"><div class="game-box"><p class="mg-count" id="mgCount"></p><div class="mg-board" id="mgBoard"></div><p class="mg-hint">👆 Открой подсказки → узнай заказчика → помоги с заказом</p><div class="qz-opts n4" id="mgOpts"></div><div class="mg-answer" id="mgAnswer" aria-live="polite"></div><div id="orderMission" hidden><p class="speech" id="orderQuote"></p><p class="say">Что поможет выполнить заказ?</p><div class="qz-opts n3" id="orderChoices"></div><p class="say" id="orderFeedback" aria-live="polite"></p></div><div class="center"><button class="action" id="mgNext" type="button">Дальше →</button></div></div></div></div></section>
 <section class="slide" id="stuck"><div class="slide-content"><h2 class="display rv">Нет идеи?<br><span class="it">Начни с действия.</span></h2><div class="visual-content rv"><div class="method dark"><span class="method-number">01</span><h3>Что делают в мастерской?</h3><div class="equation"><div>✂️<small>Собирают</small></div><div>🎨<small>Раскрашивают</small></div><div>🪁<small>Запускают</small></div></div></div><p class="say">Выбери действие → <em>покажи его знаком.</em></p></div></div></section>
 <section class="slide" id="client"><div class="slide-content"><h2 class="display rv">У нас<br><span class="it">заказчик!</span></h2><div class="visual-content rv"><div class="client-card"><div class="client-head"><span class="client-avatar">🪁</span><h3>Анна<br>Мастерская воздушных змеев</h3></div><p class="speech">«Семьи собирают у меня змеев и запускают их в парке. Помогите рассказать о мастерской!»</p><div class="tiles"><div class="tile"><span class="em">✍️</span><span>Название</span></div><div class="tile"><span class="em">🎨</span><span>Логотип</span></div><div class="tile"><span class="em">💬</span><span>Слоган</span></div><div class="tile"><span class="em">🖼️</span><span>Мудборд</span></div></div></div></div></div></section>
 <section class="slide" id="brief"><div class="slide-content"><h2 class="display rv">Пойми<br><span class="it">заказ</span></h2><div class="visual-content rv"><div class="tiles"><div class="tile"><span class="em">🪁</span><span>Что делают?</span></div><div class="tile"><span class="em">👨‍👩‍👧</span><span>Для кого?</span></div><div class="tile"><span class="em">📣</span><span>Зачем?</span></div></div><p class="say">Собрать змея · Семьи · <em>Узнать о мастерской</em></p></div></div></section>
@@ -133,50 +134,25 @@ const PIC = {
   real:   ['img/u/photo-1652404445394-99b607de5e95.jpg','img/u/photo-1763307411452-43cfd9f516ce.jpg','img/u/photo-1532455900982-24be47fa89de.jpg','img/u/photo-1632613714614-e817d3814a8e.jpg','img/u/photo-1630893173613-ceaf4a6797d3.jpg','img/u/photo-1649930536248-df58fd1f54f8.jpg'],
   pastel: ['img/u/photo-1767552659473-9a541393de94.jpg','img/u/photo-1579546928686-286c9fbde1ec.jpg','img/u/photo-1488867605300-0380106bc701.jpg','img/u/photo-1787580113187-1a50ab0abac2.jpg','img/u/photo-1458682625221-3a45f8a844c7.jpg','img/u/photo-1587586062323-836089e60d52.jpg']
 };
-  const MASHA_LOGO = 'img/w/62c3e24264.jpg';
-  const FIX_LOGO = 'img/w/dacc4d7f6f.png';
-  const ROUNDS = [
-    { k:'ny',     cols:['#e0262b','#2f9e4b','#ffc93c'], a:['🎄','Новый год'], o:[['🏖️','Лето на море'],['🍂','Осень'],['🚀','Космос']] },
-    { k:'sea',    cols:['#7cc8f0','#f6e3c1','#ffc93c'], a:['🏖️','Лето на море'], o:[['❄️','Зима'],['🚀','Космос'],['🔧','Фиксики']] },
-    { k:'space',  cols:['#0b1033','#5b3cc4','#e8e8ff'], a:['🚀','Космос'], o:[['🏴‍☠️','Пираты'],['🍂','Осень'],['🍬','Магазин сладостей']] },
-    { k:'pirate', cols:['#5a3a1d','#1f4e6b','#d4a83a'], a:['🏴‍☠️','Пираты'], o:[['🐻👧','Маша и Медведь'],['🎄','Новый год'],['🏖️','Лето на море']] },
-    { k:'autumn', cols:['#d9661f','#a3261b','#f0b429'], a:['🍂','Осень'], o:[['🌸','Весна'],['❄️','Зима'],['🚀','Космос']] },
-    { k:'candy',  cols:['#ff9cc8','#c9b8ff','#ffd6a0'], a:['🍬','Магазин сладостей'], o:[['🔧','Фиксики'],['🏴‍☠️','Пираты'],['🍂','Осень']] }
-  ];
-  const board = document.getElementById('mgBoard'), opts = document.getElementById('mgOpts'),
-        ans = document.getElementById('mgAnswer'), cnt = document.getElementById('mgCount'), next = document.getElementById('mgNext');
-  let i = 0;
-  function openAll(){ board.querySelectorAll('.mg-tile').forEach(t => t.classList.add('open')); board.querySelector('.mg-colors').classList.remove('hide'); }
-  function render(){
-    const r = ROUNDS[i];
-    cnt.textContent = (i + 1) + ' / ' + ROUNDS.length;
-    board.innerHTML = shuffle(PIC[r.k]).map(u => '<button class="mg-tile" type="button" aria-label="Открыть картинку">' + ph(u, '🖼️', 400) + '<span class="cover">?</span></button>').join('') +
-      '<div class="mg-colors hide">' + r.cols.map(c => '<i style="background:' + c + '"></i>').join('') + '</div>';
-    board.querySelectorAll('.mg-tile').forEach(t => t.addEventListener('click', () => {
-      t.classList.add('open');
-      if (board.querySelectorAll('.mg-tile:not(.open)').length === 0) board.querySelector('.mg-colors').classList.remove('hide');
-    }));
-    ans.classList.remove('on'); ans.innerHTML = '';
-    opts.innerHTML = '';
-    shuffle([r.a, ...r.o]).forEach(o => {
-      const b = document.createElement('button');
-      b.type = 'button'; b.className = 'qz-opt';
-      b.innerHTML = '<span class="em" style="font-size:clamp(2.2rem,10vw,3.2rem)">' + o[0] + '</span><span class="t">' + o[1] + '</span>';
-      b.addEventListener('click', () => {
-        if (o === r.a) {
-          b.classList.add('yes'); openAll();
-          opts.querySelectorAll('.qz-opt').forEach(x => { if (x !== b) x.classList.add('no'); });
-          ans.innerHTML = (r.logo ? '<img alt="" src="' + r.logo + '" referrerpolicy="no-referrer" onerror="this.remove()">' : '<span class="em">' + r.a[0] + '</span>') + r.a[1];
-          ans.classList.add('on');
-        } else { b.classList.remove('no'); void b.offsetWidth; b.classList.add('no'); }
-      });
-      opts.appendChild(b);
-    });
-    next.textContent = i === ROUNDS.length - 1 ? 'Сначала ↺' : 'Дальше ➜';
-  }
-  next.addEventListener('click', () => { i = (i + 1) % ROUNDS.length; render(); });
-  render();
-
+const CASES = [
+ {clues:[['🥖','Пеку хлеб'],['🥐','Делаю круассаны'],['🏪','Открываю пекарню'],['👀','Хочу, чтобы заметили']],client:'Пекарня',em:'🥐',others:[['🚗','Автосервис'],['🌷','Цветочный магазин']],quote:'«Нужен знак для вывески. Пусть сразу видно: здесь пекут хлеб!»',ideas:[['🥖','Знак-батон'],['🚗','Знак-машина'],['🎮','Знак-джойстик']],why:'Батон рассказывает о пекарне. Начали с того, что делает заказчик.'},
+ {clues:[['🚲','Чиню велосипеды'],['🔧','Пользуюсь инструментами'],['🛞','Меняю колёса'],['📣','Приглашаю соседей']],client:'Веломастерская',em:'🚲',others:[['🍰','Кондитерская'],['📚','Библиотека']],quote:'«На афише покажите: мы ремонтируем велосипеды, а не продаём новые».',ideas:[['🛍️🚲','Купи новый велосипед!'],['🚲🔧','Починим твой велосипед!'],['🏁🚲','Приходи на гонку!']],why:'Ключевое слово — «ремонтируем». Рассказали именно об услуге заказчика.'},
+ {clues:[['🏺','Работаю с глиной'],['👐','Учу лепить'],['👨‍👩‍👧','Жду семьи'],['☕','Делаем чашки']],client:'Гончарная мастерская',em:'🏺',others:[['🍕','Пиццерия'],['🎬','Кинотеатр']],quote:'«Нужен слоган: пригласите детей и родителей слепить чашку вместе».',ideas:[['☕🛍️','Купи готовую чашку!'],['🏎️','Будь быстрее всех!'],['👐👨‍👩‍👧','Слепим чашку всей семьёй!']],why:'В слогане есть занятие и те, кого приглашаем. Не просто красивая фраза.'},
+ {clues:[['◇','Собираем ромб'],['🎨','Раскрашиваем'],['🧵','Добавляем нить'],['💨','Ловим ветер']],client:'Мастерская змеев',em:'🪁',others:[['👗','Ателье'],['🐶','Зоомагазин']],quote:'«Нужен мудборд: покажите лёгкость, ветер и совместное творчество».',ideas:[['☁️🎨🪁','Небо · краски · полёт'],['🏎️🏁🏆','Скорость · гонки · победа'],['🍰🍭🍫','Торты · конфеты · шоколад']],why:'Картинки связаны со словами заказчика. А какой образ добавишь ты?'}
+];
+const board=document.getElementById('mgBoard'),opts=document.getElementById('mgOpts'),ans=document.getElementById('mgAnswer'),cnt=document.getElementById('mgCount'),next=document.getElementById('mgNext');
+const mission=document.getElementById('orderMission'),quote=document.getElementById('orderQuote'),choices=document.getElementById('orderChoices'),feedback=document.getElementById('orderFeedback');
+let round=0,solved=false;
+function openAll(){board.querySelectorAll('.mg-tile').forEach(t=>{t.classList.add('open');t.setAttribute('aria-expanded','true');});}
+function renderOrder(){
+ const r=CASES[round];solved=false;cnt.textContent=(round+1)+' / '+CASES.length;board.replaceChildren();opts.replaceChildren();choices.replaceChildren();ans.textContent='';ans.classList.remove('on');mission.hidden=true;feedback.textContent='';next.disabled=true;next.textContent=round===CASES.length-1?'Ещё раз ↺':'Следующий заказ →';
+ r.clues.forEach(([em,word],i)=>{const tile=document.createElement('button');tile.type='button';tile.className='mg-tile';tile.setAttribute('aria-label','Открыть подсказку '+(i+1));tile.setAttribute('aria-expanded','false');tile.innerHTML='<span class="order-clue"><span>'+em+'</span><small>'+word+'</small></span><span class="cover">?</span>';tile.addEventListener('click',()=>{tile.classList.add('open');tile.setAttribute('aria-expanded','true');});board.appendChild(tile);});
+ shuffle([[r.em,r.client],...r.others]).forEach(([em,name])=>{const b=document.createElement('button');b.type='button';b.className='qz-opt';b.innerHTML='<span class="em">'+em+'</span><span class="t">'+name+'</span>';b.addEventListener('click',()=>{if(name!==r.client){ans.textContent='🔎 Открой ещё подсказку. Что делает заказчик?';ans.classList.add('on');return;}openAll();opts.querySelectorAll('button').forEach(x=>x.disabled=true);b.classList.add('yes');ans.textContent=em+' '+name;ans.classList.add('on');mission.hidden=false;quote.textContent=r.quote;});opts.appendChild(b);});
+ // Correct ideas vary in position before shuffling; each is tied to the actual brief.
+ const correct=[0,1,2,0][round];
+ shuffle(r.ideas.map((v,i)=>({v,right:i===correct}))).forEach(({v:[em,text],right})=>{const b=document.createElement('button');b.type='button';b.className='qz-opt';b.innerHTML='<span class="em">'+em+'</span><span class="t">'+text+'</span>';b.addEventListener('click',()=>{if(solved)return;if(!right){feedback.textContent='🔎 Вернись к словам заказчика. О чём он просит?';return;}solved=true;b.classList.add('yes');choices.querySelectorAll('button').forEach(x=>x.disabled=true);feedback.textContent='✅ '+r.why;next.disabled=false;});choices.appendChild(b);});
+}
+next.addEventListener('click',()=>{if(!solved)return;round=(round+1)%CASES.length;renderOrder();});renderOrder();
 
 const pool=[{em:'🪁',name:'Змей'},{em:'✂️',name:'Мастерить'},{em:'👨‍👩‍👧',name:'Вместе'},{em:'💨',name:'Ветер'},{em:'☁️',name:'Облака'},{em:'🎨',name:'Творчество'},...PIC.autumn.slice(0,2).map(u=>({u,name:'Парк'})),...PIC.pastel.slice(0,2).map(u=>({u,name:'Цвет и фактура'})),{em:'🎀',name:'Ленты'},{em:'🌈',name:'Радуга'}];
 const colors=['#7cc8f0','#ffc93c','#ff8a6b','#7bd389','#c9b8ff','#f6e3c1'];
