@@ -7,54 +7,197 @@
 .client-card{background:#fff;border:3px solid var(--ink);border-radius:26px;padding:clamp(1.3rem,3vw,2rem);box-shadow:7px 8px 0 var(--ink)}.client-head{display:flex;gap:20px;align-items:center}.client-avatar{background:linear-gradient(135deg,#c9b8ff,#ffb596);border-radius:50%;padding:18px;font-size:3rem;line-height:1}.client-head h3{font-weight:900;font-size:clamp(1.1rem,3vw,1.8rem);line-height:1.05;text-transform:uppercase;letter-spacing:-.03em}.speech{background:var(--paper-2);border-radius:20px;padding:1.2rem;margin:1.3rem 0;font-weight:700;font-size:clamp(1.1rem,2.6vw,1.5rem)}.client-card .tile{min-height:120px;padding:1rem}.client-card .em{font-size:2.5rem}
 .action{display:inline-block;background:var(--ink);color:var(--paper);border:0;border-radius:999px;padding:12px 22px;margin-top:1.3rem;font:inherit;font-weight:900;cursor:pointer}.action:disabled{opacity:.4;cursor:default}.decision-game{background:var(--paper-2);padding:clamp(1.2rem,3vw,2rem);border-radius:26px}.round-count{font-size:12px;font-weight:900;color:var(--muted);margin-bottom:1rem}.game-order,.game-idea{padding:1rem 1.3rem;border-radius:18px;background:var(--paper);margin-bottom:10px}.game-idea{background:var(--ink);color:var(--paper)}.game-order p,.game-idea p{font-size:clamp(1.2rem,3vw,1.8rem);font-weight:900;margin-top:8px;line-height:1.2}.vote-buttons{display:flex;gap:10px;flex-wrap:wrap;margin:1.2rem 0}.vote-buttons button{background:#fff;border:2px solid transparent;border-radius:16px;padding:12px 20px;font:inherit;font-weight:900;font-size:1.1rem;cursor:pointer}.vote-buttons button[aria-pressed=true]{background:var(--yellow);border-color:var(--ink)}.vote-prompt{font-weight:800;font-size:1rem;min-height:1.5em}.decision-answer{background:#d8eedf;border-radius:18px;padding:1rem;margin-top:1rem;font-size:1.1rem}.decision-answer strong{display:block;font-weight:900;margin-bottom:6px}[hidden]{display:none!important}button:focus-visible,a:focus-visible{outline:3px solid var(--signal);outline-offset:4px}
 @media(max-width:600px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.tile{min-height:130px}.compare{grid-template-columns:1fr}.equation{gap:12px}.client-head{gap:12px}.client-avatar{padding:12px;font-size:2rem}.top-brand{font-size:11px;max-width:75%}.vote-buttons button{flex:1;padding:12px 8px;font-size:.95rem}}
+
+  /* ===== Пробковая доска ===== */
+  .cork{
+    position:relative;margin-top:1.5rem;border-radius:22px;padding:clamp(14px,4vw,26px);
+    background:#c99a62 radial-gradient(rgba(0,0,0,.08) 1px,transparent 1.5px) 0 0/9px 9px;
+    border:10px solid #8a5a2b;box-shadow:inset 0 0 0 3px rgba(0,0,0,.15),8px 8px 0 var(--ink);
+    display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(8px,2.5vw,16px);
+  }
+  .pin{position:relative;background:#fff;padding:6px 6px 10px;box-shadow:0 4px 10px rgba(0,0,0,.25)}
+  .pin:nth-child(3n+1){transform:rotate(-3deg)} .pin:nth-child(3n+2){transform:rotate(2deg)} .pin:nth-child(3n){transform:rotate(-1deg)}
+  .pin::before{content:"";position:absolute;top:-7px;left:50%;width:16px;height:16px;margin-left:-8px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ff8a8a,#d90f0f);box-shadow:0 2px 2px rgba(0,0,0,.4);z-index:2}
+  .pin .ph{aspect-ratio:1}
+  .pin.sw{display:flex;gap:4px;align-items:stretch;padding:8px}
+  .pin.sw i{flex:1;border-radius:4px;min-height:clamp(60px,20vw,110px)}
+  .pin.word{display:grid;place-items:center;font-weight:900;font-size:clamp(1rem,4.6vw,1.6rem);text-transform:uppercase;letter-spacing:-.02em;background:#fff8c2;text-align:center;line-height:1}
+
+  /* Формула «доска + настроение» */
+  .mb-eq{display:flex;align-items:center;justify-content:center;gap:clamp(.25rem,1.5vw,1rem);flex-wrap:wrap;margin-top:1.5rem}
+  .mb-eq .it-b{background:var(--paper-2);border:3px solid var(--ink);border-radius:24px;padding:.9rem .5rem;min-width:clamp(82px,23vw,150px);display:flex;flex-direction:column;align-items:center;gap:.3rem;text-align:center}
+  .mb-eq .it-b .em{font-size:clamp(2.4rem,10vw,3.4rem);line-height:1}
+  .mb-eq .it-b .t{font-size:clamp(.78rem,3.4vw,1.3rem);font-weight:900;text-transform:uppercase}
+  .mb-eq .it-b .en{font-size:12px;font-weight:700;color:var(--muted)}
+  .mb-eq .it-b.res{background:var(--signal);color:#fff;border-color:var(--signal);transform:rotate(-2deg)}
+  .mb-eq .it-b.res .en{color:rgba(255,255,255,.8)}
+  .mb-eq .op{font-size:clamp(1.4rem,6vw,2.6rem);font-weight:900;color:var(--muted)}
+
+  /* Настоящие мудборды */
+  .gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:1.5rem}
+  @media(min-width:768px){.gallery{grid-template-columns:repeat(3,1fr)}}
+  .gallery .ph{aspect-ratio:4/5;border-radius:20px;border:3px solid var(--ink)}
+  .gallery .ph:nth-child(odd){transform:rotate(-1.2deg)} .gallery .ph:nth-child(even){transform:rotate(1.2deg)}
+  .credit{margin-top:.8rem;font-size:11px;color:var(--muted);text-align:center}
+  .credit a{text-decoration:underline}
+
+  /* ===== Игра «Чей это мудборд?» ===== */
+  .mg-count{text-align:center;font-size:13px;font-weight:900;letter-spacing:.14em;color:var(--muted)}
+  .mg-board{
+    margin:.9rem auto 0;max-width:560px;border-radius:20px;padding:12px;
+    background:#c99a62 radial-gradient(rgba(0,0,0,.08) 1px,transparent 1.5px) 0 0/9px 9px;border:8px solid #8a5a2b;
+    display:grid;grid-template-columns:1fr 1fr;gap:10px;
+  }
+  .mg-tile{position:relative;aspect-ratio:1;border-radius:12px;overflow:hidden;cursor:pointer;border:0;padding:0;background:#fff;perspective:800px}
+  .mg-tile .ph{position:absolute;inset:0}
+  .mg-tile .cover{
+    position:absolute;inset:0;display:grid;place-items:center;font-size:clamp(2.6rem,12vw,4rem);font-weight:900;color:#fff;
+    transition:transform .5s var(--ease-out),opacity .5s;z-index:2;
+  }
+  .mg-tile:nth-child(1) .cover{background:var(--pink)} .mg-tile:nth-child(2) .cover{background:var(--blue)}
+  .mg-tile:nth-child(3) .cover{background:var(--yellow);color:var(--ink)} .mg-tile:nth-child(4) .cover{background:var(--green);color:var(--ink)}
+  .mg-tile.open .cover{transform:rotateY(90deg);opacity:0;pointer-events:none}
+  .mg-colors{grid-column:1/-1;display:flex;height:34px;border-radius:10px;overflow:hidden;border:3px solid #fff;transition:opacity .4s}
+  .mg-colors i{flex:1}
+  .mg-colors.hide{opacity:0}
+  .mg-hint{text-align:center;margin-top:.7rem;font-size:13px;font-weight:800;color:var(--muted)}
+  .mg-answer{
+    display:none;margin:1rem auto 0;max-width:560px;background:var(--ink);color:var(--paper);border-radius:22px;padding:1rem;
+    align-items:center;justify-content:center;gap:1rem;font-size:clamp(1.3rem,5.5vw,2rem);font-weight:900;text-transform:uppercase;
+  }
+  .mg-answer.on{display:flex;animation:pop .5s var(--ease-out)}
+  .mg-answer .em{font-size:1.8em;line-height:1}
+  .mg-answer img{height:64px;width:auto;border-radius:10px;background:#fff;padding:4px}
+
+  /* ===== Тренировка: собери мудборд ===== */
+  .builder{display:grid;gap:16px;margin-top:1.5rem;align-items:start}
+  @media(min-width:900px){.builder{grid-template-columns:1fr 1fr}}
+  .web{background:#fff;border:3px solid var(--ink);border-radius:18px;overflow:hidden}
+  .web .bar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--paper-3);border-bottom:3px solid var(--ink);font-weight:800;font-size:14px}
+  .web .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:10px}
+  .web .grid button{position:relative;aspect-ratio:1;border:0;padding:0;border-radius:10px;overflow:hidden;cursor:pointer;background:#eee}
+  .web .grid button .ph{position:absolute;inset:0}
+  .web .grid button.used{opacity:.25}
+  .web .grid button.used::after{content:"📋";position:absolute;inset:0;display:grid;place-items:center;font-size:1.8rem}
+  .myboard{
+    border-radius:18px;padding:12px;min-height:280px;
+    background:#c99a62 radial-gradient(rgba(0,0,0,.08) 1px,transparent 1.5px) 0 0/9px 9px;border:8px solid #8a5a2b;
+  }
+  .myboard .slots{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .slot{position:relative;aspect-ratio:1;border-radius:10px;border:3px dashed rgba(255,255,255,.7);display:grid;place-items:center;font-size:1.6rem;color:rgba(255,255,255,.8);background:rgba(255,255,255,.15)}
+  .slot.full{border:0;background:#fff;padding:5px;box-shadow:0 4px 10px rgba(0,0,0,.25);cursor:pointer}
+  .slot.full .ph{width:100%;height:100%;border-radius:6px}
+  .slot .mk{position:absolute;top:-10px;right:-8px;font-size:20px;z-index:2}
+  .slot.full:nth-child(odd){transform:rotate(-2deg)} .slot.full:nth-child(even){transform:rotate(2deg)}
+  .slot.pop{animation:pop .45s var(--ease-out)}
+  .myboard .extras{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;align-items:center}
+  .myboard .cols{display:flex;gap:6px;background:#fff;padding:6px;border-radius:10px}
+  .myboard .cols i{width:30px;height:30px;border-radius:6px;border:2px solid rgba(0,0,0,.15)}
+  .myboard .wds{display:flex;gap:6px;flex-wrap:wrap}
+  .myboard .wds span{background:#fff8c2;border-radius:6px;padding:4px 10px;font-weight:900;font-size:14px;box-shadow:0 2px 4px rgba(0,0,0,.2)}
+  .mb-tools{margin-top:1rem}
+  .mb-tools .lbl{font-size:12px;font-weight:900;text-transform:uppercase;margin:.6rem 0 .4rem}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chipb{min-width:46px;height:46px;border-radius:14px;border:3px solid var(--ink);background:#fff;cursor:pointer;font:inherit;font-weight:900;font-size:15px;padding:0 .7rem;transition:transform .15s}
+  .chipb.col{border-radius:50%;width:46px;padding:0}
+  .chipb.on{transform:scale(1.1);box-shadow:0 0 0 3px #fff,0 0 0 6px var(--ink)}
+  .mb-say{min-height:2.6rem;margin-top:1rem;text-align:center;font-size:clamp(1.1rem,4.5vw,1.4rem);font-weight:900}
+  .mb-say span{display:inline-block;animation:pop .45s var(--ease-out) both}
+
+
+.sample-board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:20px;border-radius:22px;background:#c99a62;border:7px solid #8a5a2b}.sample-board .ph{aspect-ratio:1}.sample-board .pin.word{font-size:clamp(.8rem,2vw,1.3rem)}.sample-board .pin.sw i{min-height:60px}.slogan-rows{display:grid;gap:14px}.slogan-rows>div{background:var(--paper-2);border-radius:22px;padding:1.3rem;display:grid;grid-template-columns:1fr 1.5fr;gap:16px;align-items:center;font-size:clamp(1rem,2.6vw,1.5rem);font-weight:800}.slogan-rows b{color:var(--signal);font-weight:900}.kite-drawing{display:block;width:clamp(90px,16vw,150px);height:auto;color:var(--paper)}.build-emoji{display:grid;place-items:center;width:100%;height:100%;font-size:clamp(2rem,6vw,3.8rem);background:var(--paper-2)}.slot.full{padding:0}.slot .build-emoji{border-radius:8px}.web .mb-tools{padding:0 14px 16px}.mg-tile:focus-visible{outline:4px solid var(--signal);outline-offset:2px}.sample-board{margin:0}.qz-opts{margin-top:1rem}.center{text-align:center}@media(max-width:600px){.slogan-rows>div{grid-template-columns:1fr}.sample-board{padding:12px;gap:8px}.sample-board .pin{padding:3px}.sample-board .pin.word{min-height:60px}}
 </style></head><body><header class="top"><a class="top-brand" href="index.html">Идея для заказчика</a><span>Ольга</span></header><main><section class="slide" id="top"><div class="slide-content"><h1 class="display rv">Идея<br>для <span class="it">заказчика</span></h1><div class="visual-content rv"><div class="tiles"><div class="tile"><span class="em">👂</span><span>Слушаем</span></div><div class="tile"><span class="em">💡</span><span>Придумываем</span></div><div class="tile"><span class="em">🎯</span><span>Проверяем</span></div></div><a class="action" href="#mission">Начнём →</a></div></div></section>
 <section class="slide" id="mission"><div class="slide-content"><h2 class="display rv">Кто ставит<br><span class="it">задачу?</span></h2><div class="visual-content rv"><div class="equation"><div>🧑‍💼<small>Заказчик</small></div><b>→</b><div>🎯<small>Задача</small></div><b>→</b><div>🎨<small>Наша идея</small></div></div><p class="say">Что делаем? <em>Для кого?</em> Зачем?</p></div></div></section>
-<section class="slide" id="borders"><div class="slide-content"><h2 class="display rv">Фантазируем.<br><span class="it">В рамках задачи.</span></h2><div class="visual-content rv"><div class="compare"><div class="example dark"><span class="eyebrow">Заказ: реклама слаймов</span><div class="big-emoji">🫙 → 🧸</div><h3>Слаймы стали сквишами</h3><p>↩️ Другой товар</p></div><div class="example blue"><span class="eyebrow">Тот же заказ</span><div class="big-emoji">🫙 + 🪐</div><h3>Космический слайм</h3><p>✅ Новое оформление</p></div></div><p class="say">Товар сохраняем. <em>Образы придумываем.</em></p></div></div></section>
-<section class="slide" id="detectives"><div class="slide-content"><h2 class="display rv">Игра:<br><span class="it">попали в задачу?</span></h2><div class="visual-content rv"><div class="decision-game" id="decisionGame"><p id="roundCount" class="round-count"></p><div class="game-order"><span class="eyebrow">Заказ</span><p id="gameOrder"></p></div><div class="game-idea"><span class="eyebrow">Наша идея</span><p id="gameIdea"></p></div><div class="vote-buttons" id="voteButtons"><button type="button" data-vote="yes">✅ Берём</button><button type="button" data-vote="ask">💬 Уточняем</button><button type="button" data-vote="no">↩️ Мимо</button></div><p id="votePrompt" class="vote-prompt" aria-live="polite"></p><button class="action" id="revealDecision" type="button" disabled>Проверить →</button><div id="decisionAnswer" class="decision-answer" aria-live="polite" hidden></div><button class="action" id="nextDecision" type="button" hidden>Дальше →</button></div><noscript><p class="say">🫙 + 🪐 — подходит? Почему?</p></noscript></div></div></section>
+<section class="slide" id="borders"><div class="slide-content"><h2 class="display rv">Фантазируем.<br><span class="it">В рамках задачи.</span></h2><div class="visual-content rv"><div class="compare"><div class="example dark"><span class="eyebrow">Заказ: вывеска пекарни</span><div class="big-emoji">🥐 → 🚗</div><h3>Магазин машин?</h3><p>Куда пропала пекарня?</p></div><div class="example blue"><span class="eyebrow">Тот же заказ</span><div class="big-emoji">🥐 + ☀️</div><h3>Солнечная пекарня</h3><p>Знакомый продукт · новый образ</p></div></div><p class="say">Что предлагает заказчик? <em>Как это показать?</em></p></div></div></section>
+<section class="slide" id="detectives"><div class="slide-content"><h2 class="display rv">Чей это<br><span class="it">мудборд?</span></h2><div class="visual-content rv"><div class="game-box"><p class="mg-count" id="mgCount"></p><div class="mg-board" id="mgBoard"></div><p class="mg-hint">👆 Открывай картинки. Угадай, для кого доска!</p><div class="qz-opts n4" id="mgOpts"></div><div class="mg-answer" id="mgAnswer" aria-live="polite"></div><div class="center"><button class="action" id="mgNext" type="button">Дальше →</button></div></div></div></div></section>
 <section class="slide" id="stuck"><div class="slide-content"><h2 class="display rv">Нет идеи?<br><span class="it">Начни с действия.</span></h2><div class="visual-content rv"><div class="method dark"><span class="method-number">01</span><h3>Что делают в мастерской?</h3><div class="equation"><div>✂️<small>Собирают</small></div><div>🎨<small>Раскрашивают</small></div><div>🪁<small>Запускают</small></div></div></div><p class="say">Выбери действие → <em>покажи его знаком.</em></p></div></div></section>
 <section class="slide" id="client"><div class="slide-content"><h2 class="display rv">У нас<br><span class="it">заказчик!</span></h2><div class="visual-content rv"><div class="client-card"><div class="client-head"><span class="client-avatar">🪁</span><h3>Анна<br>Мастерская воздушных змеев</h3></div><p class="speech">«Семьи собирают у меня змеев и запускают их в парке. Помогите рассказать о мастерской!»</p><div class="tiles"><div class="tile"><span class="em">✍️</span><span>Название</span></div><div class="tile"><span class="em">🎨</span><span>Логотип</span></div><div class="tile"><span class="em">💬</span><span>Слоган</span></div><div class="tile"><span class="em">🖼️</span><span>Мудборд</span></div></div></div></div></div></section>
 <section class="slide" id="brief"><div class="slide-content"><h2 class="display rv">Пойми<br><span class="it">заказ</span></h2><div class="visual-content rv"><div class="tiles"><div class="tile"><span class="em">🪁</span><span>Что делают?</span></div><div class="tile"><span class="em">👨‍👩‍👧</span><span>Для кого?</span></div><div class="tile"><span class="em">📣</span><span>Зачем?</span></div></div><p class="say">Собрать змея · Семьи · <em>Узнать о мастерской</em></p></div></div></section>
-<section class="slide" id="name"><div class="slide-content"><div class="step-tag rv">1 · Название</div><h2 class="display rv">Как назовём<br><span class="it">мастерскую?</span></h2><div class="visual-content rv"><div class="tiles"><div class="tile"><span class="em">💨</span><span>Ветер</span></div><div class="tile"><span class="em">☁️</span><span>Небо</span></div><div class="tile"><span class="em">🪁</span><span>Полёт</span></div><div class="tile"><span class="em">✨</span><span>Твоё слово</span></div></div><p class="say">Три названия → <em>выбери одно.</em></p></div></div></section>
-<section class="slide" id="logo"><div class="slide-content"><div class="step-tag rv">2 · Логотип</div><h2 class="display rv">Знак, который<br><span class="it">узнают</span></h2><div class="visual-content rv"><div class="method dark"><div class="equation"><div>✏️<small>3 эскиза</small></div><b>→</b><div>🔍<small>Уменьши</small></div><b>→</b><div>🏷️<small>Выбери знак</small></div></div></div><p class="say">Покажи полёт. <em>Убери лишнее.</em></p></div></div></section>
-<section class="slide" id="slogan"><div class="slide-content"><div class="step-tag rv">3 · Слоган</div><h2 class="display rv">Что скажем<br><span class="it">семье?</span></h2><div class="visual-content rv"><div class="tiles"><div class="tile"><span class="em">✂️</span><span>Сделай сам</span></div><div class="tile"><span class="em">👨‍👩‍👧</span><span>Вместе</span></div><div class="tile"><span class="em">🪁</span><span>Запусти в небо</span></div></div><p class="say">Одна короткая фраза. <em>Пригласи в мастерскую.</em></p></div></div></section>
-<section class="slide" id="mood"><div class="slide-content"><div class="step-tag rv">4 · Мудборд</div><h2 class="display rv">Какое здесь<br><span class="it">настроение?</span></h2><div class="visual-content rv"><div class="tiles"><div class="tile"><span class="em">🖼️</span><span>5–7 картинок</span></div><div class="tile"><span class="em">🎨</span><span>2–3 цвета</span></div><div class="tile"><span class="em">🔤</span><span>Шрифт</span></div><div class="tile"><span class="em">〰️</span><span>Узоры</span></div></div><p class="say">Полёт · Творчество · <em>Семейный выходной</em></p></div></div></section>
-<section class="slide" id="show"><div class="slide-content"><h2 class="display rv">Покажи<br><span class="it">свою идею</span></h2><div class="visual-content rv"><div class="method blue"><span class="method-number">🎯</span><h3>«Я предлагаю…<br>потому что Анне нужно…»</h3></div><div class="tiles"><div class="tile"><span class="em">✍️</span><span>Название</span></div><div class="tile"><span class="em">🎨</span><span>Логотип</span></div><div class="tile"><span class="em">💬</span><span>Слоган</span></div><div class="tile"><span class="em">🖼️</span><span>Мудборд</span></div></div></div></div></section></main><nav class="dock" aria-label="Разделы урока"><a href="#top" aria-label="Старт" title="Старт">↑</a><a href="#mission" aria-label="Задача" title="Задача">🎯</a><a href="#borders" aria-label="Фантазия" title="Фантазия">💡</a><a href="#detectives" aria-label="Игра" title="Игра">🎲</a><a href="#stuck" aria-label="Начало идеи" title="Начало идеи">🔎</a><a href="#client" aria-label="Анна" title="Анна">🪁</a><a href="#brief" aria-label="Заказ" title="Заказ">📋</a><a href="#name" aria-label="Название" title="Название">1</a><a href="#logo" aria-label="Логотип" title="Логотип">2</a><a href="#slogan" aria-label="Слоган" title="Слоган">3</a><a href="#mood" aria-label="Мудборд" title="Мудборд">4</a><a href="#show" aria-label="Показ" title="Показ">✓</a></nav><script src="lesson.js"></script><script src="nav.js"></script><script>
+<section class="slide" id="name"><div class="slide-content"><div class="step-tag rv">1 · Название</div><h2 class="display rv">Как назовём<br><span class="it">мастерскую?</span></h2><div class="visual-content rv"><div class="tiles"><div class="tile"><span class="em">💨</span><span></span></div><div class="tile"><span class="em">☁️</span><span></span></div><div class="tile"><span class="em">🪁</span><span></span></div><div class="tile"><span class="em">🌈</span><span></span></div><div class="tile"><span class="em">🐦</span><span></span></div><div class="tile"><span class="em">✨</span><span></span></div><div class="tile"><span class="em">🎈</span><span></span></div><div class="tile"><span class="em">🚀</span><span></span></div></div><p class="say">На что похоже? Как движется? <em>Какие слова вспоминаются?</em></p></div></div></section>
+<section class="slide" id="logo"><div class="slide-content"><div class="step-tag rv">2 · Логотип</div><h2 class="display rv">Ромб становится<br><span class="it">змеем</span></h2><div class="visual-content rv"><div class="method dark"><div class="equation"><div>◇<small>Ромб</small></div><b>+</b><div>〰️<small>Хвост</small></div><b>=</b><div><svg class="kite-drawing" viewBox="0 0 180 200" role="img" aria-label="Воздушный змей из ромба и линии"><path d="M90 12 145 70 90 130 35 70Z" fill="#ffc93c" stroke="currentColor" stroke-width="4"/><path d="M90 12V130M35 70H145" fill="none" stroke="currentColor" stroke-width="3"/><path d="M90 130C130 150 50 160 90 188" fill="none" stroke="currentColor" stroke-width="4"/><path d="m96 151 18-8-3 18Z" fill="#ff3d3d"/><path d="m78 172-18-8 3 18Z" fill="#3a47d5"/></svg><small>Воздушный змей</small></div></div></div><p class="say">✏️ Сначала на бумаге. <em>Начни с простой фигуры.</em></p></div></div></section>
+<section class="slide" id="slogan"><div class="slide-content"><div class="step-tag rv">3 · Слоган</div><h2 class="display rv">Что скажем<br><span class="it">семье?</span></h2><div class="visual-content rv"><div class="tiles"><div class="tile"><span class="em">✂️</span><span>Что делаем?</span></div><div class="tile"><span class="em">👨‍👩‍👧</span><span>С кем?</span></div><div class="tile"><span class="em">😄</span><span>Что почувствуем?</span></div></div><p class="say">Слоган — короткое приглашение. <em>За что полюбят мастерскую?</em></p></div></div></section>
+<section class="slide" id="slogan-examples"><div class="slide-content"><h2 class="display rv">Из мысли —<br><span class="it">во фразу</span></h2><div class="visual-content rv"><div class="slogan-rows"><div><span>✂️ Сделать самому</span><b>«Собери свой первый полёт!»</b></div><div><span>👨‍👩‍👧 Быть вместе</span><b>«Вместе — выше облаков!»</b></div><div><span>🪁 Попробовать новое</span><b>«Твоя мечта готова к взлёту!»</b></div></div><p class="say">А что скажешь ты? <em>«Приходи…», «Собери…», «Запусти…»</em></p></div></div></section><section class="slide" id="mood"><div class="slide-content"><div class="step-tag rv">4 · Мудборд</div><h2 class="display rv">Какое здесь<br><span class="it">настроение?</span></h2><div class="visual-content rv"><div class="tiles"><div class="tile"><span class="em">🖼️</span><span>5–7 картинок</span></div><div class="tile"><span class="em">🎨</span><span>2–3 цвета</span></div><div class="tile"><span class="em">🔤</span><span>Шрифт</span></div><div class="tile"><span class="em">〰️</span><span>Узоры</span></div></div><p class="say">Полёт · Творчество · <em>Семейный выходной</em></p></div></div></section>
+<section class="slide" id="mood-examples"><div class="slide-content"><h2 class="display rv">Одно настроение.<br><span class="it">Разные доски.</span></h2><div class="visual-content rv"><div class="compare"><div class="sample-board"><div class="pin"><div class="ph"><img src="img/u/photo-1650012332958-2aa054c850ff.jpg" loading="lazy" alt="Море"><span class="fb">🖼️</span></div></div><div class="pin"><div class="ph"><img src="img/u/photo-1782320645111-d5efb62ea055.jpg" loading="lazy" alt="Море"><span class="fb">🖼️</span></div></div><div class="pin"><div class="ph"><img src="img/u/photo-1497034825429-c343d7c6a68f.jpg" loading="lazy" alt="Море"><span class="fb">🖼️</span></div></div><div class="pin word">Море</div><div class="pin sw"><i style="background:#7cc8f0"></i><i style="background:#f6e3c1"></i><i style="background:#ffc93c"></i></div><div class="pin word">Тепло ☀️</div></div><div class="sample-board"><div class="pin"><div class="ph"><img src="img/u/photo-1765754431926-964ed45a41e9.jpg" loading="lazy" alt="Космос"><span class="fb">🖼️</span></div></div><div class="pin"><div class="ph"><img src="img/u/photo-1614730321146-b6fa6a46bcb4.jpg" loading="lazy" alt="Космос"><span class="fb">🖼️</span></div></div><div class="pin"><div class="ph"><img src="img/u/photo-1614728263952-84ea256f9679.jpg" loading="lazy" alt="Космос"><span class="fb">🖼️</span></div></div><div class="pin word">Космос</div><div class="pin sw"><i style="background:#0b1033"></i><i style="background:#5b3cc4"></i><i style="background:#e8e8ff"></i></div><div class="pin word">Загадочно ✨</div></div></div><p class="say">Картинки + цвета + слова = <em>настроение.</em></p></div></div></section><section class="slide" id="build"><div class="slide-content"><h2 class="display rv">Тренировка:<br><span class="it">собери мудборд</span></h2><div class="visual-content rv"><p class="say">Для Анны: <em>полёт · творчество · вместе</em></p><div class="builder"><div class="web"><div class="bar">🖼️ Нажми — добавь на доску</div><div class="grid" id="buildPool"></div><div class="mb-tools"><p class="lbl">Цвета</p><div class="chips" id="buildColors"></div><p class="lbl">Настроение</p><div class="chips" id="buildWords"></div></div></div><div><div class="myboard"><div class="slots" id="buildSlots"></div><div class="extras"><div class="cols" id="chosenColors"></div><div class="wds" id="chosenWords"></div></div></div><p class="mg-hint">👆 Нажми на картинку на доске, чтобы убрать</p><button class="action" id="buildClear" type="button">Собрать по-другому ↺</button><p class="mg-hint" id="buildStatus" aria-live="polite"></p></div></div></div></div></section><section class="slide" id="show"><div class="slide-content"><h2 class="display rv">Покажи<br><span class="it">свою идею</span></h2><div class="visual-content rv"><div class="method blue"><span class="method-number">🎯</span><h3>«Я предлагаю…<br>потому что Анне нужно…»</h3></div><div class="tiles"><div class="tile"><span class="em">✍️</span><span>Название</span></div><div class="tile"><span class="em">🎨</span><span>Логотип</span></div><div class="tile"><span class="em">💬</span><span>Слоган</span></div><div class="tile"><span class="em">🖼️</span><span>Мудборд</span></div></div></div></div></section></main><nav class="dock" aria-label="Разделы урока"><a href="#top" aria-label="Старт" title="Старт">↑</a><a href="#mission" aria-label="Задача" title="Задача">🎯</a><a href="#borders" aria-label="Фантазия" title="Фантазия">💡</a><a href="#detectives" aria-label="Игра" title="Игра">🎲</a><a href="#stuck" aria-label="Начало идеи" title="Начало идеи">🔎</a><a href="#client" aria-label="Анна" title="Анна">🪁</a><a href="#brief" aria-label="Заказ" title="Заказ">📋</a><a href="#name" aria-label="Название" title="Название">1</a><a href="#logo" aria-label="Логотип" title="Логотип">2</a><a href="#slogan" aria-label="Слоган" title="Слоган">3</a><a href="#slogan-examples" title="Примеры слоганов" aria-label="Примеры слоганов">💬</a><a href="#mood" aria-label="Мудборд" title="Мудборд">4</a><a href="#mood-examples" title="Примеры досок" aria-label="Примеры досок">🖼️</a><a href="#build" title="Тренировка" aria-label="Тренировка">🧩</a><a href="#show" aria-label="Показ" title="Показ">✓</a></nav><script src="lesson.js"></script><script src="nav.js"></script><script>
 (function(){
-  const rounds = [
-    {order:'🫙 Реклама магазина слаймов',idea:'🧸 Откроем магазин сквишей!',title:'↩️ Меняем товар',why:'Заказ — про слаймы. Вернём их в рекламу.'},
-    {order:'🫙 Яркая реклама слаймов',idea:'🫙 + 🪐 Слайм в космических цветах',title:'✅ Идея подходит',why:'Слайм остался. Космос — настроение.'},
-    {order:'🪁 Пригласить в мастерскую змеев',idea:'🍦 «Всем бесплатное мороженое!»',title:'💬 Сначала спросим',why:'Анна не обещала подарок.'},
-    {order:'🪁 Семейная мастерская змеев',idea:'🐱 + 🪁 Кот запускает змея',title:'✅ Можно попробовать',why:'Кот помогает показать занятие мастерской.'}
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const ph=(u,fb,w,alt)=>'<div class="ph"><img loading="lazy" alt="'+(alt||'Картинка настроения')+'" src="'+u+'"><span class="fb">'+(fb||'🖼️')+'</span></div>';
+const PIC = {
+  masha:  ['img/u/photo-1507041957456-9c397ce39c97.jpg','img/u/photo-1563559776084-759c4c52567f.jpg','img/u/photo-1587049352851-8d4e89133924.jpg','img/u/photo-1555078604-b2379f0e964a.jpg'],
+  fix:    ['img/u/photo-1655927858183-fe31d5dd1080.jpg','img/u/photo-1529310399831-ed472b81d589.jpg','img/u/photo-1760842543713-108c3cadbba1.jpg','img/u/photo-1581783898377-1c85bf937427.jpg'],
+  ny:     ['img/u/photo-1770678817191-c3f8d0c52496.jpg','img/u/photo-1612979168796-bcae1575b8c5.jpg','img/u/photo-1613481950732-c1dcddcb410e.jpg','img/u/photo-1767741857489-b28dcaa531a4.jpg'],
+  sea:    ['img/u/photo-1650012332958-2aa054c850ff.jpg','img/u/photo-1782320645111-d5efb62ea055.jpg','img/u/photo-1497034825429-c343d7c6a68f.jpg','img/u/photo-1563630381190-77c336ea545a.jpg'],
+  space:  ['img/u/photo-1765754431926-964ed45a41e9.jpg','img/u/photo-1614730321146-b6fa6a46bcb4.jpg','img/u/photo-1614728263952-84ea256f9679.jpg','img/u/photo-1541873676-a18131494184.jpg'],
+  pirate: ['img/u/photo-1781820559556-c3e7924ade2f.jpg','img/u/photo-1520299607509-dcd935f9a839.jpg','img/u/photo-1775733894506-e0fcfa4405f2.jpg','img/u/photo-1565214975484-3cfa9e56f914.jpg'],
+  autumn: ['img/u/photo-1760905066148-2f04b5c6c087.jpg','img/u/photo-1459478309853-2c33a60058e7.jpg','img/u/photo-1523712999610-f77fbcfc3843.jpg','img/u/photo-1506193503569-d57d2a678510.jpg'],
+  candy:  ['img/u/photo-1582573732277-c5444fa37391.jpg','img/u/photo-1575224300306-1b8da36134ec.jpg','img/u/photo-1673124247113-a44d3c6ccbc5.jpg','img/u/photo-1633158832466-be592c721217.jpg'],
+  real:   ['img/u/photo-1652404445394-99b607de5e95.jpg','img/u/photo-1763307411452-43cfd9f516ce.jpg','img/u/photo-1532455900982-24be47fa89de.jpg','img/u/photo-1632613714614-e817d3814a8e.jpg','img/u/photo-1630893173613-ceaf4a6797d3.jpg','img/u/photo-1649930536248-df58fd1f54f8.jpg'],
+  pastel: ['img/u/photo-1767552659473-9a541393de94.jpg','img/u/photo-1579546928686-286c9fbde1ec.jpg','img/u/photo-1488867605300-0380106bc701.jpg','img/u/photo-1787580113187-1a50ab0abac2.jpg','img/u/photo-1458682625221-3a45f8a844c7.jpg','img/u/photo-1587586062323-836089e60d52.jpg']
+};
+  const MASHA_LOGO = 'img/w/62c3e24264.jpg';
+  const FIX_LOGO = 'img/w/dacc4d7f6f.png';
+  const ROUNDS = [
+    { k:'ny',     cols:['#e0262b','#2f9e4b','#ffc93c'], a:['🎄','Новый год'], o:[['🏖️','Лето на море'],['🍂','Осень'],['🚀','Космос']] },
+    { k:'sea',    cols:['#7cc8f0','#f6e3c1','#ffc93c'], a:['🏖️','Лето на море'], o:[['❄️','Зима'],['🚀','Космос'],['🔧','Фиксики']] },
+    { k:'space',  cols:['#0b1033','#5b3cc4','#e8e8ff'], a:['🚀','Космос'], o:[['🏴‍☠️','Пираты'],['🍂','Осень'],['🍬','Магазин сладостей']] },
+    { k:'pirate', cols:['#5a3a1d','#1f4e6b','#d4a83a'], a:['🏴‍☠️','Пираты'], o:[['🐻👧','Маша и Медведь'],['🎄','Новый год'],['🏖️','Лето на море']] },
+    { k:'autumn', cols:['#d9661f','#a3261b','#f0b429'], a:['🍂','Осень'], o:[['🌸','Весна'],['❄️','Зима'],['🚀','Космос']] },
+    { k:'candy',  cols:['#ff9cc8','#c9b8ff','#ffd6a0'], a:['🍬','Магазин сладостей'], o:[['🔧','Фиксики'],['🏴‍☠️','Пираты'],['🍂','Осень']] }
   ];
-  const root=document.getElementById('decisionGame');
-  const get=id=>document.getElementById(id);
-  const buttons=[...root.querySelectorAll('[data-vote]')];
-  const reveal=get('revealDecision'), next=get('nextDecision'), answer=get('decisionAnswer');
-  let index=0, choice=null;
+  const board = document.getElementById('mgBoard'), opts = document.getElementById('mgOpts'),
+        ans = document.getElementById('mgAnswer'), cnt = document.getElementById('mgCount'), next = document.getElementById('mgNext');
+  let i = 0;
+  function openAll(){ board.querySelectorAll('.mg-tile').forEach(t => t.classList.add('open')); board.querySelector('.mg-colors').classList.remove('hide'); }
   function render(){
-    const r=rounds[index];choice=null;
-    get('roundCount').textContent='История '+(index+1)+' из '+rounds.length;
-    get('gameOrder').textContent=r.order;get('gameIdea').textContent=r.idea;
-    get('votePrompt').textContent='Почему? Назови слово из заказа.';
-    buttons.forEach(b=>{b.disabled=false;b.setAttribute('aria-pressed','false');});
-    answer.hidden=true;answer.replaceChildren();reveal.hidden=false;reveal.disabled=true;next.hidden=true;
+    const r = ROUNDS[i];
+    cnt.textContent = (i + 1) + ' / ' + ROUNDS.length;
+    board.innerHTML = shuffle(PIC[r.k]).map(u => '<button class="mg-tile" type="button" aria-label="Открыть картинку">' + ph(u, '🖼️', 400) + '<span class="cover">?</span></button>').join('') +
+      '<div class="mg-colors hide">' + r.cols.map(c => '<i style="background:' + c + '"></i>').join('') + '</div>';
+    board.querySelectorAll('.mg-tile').forEach(t => t.addEventListener('click', () => {
+      t.classList.add('open');
+      if (board.querySelectorAll('.mg-tile:not(.open)').length === 0) board.querySelector('.mg-colors').classList.remove('hide');
+    }));
+    ans.classList.remove('on'); ans.innerHTML = '';
+    opts.innerHTML = '';
+    shuffle([r.a, ...r.o]).forEach(o => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'qz-opt';
+      b.innerHTML = '<span class="em" style="font-size:clamp(2.2rem,10vw,3.2rem)">' + o[0] + '</span><span class="t">' + o[1] + '</span>';
+      b.addEventListener('click', () => {
+        if (o === r.a) {
+          b.classList.add('yes'); openAll();
+          opts.querySelectorAll('.qz-opt').forEach(x => { if (x !== b) x.classList.add('no'); });
+          ans.innerHTML = (r.logo ? '<img alt="" src="' + r.logo + '" referrerpolicy="no-referrer" onerror="this.remove()">' : '<span class="em">' + r.a[0] + '</span>') + r.a[1];
+          ans.classList.add('on');
+        } else { b.classList.remove('no'); void b.offsetWidth; b.classList.add('no'); }
+      });
+      opts.appendChild(b);
+    });
+    next.textContent = i === ROUNDS.length - 1 ? 'Сначала ↺' : 'Дальше ➜';
   }
-  buttons.forEach(b=>b.addEventListener('click',()=>{
-    choice=b.dataset.vote;buttons.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
-    get('votePrompt').textContent='Я выбираю… потому что…';
-    reveal.disabled=false;
-  }));
-  reveal.addEventListener('click',()=>{
-    if(!choice)return;
-    const r=rounds[index], title=document.createElement('strong'), text=document.createElement('p');
-    title.textContent=r.title;text.textContent=r.why;answer.replaceChildren(title,text);answer.hidden=false;
-    buttons.forEach(b=>b.disabled=true);reveal.hidden=true;next.hidden=false;
-    next.textContent=index===rounds.length-1?'Что запомнили? →':'Следующая история →';
-  });
-  next.addEventListener('click',()=>{
-    if(index<rounds.length-1){index++;render();buttons[0].focus();}
-    else{get('votePrompt').textContent='Свои идеи подходят, если…';next.hidden=true;}
-  });
+  next.addEventListener('click', () => { i = (i + 1) % ROUNDS.length; render(); });
   render();
+
+
+const pool=[{em:'🪁',name:'Змей'},{em:'✂️',name:'Мастерить'},{em:'👨‍👩‍👧',name:'Вместе'},{em:'💨',name:'Ветер'},{em:'☁️',name:'Облака'},{em:'🎨',name:'Творчество'},...PIC.autumn.slice(0,2).map(u=>({u,name:'Парк'})),...PIC.pastel.slice(0,2).map(u=>({u,name:'Цвет и фактура'})),{em:'🎀',name:'Ленты'},{em:'🌈',name:'Радуга'}];
+const colors=['#7cc8f0','#ffc93c','#ff8a6b','#7bd389','#c9b8ff','#f6e3c1'];
+const words=['полёт','вместе','творчество','свобода','радость','лёгкость'];
+let placed=[],cols=[],wds=[];
+const get=id=>document.getElementById(id);
+const visual=x=>x.u?ph(x.u,'🖼️',200,x.name):'<span class="build-emoji">'+x.em+'</span>';
+function draw(){
+ get('buildSlots').replaceChildren();
+ for(let n=0;n<6;n++){const el=document.createElement(placed[n]===undefined?'div':'button');el.className='slot'+(placed[n]===undefined?'':' full');if(placed[n]!==undefined){el.type='button';el.setAttribute('aria-label','Убрать: '+pool[placed[n]].name);el.innerHTML=visual(pool[placed[n]]);el.addEventListener('click',()=>{placed.splice(n,1);draw();});}else el.textContent='+';get('buildSlots').appendChild(el);}
+ get('buildPool').querySelectorAll('button').forEach((b,k)=>{b.classList.toggle('used',placed.includes(k));b.setAttribute('aria-pressed',String(placed.includes(k)));});
+ get('chosenColors').innerHTML=cols.map(c=>'<i style="background:'+c+'"></i>').join('');
+ get('chosenWords').innerHTML=wds.map(w=>'<span>'+w+'</span>').join('');
+ get('buildColors').querySelectorAll('button').forEach((b,k)=>b.classList.toggle('on',cols.includes(colors[k])));
+ get('buildWords').querySelectorAll('button').forEach((b,k)=>b.classList.toggle('on',wds.includes(words[k])));
+ get('buildStatus').textContent=placed.length===6?'Как эта доска рассказывает о мастерской?':placed.length+' / 6 картинок';
+}
+pool.forEach((x,k)=>{const b=document.createElement('button');b.type='button';b.setAttribute('aria-label',x.name);b.innerHTML=visual(x);b.addEventListener('click',()=>{if(placed.includes(k)){placed=placed.filter(v=>v!==k);}else if(placed.length<6){placed.push(k);}else{get('buildStatus').textContent='Хочешь другую картинку? Убери одну с доски.';return;}draw();});get('buildPool').appendChild(b);});
+colors.forEach(c=>{const b=document.createElement('button');b.type='button';b.className='chipb col';b.style.background=c;b.setAttribute('aria-label','Добавить цвет '+c);b.addEventListener('click',()=>{if(cols.includes(c))cols=cols.filter(v=>v!==c);else{if(cols.length===3)cols.shift();cols.push(c);}draw();});get('buildColors').appendChild(b);});
+words.forEach(w=>{const b=document.createElement('button');b.type='button';b.className='chipb';b.textContent=w;b.addEventListener('click',()=>{if(wds.includes(w))wds=wds.filter(v=>v!==w);else{if(wds.length===3)wds.shift();wds.push(w);}draw();});get('buildWords').appendChild(b);});
+get('buildClear').addEventListener('click',()=>{placed=[];cols=[];wds=[];draw();});draw();
+document.addEventListener('error',e=>{const im=e.target;if(im.tagName==='IMG'&&im.parentElement?.classList.contains('ph'))im.parentElement.classList.add('noimg');},true);
 })();
 </script></body></html>
