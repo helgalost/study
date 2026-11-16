@@ -3,6 +3,7 @@
 (function () {
   var LESSONS = [
     ['welcome.html',  'Введение и знакомство'],
+    ['computer.html', 'Работа с компьютером'],
     ['brand.html',    'Бренд'],
     ['slogan.html',   'Слоган'],
     ['paint.html',    'Рисование'],
