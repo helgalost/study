@@ -4,6 +4,7 @@
   var LESSONS = [
     ['welcome.html',  'Введение и знакомство'],
     ['computer.html', 'Работа с компьютером'],
+    ['programs-files.html', 'Работа с программами и файлами'],
     ['brand.html',    'Бренд'],
     ['slogan.html',   'Слоган'],
     ['paint.html',    'Рисование'],
