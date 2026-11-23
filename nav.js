@@ -17,7 +17,8 @@
     ['color.html',    'Цвет и настроение'],
     ['pack.html',     'Упаковка'],
     ['howad.html',    'Как рекламировать'],
-    ['case-kites.html','Кейс: мастерская воздушных змеев']
+    ['case-kites.html','Кейс: мастерская воздушных змеев'],
+    ['team-work.html','Работа в группе']
   ];
 
   var file = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
